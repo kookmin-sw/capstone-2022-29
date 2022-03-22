@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_application/pages/landing_page.dart';
 import 'package:flutter_application/pages/login_page.dart';
+import 'package:flutter_application/pages/navigator.dart';
 
 void main() {
   runApp(const MyApp());
@@ -23,7 +24,7 @@ class MyApp extends StatelessWidget {
     );
     return MaterialApp(
       title: 'Smishing',
-      home: LoginPage(),
+      home: NavigatorPage(),
     );
   }
 }
