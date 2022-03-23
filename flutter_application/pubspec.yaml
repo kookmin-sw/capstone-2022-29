@@ -67,6 +67,7 @@ flutter:
     - lib/assets/logo.png
     - lib/assets/logo_mini.png
     - lib/assets/kakao_logo.png
+    - lib/assets/report_icon.svg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

@@ -16,12 +16,12 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setSystemUIOverlayStyle(
-      SystemUiOverlayStyle.light.copyWith(
-        statusBarColor: Colors.black, // Color for Android
-        statusBarBrightness: Brightness.light, // for IOS.
-      ),
-    );
+    // SystemChrome.setSystemUIOverlayStyle(
+    //   SystemUiOverlayStyle.light.copyWith(
+    //     statusBarColor: Colors.black, // Color for Android
+    //     statusBarBrightness: Brightness.light, // for IOS.
+    //   ),
+    // );
     return MaterialApp(
       title: 'Smishing',
       home: NavigatorPage(),

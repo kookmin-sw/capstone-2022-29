@@ -2,8 +2,8 @@
 
 import 'package:flutter/material.dart';
 
-class MorePage extends StatelessWidget {
-  const MorePage({Key? key}) : super(key: key);
+class SearchPage extends StatelessWidget {
+  const SearchPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -13,7 +13,7 @@ class MorePage extends StatelessWidget {
       body: SafeArea(
         child: Center(
           child: Text(
-            "More Page",
+            "Search Page",
             style: TextStyle(
               color: Color(0xffffffff),
             ),

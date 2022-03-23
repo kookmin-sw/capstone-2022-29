@@ -7,6 +7,7 @@ import 'package:flutter_application/pages/home/home_page.dart';
 import 'package:flutter_application/pages/info/info_page.dart';
 import 'package:flutter_application/pages/more/more_page.dart';
 import 'package:flutter_application/pages/report/report_page.dart';
+import 'package:flutter_application/pages/search/search_page.dart';
 
 class NavigatorPage extends StatefulWidget {
   NavigatorPage({Key? key}) : super(key: key);
@@ -18,6 +19,7 @@ class NavigatorPage extends StatefulWidget {
 class _NavigatorPageState extends State<NavigatorPage> {
   List<Widget> _SelectedTab = <Widget>[
     HomePage(),
+    SearchPage(),
     InfoPage(),
     ReportPage(),
     MorePage(),
@@ -26,7 +28,7 @@ class _NavigatorPageState extends State<NavigatorPage> {
   int selectedIndex = 0;
 
   Color? changeDotIndicatorColor() {
-    if (selectedIndex == 0 || selectedIndex == 3)
+    if (selectedIndex == 0 || selectedIndex == 1 || selectedIndex == 4)
       return Colors.white;
     else
       return Color(0xff5964E1);
@@ -40,7 +42,7 @@ class _NavigatorPageState extends State<NavigatorPage> {
         statusBarBrightness: Brightness.light, // for IOS.
       ),
     );
-    // Size size = MediaQuery.of(context).size;
+    Size size = MediaQuery.of(context).size;
     return Scaffold(
       extendBody: true,
       backgroundColor: Colors.transparent,
@@ -49,7 +51,11 @@ class _NavigatorPageState extends State<NavigatorPage> {
         currentIndex: selectedIndex,
         backgroundColor: Colors.transparent,
         enablePaddingAnimation: false,
-        paddingR: EdgeInsets.zero,
+        enableFloatingNavBar: false,
+        margin: EdgeInsets.only(
+            left: size.width * 0.1,
+            right: size.width * 0.1,
+            bottom: size.height * 0.02),
         dotIndicatorColor: changeDotIndicatorColor(),
         unselectedItemColor: Colors.grey[300],
         onTap: (index) {
@@ -60,6 +66,10 @@ class _NavigatorPageState extends State<NavigatorPage> {
         items: [
           DotNavigationBarItem(
             icon: Icon(Icons.home_rounded),
+            selectedColor: Color(0xffffffff),
+          ),
+          DotNavigationBarItem(
+            icon: Icon(Icons.search_outlined),
             selectedColor: Color(0xffffffff),
           ),
           DotNavigationBarItem(
