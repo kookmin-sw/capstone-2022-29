@@ -1,37 +1,43 @@
-## Welcome to GitHub Pages
+## 1. 프로젝트 소개
+![뉴익 로고](https://user-images.githubusercontent.com/55417591/161069626-50a79398-abd8-47d5-9a57-e7b91a5a83b0.jpeg)
 
-You can use the [editor on GitHub](https://github.com/kookmin-sw/cap-template/edit/master/index.md) to maintain and preview the content for your website in Markdown files.
+✔️ 수많은 기사들 중에서, 알고자 하는 주제에 대한 모든 사건들을 시간 순서대로 한눈에 파악할 수 있다면?  
+✔️ 뉴익은 사용자가 검색하는 주제에 대한 일련의 뉴스 기사들을 시간대별 사건 순으로, 수평적으로 정리해 보여주는 앱
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+### Abstract
+> 뉴스는 시대의 흐름을 담은 친숙하고 유용한 매체이다. 하지만, 우리는 현 언론사를 이용하면서 느낄 수 있는 불편함이 많다. 예를 들어, "코로나"에 대해 알고자 검색했다고 가정하자. 우리는 수십만 개의 기사들과 유사언론, 기사형 광고 등의 가짜뉴스로 인해 뉴스의 본질이 흐려짐을 느낄 수 있다. 또한 알고자 하는 바를 한눈에 파악하기가 어려워 불편하다. 20년 글로벌 조사 전문기관인 입소스에서 전 세계 25개국을 대상으로 가짜뉴스에 대한 조사에 따르면, 한국의 경우, 국민의 대부분인 89%가 가짜뉴스가 심각하다고 느끼고 있는 것으로 나타났다. 이처럼 점차 언론사의 신뢰는 떨어지고 있고 언론사 사용의 불편함을 토로하는 목소리가 높아지고 있다.  
+뉴익은 뉴스 빅데이터를 토대로 시기별 주요 사건들의 흐름을 한눈에 파악할 수 있게 정리해 보여주고자 한다. 또한 사용자가 보다 더 편리하도록 요약 기능을 제공하도록 한다.
 
-### Markdown
+> English
 
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
+## 2. 소개 영상
+추후 작성 예정
 
-```markdown
-Syntax highlighted code block
-
-# Header 1
-## Header 2
-### Header 3
-
-- Bulleted
-- List
-
-1. Numbered
-2. List
-
-**Bold** and _Italic_ and `Code` text
-
-[Link](url) and ![Image](src)
+## 3. 팀 소개
 ```
+****1604 백연선
+Role : FrontEnd & BackEnd
+GitHub : https://github.com/BaekYeonSun
+```
+```
+****1650 이한정
+Role : Machine Learning
+GitHub : https://github.com/leehanjeong
+```
+```
+****1670 조나영
+Role : Machine Learning
+GitHub : https://github.com/NaYoung2253
+```
+```
+****1686 최혜원
+Role : FrontEnd & BackEnd
+GitHub : https://github.com/Hyewon0223
+```
+## 4. 사용법
 
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
+추후 작성 예정
 
-### Jekyll Themes
+## 5. 기타
 
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/kookmin-sw/cap-template/settings). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
-
-### Support or Contact
-
-Having trouble with Pages? Check out our [documentation](https://help.github.com/categories/github-pages-basics/) or [contact support](https://github.com/contact) and we’ll help you sort it out.
+추후 작성 예정
