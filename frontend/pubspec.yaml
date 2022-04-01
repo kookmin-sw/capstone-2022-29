@@ -39,6 +39,12 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
 
+  flutter_svg: ^1.0.3
+  flutter_signin_button: ^2.0.0
+  outline_search_bar: ^2.3.0
+
+  dot_navigation_bar: ^1.0.1+4
+
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
   # activated in the `analysis_options.yaml` file located at the root of your
@@ -58,9 +64,12 @@ flutter:
   uses-material-design: true
 
   # To add assets to your application, add an assets section, like this:
-  # assets:
-  #   - images/a_dot_burr.jpeg
-  #   - images/a_dot_ham.jpeg
+  assets:
+    - lib/assets/landing.png
+    - lib/assets/logo.png
+    - lib/assets/logo_mini.png
+    - lib/assets/kakao_logo.png
+    - lib/assets/report_icon.svg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
