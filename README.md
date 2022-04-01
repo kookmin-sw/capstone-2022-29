@@ -21,12 +21,12 @@ GitHub : https://github.com/BaekYeonSun
 ```
 ```
 ****1650 이한정
-Role : Machine Learning
+Role : Data Mining & Clustering
 GitHub : https://github.com/leehanjeong
 ```
 ```
 ****1670 조나영
-Role : Machine Learning
+Role : Data Mining & Clustering
 GitHub : https://github.com/NaYoung2253
 ```
 ```
