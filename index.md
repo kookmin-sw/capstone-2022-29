@@ -11,7 +11,7 @@
 > English
 
 ## 2. 소개 영상
-추후 작성 예정
+[![capstone-2022-29 / 뉴익[뉴스를 익히다] 소개 영상](https://user-images.githubusercontent.com/55418359/161452259-61e5afb4-23f8-4b20-b290-d81b9470706b.jpeg)](https://youtu.be/TEmlbx04ibs "capstone-2022-29 / 뉴익[뉴스를 익히다] 소개 영상")
 
 ## 3. 팀 소개
 ```
