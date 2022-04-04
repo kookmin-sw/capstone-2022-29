@@ -21,27 +21,15 @@
 ## 2. 소개 영상
 [![capstone-2022-29 / 뉴익[뉴스를 익히다] 소개 영상](https://user-images.githubusercontent.com/55418359/161452259-61e5afb4-23f8-4b20-b290-d81b9470706b.jpeg)](https://youtu.be/TEmlbx04ibs "capstone-2022-29 / 뉴익[뉴스를 익히다] 소개 영상")
 
+### 🚀 주요기능
+![capstone-2022-29 / 뉴익[뉴스를 익히다] 주요 기능](https://user-images.githubusercontent.com/54919662/161482237-99a2c953-aeb7-48c1-8f51-13d6984e5f7a.png)
+
+### 👩🏻‍💻 프로젝트 구성도
+![capstone-2022-29 / 뉴익[뉴스를 익히다] 프로젝트 구성도](https://user-images.githubusercontent.com/54919662/161506722-7a9c6281-815e-47df-9be5-f9dc01de6fc8.png)
+
 ## 3. 팀 소개
-```
-****1604 백연선
-Role : FrontEnd & BackEnd
-GitHub : https://github.com/BaekYeonSun
-```
-```
-****1650 이한정
-Role : Data Mining & Clustering
-GitHub : https://github.com/leehanjeong
-```
-```
-****1670 조나영
-Role : Data Mining & Clustering
-GitHub : https://github.com/NaYoung2253
-```
-```
-****1686 최혜원
-Role : FrontEnd & BackEnd
-GitHub : https://github.com/Hyewon0223
-```
+![capstone-2022-29 / 뉴익[뉴스를 익히다] 팀원 소개](https://user-images.githubusercontent.com/54919662/161482002-991c6eee-25cf-47b3-91c8-8e9f5f8d0642.png)
+
 ## 4. 사용법
 
 추후 작성 예정
