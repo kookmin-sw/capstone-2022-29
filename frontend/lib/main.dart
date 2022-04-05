@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:frontend/pages/landing_page.dart';
+import 'package:frontend/pages/more/notice_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -16,7 +17,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: '뉴익',
-      home: LandingPage(),
+      home: NoticePage(),
     );
   }
 }

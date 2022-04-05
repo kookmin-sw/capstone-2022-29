@@ -66,11 +66,12 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-    - lib/assets/landing.png
-    - lib/assets/logo.png
-    - lib/assets/logo_mini.png
-    - lib/assets/kakao_logo.png
-    - lib/assets/report_icon.svg
+    - lib/assets/images/landing.png
+    - lib/assets/images/logo.png
+    - lib/assets/images/logo_mini.png
+    - lib/assets/images/kakao_logo.png
+    - lib/assets/images/report_icon.svg
+    - lib/assets/images/backIcon.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
@@ -100,4 +101,4 @@ flutter:
 flutter_icons:
   android: true
   ios: true
-  image_path: "/lib/assets/app-icon.png"
+  image_path: "/lib/assets/images/app-icon.png"
