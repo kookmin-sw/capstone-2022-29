@@ -10,12 +10,7 @@ AppBar appBar(BuildContext context, String title) {
       onPressed: null,
     ),
     title: Container(
-      child: Center(
-        child: Text(
-          title,
-          style: TextStyle(color: Colors.black),
-        ),
-      ),
+      child: Center( child: title != ''? Text(title,style: TextStyle(color: Colors.black)) : Image.asset('lib/assets/images/logo_mini.png')),
       width: 165,
       height: 40,
       decoration: BoxDecoration(
