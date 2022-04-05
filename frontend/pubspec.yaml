@@ -29,8 +29,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-
-
+  
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
@@ -44,6 +43,12 @@ dev_dependencies:
   outline_search_bar: ^2.3.0
 
   dot_navigation_bar: ^1.0.1+4
+
+  flutter_kakao_login: ^3.4.0
+
+  flutter_dotenv: ^5.0.2
+
+  http: ^0.13.4
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
@@ -71,6 +76,7 @@ flutter:
     - lib/assets/logo_mini.png
     - lib/assets/kakao_logo.png
     - lib/assets/report_icon.svg
+    - .env
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
