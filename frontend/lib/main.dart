@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:frontend/pages/landing_page.dart';
+import 'package:frontend/pages/more/my_keyword_page.dart';
 import 'package:frontend/pages/more/notice_detail_page.dart';
 import 'package:frontend/pages/more/notice_page.dart';
 import 'package:frontend/pages/more/qna_page.dart';
@@ -19,7 +20,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: '뉴익',
-      home: QnAPage(),
+      home: MyKeywordPage(),
     );
   }
 }

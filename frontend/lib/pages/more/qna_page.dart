@@ -1,84 +1,102 @@
-// ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_constructors, prefer_const_constructors_in_immutables, avoid_print
 
 import 'package:flutter/material.dart';
 import 'package:frontend/components/app_bar.dart';
-// import 'package:frontend/components/detail_title.dart';
-// import 'package:frontend/components/detail_content.dart';
+import 'package:frontend/components/button2.dart';
 
-class QnAPage extends StatelessWidget {
-  const QnAPage({Key? key}) : super(key: key);
+class QnAPage extends StatefulWidget {
+  QnAPage({Key? key}) : super(key: key);
+
+  @override
+  State<QnAPage> createState() => _QnAPageState();
+}
+
+class _QnAPageState extends State<QnAPage> {
+  final titleController = TextEditingController();
+  final contentController = TextEditingController();
+  final emailController = TextEditingController();
+
+  // void onClickPressed() {
+  //   print('title: ' + titleController.text);
+  //   print('content: ' + contentController.text);
+  //   print('email: ' + emailController.text);      
+  // }
+
+  // void onCanclePressed() {
+  //   print('cancle');
+  // }
   
   @override
   Widget build(BuildContext context) {
-Size size = MediaQuery.of(context).size;
+    Size size = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: Color.fromRGBO(247, 247, 247, 1),
-      appBar: appBar(context, 'Q&A'),
+      appBar: appBar(size, 'Q&A'),
       body: Column(
-        children: [
-        //   Container(
-        //     width: size.width,    
-        //     height: 40,
-        //     child: TextFormField(
-        //       decoration: InputDecoration(
-        //         labelText: 'Q&A 제목을 입력해주세요',
-        //         fillColor: Colors.white,
-        //         border: OutlineInputBorder(
-        //           borderRadius: BorderRadius.circular(30),
-        //           borderSide: BorderSide(),
-        //         ),
-        //       ),
-        //     ),
-        //     margin: EdgeInsets.fromLTRB(48, 20, 48, 20),
-        //     decoration: BoxDecoration(
-        //       color: Colors.white,
-        //       borderRadius: BorderRadius.circular(30),
-        //     ),
-        //  ),
-        //  Container(
-        //     width: size.width,    
-        //     height: 340,
-        //     child: TextFormField(
-        //       minLines: 1,
-        //       maxLines: 5,  // allow user to enter 5 line in textfield
-        //       keyboardType: TextInputType.multiline,  // user keyboard will have a button to move cursor to next line
-        //       // controller: _Textcontroller,
-            
-        //       decoration: InputDecoration(
-        //         labelText: 'Q&A 내용을 입력해주세요',
-        //         fillColor: Colors.white,
-        //         border: OutlineInputBorder(
-        //           borderRadius: BorderRadius.circular(30),
-        //           borderSide: BorderSide(),
-        //         ),
-        //       ),
-        //     ),
-        //     margin: EdgeInsets.fromLTRB(48, 0, 48, 0),
-        //     decoration: BoxDecoration(
-        //       color: Colors.white,
-        //       borderRadius: BorderRadius.circular(30),
-        //     ),
-        //   ),
-        //   Container(
-        //     width: size.width,    
-        //     height: 40,
-        //     child: TextFormField(
-        //       decoration: InputDecoration(
-        //         labelText: '답변을 받으실 연락처/이메일을 입력해주세요',
-        //         fillColor: Colors.white,
-        //         border: OutlineInputBorder(
-        //           borderRadius: BorderRadius.circular(30),
-        //           borderSide: BorderSide(),
-        //         ),
-        //       ),
-        //     ),
-        //     margin: EdgeInsets.fromLTRB(48, 20, 48, 20),
-        //     decoration: BoxDecoration(
-        //       color: Colors.white,
-        //       borderRadius: BorderRadius.circular(30),
-        //     ),
-        //  ),
-        ]
+        children: <Widget>[
+            Center(
+              child: Container(
+                child: TextField(
+                  textAlign: TextAlign.center,
+                  controller: titleController,
+                  decoration: InputDecoration(
+                    border: InputBorder.none,
+                    hintText: 'Q&A 제목을 입력해주세요',
+                  ),
+                  cursorColor: Colors.black,
+                ),
+                width: size.width * 0.8,    
+                height: size.height * 0.05,
+                margin: EdgeInsets.only(top: size.height * 0.02),
+                padding: EdgeInsets.only(left: size.width*0.05, right:size.width*0.05),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(30),
+                ),
+              ),
+            ),
+            Container(
+              child: TextField(
+                controller: contentController,
+                keyboardType: TextInputType.multiline,
+                maxLines: 20,
+                decoration: InputDecoration(
+                    border: InputBorder.none,
+                    hintText: 'Q&A 내용을 입력해주세요',
+                  ),
+                  cursorColor: Colors.black,
+              ),
+              width: size.width * 0.8,    
+              margin: EdgeInsets.only(top: size.height * 0.02),
+              padding: EdgeInsets.only(left: size.width*0.05,top: size.height*0.01,right:size.width*0.05, bottom:size.height*0.01),
+              decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(30),
+                ),
+            ),
+            Center(
+              child: Container(
+                child: TextField(
+                  textAlign: TextAlign.center,
+                  controller: emailController,
+                  decoration: InputDecoration(
+                    border: InputBorder.none,
+                    hintText: '답변을 받으실 이메일을 입력해주세요.',
+                  ),
+                  cursorColor: Colors.black,
+                ),
+                width: size.width * 0.8,    
+                height: size.height * 0.05,
+                margin: EdgeInsets.only(top: size.height * 0.02),
+                padding: EdgeInsets.only(left: size.width*0.05, right:size.width*0.05),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(30),
+                ),
+              ),
+            ),
+            buttonTwo(size, '취소', '저장'),
+        ],
       )
     );
   }
