@@ -7,6 +7,6 @@ Widget logo(Size size) {
       top: size.height * 0.03,
     ),
     width: size.width * 0.3,
-    child: Image.asset('lib/assets/logo_mini.png'),
+    child: Image.asset('lib/assets/images/logo_mini.png'),
   );
 }

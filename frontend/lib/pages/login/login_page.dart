@@ -157,7 +157,7 @@ class _LoginPageState extends State<LoginPage> {
             ),
             Center(
               child: Container(
-                child: Image.asset('lib/assets/logo.png'),
+                child: Image.asset('lib/assets/images/logo.png'),
               ),
             ),
             SizedBox(
@@ -172,7 +172,7 @@ class _LoginPageState extends State<LoginPage> {
               textColor: Colors.black,
               image: Container(
                 height: size.height * 0.025,
-                child: Image.asset('lib/assets/kakao_logo.png'),
+                child: Image.asset('lib/assets/images/kakao_logo.png'),
               ),
             ),
           ],
