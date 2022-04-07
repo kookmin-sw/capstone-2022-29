@@ -5,7 +5,7 @@ import 'package:flutter_signin_button/flutter_signin_button.dart';
 import 'package:flutter_kakao_login/flutter_kakao_login.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:frontend/pages/home/home_page.dart';
+import 'package:frontend/pages/navigator.dart';
 
 class LoginPage extends StatefulWidget {
   LoginPage({Key? key}) : super(key: key);
@@ -95,7 +95,9 @@ class _LoginPageState extends State<LoginPage> {
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => HomePage(),
+          builder: (context) => NavigatorPage(
+            index: 0,
+          ),
         ),
       );
       debugPrint("Kakao login success");
