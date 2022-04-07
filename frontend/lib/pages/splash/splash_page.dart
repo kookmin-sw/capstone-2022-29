@@ -50,7 +50,7 @@ class _SplashPageState extends State<SplashPage> {
               stops: [0.0, 0.9177],
             ),
           ),
-          child: Image.asset('lib/assets/landing.png'),
+          child: Image.asset('lib/assets/images/landing.png'),
         ),
       ),
     );
