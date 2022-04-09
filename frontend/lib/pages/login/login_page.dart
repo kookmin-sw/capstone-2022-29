@@ -92,7 +92,7 @@ class _LoginPageState extends State<LoginPage> {
         _updateRefreshToken(result.token!.refreshToken!);
       }
 
-      Navigator.push(
+      Navigator.pushReplacement(
         context,
         MaterialPageRoute(
           builder: (context) => NavigatorPage(

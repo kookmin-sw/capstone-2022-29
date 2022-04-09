@@ -22,7 +22,7 @@ class _SplashPageState extends State<SplashPage> {
     final response = await http.get(Uri.parse('https://flutter.dev/'));
 
     if (response.statusCode == 200) {
-      Navigator.push(
+      Navigator.pushReplacement(
         context,
         MaterialPageRoute(
           builder: (context) => LoginPage(),

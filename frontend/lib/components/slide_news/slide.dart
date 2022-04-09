@@ -2,8 +2,9 @@
 
 import 'package:flutter/material.dart';
 import 'package:frontend/components/slide_news/card_news.dart';
+import 'package:frontend/pages/navigator.dart';
 
-Widget slide(Size size, String keyword) {
+Widget slide(BuildContext context, Size size, String query) {
   return Center(
     child: Container(
       height: size.height * 0.23,
@@ -41,7 +42,7 @@ Widget slide(Size size, String keyword) {
                       ),
                     ),
                     child: Text(
-                      "$keyword",
+                      "$query",
                       style: TextStyle(
                         fontSize: size.width * 0.035,
                       ),
@@ -66,7 +67,16 @@ Widget slide(Size size, String keyword) {
                   right: size.width * 0.05,
                 ),
                 child: OutlinedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => NavigatorPage(
+                          index: 3,
+                          query: query,
+                        ),
+                      ),
+                    );
+                  },
                   child: Text(
                     "바로가기",
                     style: TextStyle(
@@ -96,11 +106,11 @@ Widget slide(Size size, String keyword) {
             child: ListView(
               scrollDirection: Axis.horizontal,
               children: <Widget>[
-                cardNews(size, '조선일보', '$keyword기사1'),
-                cardNews(size, '조선일보', '$keyword기사2'),
-                cardNews(size, '조선일보', '$keyword기사3'),
-                cardNews(size, '조선일보', '$keyword기사4'),
-                cardNews(size, '조선일보', '$keyword기사5'),
+                cardNews(size, '조선일보', '$query기사1'),
+                cardNews(size, '조선일보', '$query기사2'),
+                cardNews(size, '조선일보', '$query기사3'),
+                cardNews(size, '조선일보', '$query기사4'),
+                cardNews(size, '조선일보', '$query기사5'),
               ],
             ),
           ),
