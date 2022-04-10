@@ -25,10 +25,9 @@ class NoticePage extends StatelessWidget {
         child: ListView.builder(
           itemCount: noticeTitle.length,
           itemBuilder: (context, index) {
-            return colorList(
-              context,
-              noticeTitle[index],
-              noticeContent[index],
+            return ColorList(
+              title: noticeTitle[index],
+              content: noticeContent[index],
             );
           },
         ),
