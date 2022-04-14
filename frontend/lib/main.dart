@@ -4,6 +4,8 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:frontend/pages/more/more_page.dart';
+import 'package:frontend/pages/more/my_keyword_page.dart';
 import 'package:frontend/pages/splash/splash_page.dart';
 
 void main() async {
@@ -53,7 +55,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
           theme: ThemeData(
             brightness: value,
           ),
-          home: SplashPage(),
+          home: MorePage(),
         );
       },
     );

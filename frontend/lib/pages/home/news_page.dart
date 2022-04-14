@@ -1,3 +1,5 @@
+// ignore_for_file: must_be_immutable, prefer_const_constructors
+
 import 'package:flutter/material.dart';
 import 'package:frontend/components/app_bar.dart';
 import 'package:frontend/components/news_title.dart';
