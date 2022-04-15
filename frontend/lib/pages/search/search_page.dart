@@ -98,7 +98,7 @@ class _SearchPageState extends State<SearchPage> {
                 ),
               ),
             Container(
-              margin: EdgeInsets.all(20), 
+              margin: EdgeInsets.all(size.width*0.05), 
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(30), 
@@ -108,7 +108,11 @@ class _SearchPageState extends State<SearchPage> {
               padding: EdgeInsets.only(top: size.height * 0.03),
               child:Column(
                 children: [
-                  Text("검색 순위", style:TextStyle(fontSize: 25,)),
+                  Container(
+                    alignment: Alignment.centerLeft,
+                    margin: EdgeInsets.only(left: size.width*0.07),
+                    child: Text("검색 순위", style:TextStyle(fontSize: 25,))
+                  ),
                   ListView.builder( 
                     scrollDirection: Axis.vertical,
                     shrinkWrap: true,
