@@ -55,7 +55,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
           theme: ThemeData(
             brightness: value,
           ),
-          home: MorePage(),
+          home: SplashPage(),
         );
       },
     );
