@@ -149,7 +149,7 @@ class _HomePageState extends State<HomePage> {
                   );
                 },
                 child: AbsorbPointer(
-                  child: searchBar(size),
+                  child: searchBar(size, false),
                 ),
               ),
               SizedBox(

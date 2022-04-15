@@ -3,7 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:outline_search_bar/outline_search_bar.dart';
 
-Widget searchBar(Size size) {
+Widget searchBar(Size size, bool color) {
   return Center(
     child: Container(
       height: size.height * 0.065,
@@ -13,11 +13,11 @@ Widget searchBar(Size size) {
         bottom: size.height * 0.01,
       ),
       child: OutlineSearchBar(
-        backgroundColor: Color(0xffffffff),
-        borderColor: Colors.transparent,
         borderRadius: BorderRadius.circular(30),
+        borderColor: color? Colors.black:Colors.transparent,
         cursorColor: Colors.black,
         searchButtonIconColor: Colors.black,
+        hintText: color? "주제 검색":"",
         padding: EdgeInsets.symmetric(
           horizontal: size.width * 0.05,
         ),
