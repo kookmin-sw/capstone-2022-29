@@ -12,7 +12,7 @@ AppBar appBar(Size size, String title) {
         onPressed: null,
       ),
     ),
-    title: Container(
+    title: title != ' ' ? Container(
       child: Center( child: title != ''? Text(title,style: TextStyle(color: Colors.black)) : Image.asset('lib/assets/images/logo_mini.png')),
       width: size.width * 0.4,
       height: size.width * 0.1,
@@ -20,7 +20,7 @@ AppBar appBar(Size size, String title) {
         color: Colors.white,
         borderRadius: BorderRadius.circular(30),
       ),
-    ),
+    ) : null,
     centerTitle: true,
     elevation: 0.0,
   );

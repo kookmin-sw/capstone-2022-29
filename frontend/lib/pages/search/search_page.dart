@@ -5,6 +5,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:frontend/components/logo.dart';
 import 'package:frontend/components/search_bar.dart';
+import 'package:frontend/pages/search/timeline_page.dart';
 
 class SearchPage extends StatefulWidget {
   SearchPage({Key? key}) : super(key: key);
@@ -80,7 +81,11 @@ class _SearchPageState extends State<SearchPage> {
                                       ),
                                     ),
                                     onPressed: (){
-                                      Navigator.pop(context);
+                                      // Navigator.pop(context);
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(builder: (context) => TimelinePage()),
+                                      );
                                     }, 
                                     child: Text("검색하기"),
                                   ),

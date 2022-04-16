@@ -38,6 +38,7 @@ dependencies:
   flutter_typeahead: ^3.2.4
   flutter_tagging: ^3.0.0
   flutter_syntax_view: ^4.0.0
+  timelines: ^0.1.0
 
 dev_dependencies:
   flutter_test:
