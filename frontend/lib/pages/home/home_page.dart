@@ -8,6 +8,8 @@ import 'package:frontend/components/search_bar.dart';
 import 'package:frontend/components/slide_news/slide.dart';
 import 'package:frontend/pages/navigator.dart';
 import 'package:bubble_chart/bubble_chart.dart';
+import 'package:localstorage/localstorage.dart';
+import 'package:frontend/api/api_service.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({Key? key}) : super(key: key);
@@ -18,6 +20,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   List<BubbleNode> childNode = [];
+  final LocalStorage localStorage = LocalStorage('user');
 
   @override
   void initState() {
@@ -47,12 +50,17 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
-  List data = [
-    {"query": "코로나", "count": 20},
-    {"query": "우크라이나", "count": 50},
-    {"query": "국민대학교", "count": 10},
-    {"query": "메타버스", "count": 15},
-  ];
+  List<Map> data = [];
+
+  Future<void> getBookmark(dynamic user_id) async {
+    data.clear();
+    List<dynamic> bookmark = await ApiService().getBookmark(user_id);
+    // print("page: ${news.length}");
+    for (var i = 0; i < bookmark.length; i++) {
+      data.add({'query': bookmark[i]['query'], 'count': bookmark[i]['count']});
+    }
+    data.sort(((a, b) => (b['count']).compareTo(a['count'])));
+  }
 
   List<BubbleNode> getData(Size size) {
     List<BubbleNode> list = [];
@@ -130,36 +138,47 @@ class _HomePageState extends State<HomePage> {
         extendBody: true,
         backgroundColor: Color(0xffF7F7F7),
         body: SafeArea(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start, // 가로
-            mainAxisAlignment: MainAxisAlignment.start, // 세로
-            children: [
-              logo(size),
-              InkWell(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) {
-                        return NavigatorPage(
-                          index: 1,
+          child: FutureBuilder(
+            future: getBookmark(localStorage.getItem('user_id')),
+            builder: (BuildContext context, AsyncSnapshot snapshot) {
+              if (data.length != 0) {
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start, // 가로
+                  mainAxisAlignment: MainAxisAlignment.start, // 세로
+                  children: [
+                    logo(size),
+                    InkWell(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) {
+                              return NavigatorPage(
+                                index: 1,
+                              );
+                            },
+                          ),
                         );
                       },
+                      child: AbsorbPointer(
+                        child: searchBar(size),
+                      ),
                     ),
-                  );
-                },
-                child: AbsorbPointer(
-                  child: searchBar(size),
-                ),
-              ),
-              SizedBox(
-                height: size.height * 0.67,
-                child: ListView(
-                  shrinkWrap: true,
-                  children: getSlide(size),
-                ),
-              ),
-            ],
+                    SizedBox(
+                      height: size.height * 0.67,
+                      child: ListView(
+                        shrinkWrap: true,
+                        children: getSlide(size),
+                      ),
+                    ),
+                  ],
+                );
+              } else {
+                return Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
+            },
           ),
         ),
       ),
