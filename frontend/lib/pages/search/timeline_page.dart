@@ -59,7 +59,7 @@ class _TimelinePageState extends State<TimelinePage> {
                           content: SingleChildScrollView(
                             child: ListBody(
                               children: <Widget>[
-                                Container(child:searchBar(size,true)), 
+                                Container(child:searchBar(size,true,"")), 
                                 Slider(
                                   value: _currentSliderValue,
                                   max: 4,
@@ -99,7 +99,7 @@ class _TimelinePageState extends State<TimelinePage> {
                 );
               },
               child: AbsorbPointer(
-                child: searchBar(size,false),
+                child: searchBar(size,false,"코로나"),
               ),
             ),
             Container(
@@ -111,16 +111,6 @@ class _TimelinePageState extends State<TimelinePage> {
               width: size.width * 0.9,
               height: size.height * 0.6,
               padding: EdgeInsets.only(top: size.height * 0.03),
-              // child:Column(
-              //   children: [
-              //     Container(
-              //       alignment: Alignment.centerLeft,
-              //       margin: EdgeInsets.only(left: size.width*0.07),
-              //       child: Text("검색 순위", style:TextStyle(fontSize: 25,))
-              //     ),
-                  
-              //   ],
-
               child: Timeline.tileBuilder(
                 builder: TimelineTileBuilder.fromStyle(
                   contentsAlign: ContentsAlign.basic,

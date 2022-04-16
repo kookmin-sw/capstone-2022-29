@@ -59,7 +59,7 @@ class _SearchPageState extends State<SearchPage> {
                             content: SingleChildScrollView(
                               child: ListBody(
                                 children: <Widget>[
-                                  Container(child:searchBar(size,true)), 
+                                  Container(child:searchBar(size,true,"")), 
                                   Slider(
                                     value: _currentSliderValue,
                                     max: 4,
@@ -99,7 +99,7 @@ class _SearchPageState extends State<SearchPage> {
                   );
                 },
                 child: AbsorbPointer(
-                  child: searchBar(size,false),
+                  child: searchBar(size,false,""),
                 ),
               ),
             Container(
