@@ -2,14 +2,14 @@
 
 import 'package:flutter/material.dart';
 
-AppBar appBar(Size size, String title) {
+AppBar appBar(Size size, String title, BuildContext context) {
   return AppBar(
     backgroundColor: Colors.transparent,
     leading: Container(
       margin: EdgeInsets.only(left: size.width * 0.05),
       child: IconButton(
         icon: Image.asset('lib/assets/images/backIcon.png', width: size.width * 0.1, height: size.width * 0.1),
-        onPressed: null,
+        onPressed: () => Navigator.pop(context),
       ),
     ),
     title: title != ' ' ? Container(

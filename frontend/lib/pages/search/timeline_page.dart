@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/components/app_bar.dart';
 import 'package:frontend/components/search_bar.dart';
+import 'package:frontend/pages/home/news_page.dart';
 import 'package:timelines/timelines.dart';
 import 'dart:convert';
 
@@ -41,7 +42,7 @@ class _TimelinePageState extends State<TimelinePage> {
     return Scaffold(
       extendBody: true,
       backgroundColor: Color.fromRGBO(247, 247, 247, 1),
-      appBar: appBar(size, ' '),
+      appBar: appBar(size, ' ', context),
       body: SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -147,7 +148,15 @@ class _TimelinePageState extends State<TimelinePage> {
                                       border: Border.all(color: Colors.black, width: 1.0, style:BorderStyle.solid),
                                       borderRadius: BorderRadius.circular(30), 
                                     ),
-                                    child: Text("바로가기"),
+                                    child: InkWell(child: Text("바로가기"),onTap: (){ 
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) {
+                                            return NewsPage(query: data[index]["content"]);
+                                          },
+                                        ),
+                                      );},) 
                                   )
                                 ],
                               ),
