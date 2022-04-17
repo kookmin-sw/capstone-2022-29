@@ -16,15 +16,15 @@ class _QnAPageState extends State<QnAPage> {
   final contentController = TextEditingController();
   final emailController = TextEditingController();
 
-  // void onClickPressed() {
-  //   print('title: ' + titleController.text);
-  //   print('content: ' + contentController.text);
-  //   print('email: ' + emailController.text);      
-  // }
+  void onClickPressed() {
+    print('title: ' + titleController.text);
+    print('content: ' + contentController.text);
+    print('email: ' + emailController.text);      
+  }
 
-  // void onCanclePressed() {
-  //   print('cancle');
-  // }
+  void onCanclePressed() {
+    print('cancle');
+  }
   
   @override
   Widget build(BuildContext context) {
@@ -95,7 +95,7 @@ class _QnAPageState extends State<QnAPage> {
                 ),
               ),
             ),
-            buttonTwo(size, '취소', '저장'),
+            buttonTwo(size, '취소', '저장', onCanclePressed, onClickPressed),
         ],
       )
     );

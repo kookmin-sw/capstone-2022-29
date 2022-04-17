@@ -113,7 +113,18 @@ class _TimelinePageState extends State<TimelinePage> {
               height: size.height * 0.6,
               padding: EdgeInsets.only(top: size.height * 0.03),
               child: Timeline.tileBuilder(
-                builder: TimelineTileBuilder.fromStyle(
+                builder: TimelineTileBuilder.connected(
+                  indicatorBuilder: (_, index) {
+                    return DotIndicator(color: Color.fromRGBO(48, 105, 171, 1));
+                  },
+                  connectorBuilder: (_, index, connectorType) {
+                    return SolidLineConnector(
+                      indent: connectorType == ConnectorType.start ? 0 : 2.0,
+                      endIndent: connectorType == ConnectorType.end ? 0 : 2.0,
+                      thickness: 4,
+                      color: Color.fromRGBO(198, 225, 255, 1),
+                    );
+                  },
                   contentsAlign: ContentsAlign.basic,
                   nodePositionBuilder: (context, index) => size.width * 0.0002,
                   contentsBuilder: (context, index) => Padding(

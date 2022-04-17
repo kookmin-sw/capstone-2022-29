@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:frontend/pages/more/more_page.dart';
 import 'package:frontend/pages/more/my_keyword_page.dart';
+import 'package:frontend/pages/search/detail_news_page.dart';
 import 'package:frontend/pages/search/search_page.dart';
 import 'package:frontend/pages/splash/splash_page.dart';
 
@@ -56,7 +57,8 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
           theme: ThemeData(
             brightness: value,
           ),
-          home: SearchPage(),
+          home: DetailNewsPage(title: '마스크 대란'),
+          // home: SearchPage(),
         );
       },
     );
