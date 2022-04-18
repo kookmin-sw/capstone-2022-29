@@ -1,3 +1,5 @@
+// ignore_for_file: must_be_immutable, prefer_const_constructors
+
 import 'package:flutter/material.dart';
 import 'package:frontend/components/app_bar.dart';
 import 'package:frontend/components/news_title.dart';
@@ -37,7 +39,7 @@ class _NewsPageState extends State<NewsPage> {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: Color(0xffF7F7F7),
-      appBar: appBar(size, '${widget.query} 뉴스'),
+      appBar: appBar(size, '${widget.query} 뉴스', context, false),
       body: SafeArea(
         child: SizedBox(
           height: size.height * 0.67,

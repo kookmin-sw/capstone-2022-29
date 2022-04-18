@@ -2,7 +2,7 @@
 
 import 'package:flutter/material.dart';
 
-Widget buttonTwo(Size size, String name1, String name2){
+Widget buttonTwo(Size size, String name1, String name2, Function func1, Function func2){
   return Container(
     margin: EdgeInsets.only(top:size.height*0.03),
     child: Row(
@@ -18,7 +18,7 @@ Widget buttonTwo(Size size, String name1, String name2){
               borderRadius: BorderRadius.circular(30),
             ),
           ),
-          onPressed: (){}, 
+          onPressed: (){func1();}, 
           child: Text(name1),
         ),
         ElevatedButton(
@@ -31,7 +31,7 @@ Widget buttonTwo(Size size, String name1, String name2){
               borderRadius: BorderRadius.circular(30),
             ),
           ),
-          onPressed: ()=>{}, 
+          onPressed: ()=>{func2()}, 
           child: Text(name2),
         ),
       ],
