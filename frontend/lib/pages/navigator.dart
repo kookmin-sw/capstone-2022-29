@@ -4,14 +4,22 @@ import 'package:flutter/material.dart';
 import 'package:frontend/pages/bookmark/bookmark_page.dart';
 import 'package:frontend/pages/home/home_page.dart';
 import 'package:frontend/pages/home/news_page.dart';
+import 'package:frontend/pages/more/more_page.dart';
+import 'package:frontend/pages/more/my_keyword_page.dart';
+import 'package:frontend/pages/more/notice_detail_page.dart';
+import 'package:frontend/pages/more/notice_page.dart';
+import 'package:frontend/pages/more/qna_page.dart';
+import 'package:frontend/pages/search/detail_news_page.dart';
 import 'package:frontend/pages/search/search_page.dart';
+import 'package:frontend/pages/search/timeline_page.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:line_icons/line_icons.dart';
 
 class NavigatorPage extends StatefulWidget {
-  NavigatorPage({Key? key, required this.index, this.query}) : super(key: key);
+  NavigatorPage({Key? key, required this.index, this.query, this.topicNum}) : super(key: key);
   int index = 0;
   String? query;
+  double? topicNum;
 
   @override
   State<NavigatorPage> createState() => _NavigatorPageState();
@@ -23,6 +31,13 @@ class _NavigatorPageState extends State<NavigatorPage> {
         SearchPage(),
         BookmarkPage(),
         NewsPage(query: widget.query),
+        TimelinePage(query: widget.query),
+        DetailNewsPage(title: widget.query),
+        MorePage(),
+        NoticePage(),
+        NoticeDetailPage(),
+        QnAPage(),
+        MyKeywordPage(),
       ];
 
   @override

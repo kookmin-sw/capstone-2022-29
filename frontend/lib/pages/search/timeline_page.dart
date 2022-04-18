@@ -4,11 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:frontend/components/app_bar.dart';
 import 'package:frontend/components/search_bar.dart';
 import 'package:frontend/pages/home/news_page.dart';
+import 'package:frontend/pages/navigator.dart';
 import 'package:timelines/timelines.dart';
 import 'dart:convert';
 
 class TimelinePage extends StatefulWidget {
-  TimelinePage({Key? key}) : super(key: key);
+  TimelinePage({Key? key, this.query}) : super(key: key);
+  String? query;
 
   @override
   State<TimelinePage> createState() => _TimelinePageState();
@@ -82,10 +84,13 @@ class _TimelinePageState extends State<TimelinePage> {
                                     ),
                                   ),
                                   onPressed: (){
-                                    // Navigator.pop(context);
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(builder: (context) => TimelinePage()),
+                                    Navigator.of(context).push(
+                                      MaterialPageRoute(
+                                        builder: (context) => NavigatorPage(
+                                          index: 4,
+                                          query: '',
+                                        ),
+                                      ),
                                     );
                                   }, 
                                   child: Text("검색하기"),
@@ -100,7 +105,7 @@ class _TimelinePageState extends State<TimelinePage> {
                 );
               },
               child: AbsorbPointer(
-                child: searchBar(size,false,"코로나"),
+                child: searchBar(size,false, widget.query ?? ''),
               ),
             ),
             Container(
@@ -164,10 +169,14 @@ class _TimelinePageState extends State<TimelinePage> {
                                         context,
                                         MaterialPageRoute(
                                           builder: (context) {
-                                            return NewsPage(query: data[index]["content"]);
+                                            return NavigatorPage(
+                                              index: 3,
+                                              query: data[index]["content"]
+                                            );
                                           },
                                         ),
-                                      );},) 
+                                      );
+                                    }) 
                                   )
                                 ],
                               ),

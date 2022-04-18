@@ -8,8 +8,8 @@ import 'package:timelines/timelines.dart';
 import 'dart:convert';
 
 class DetailNewsPage extends StatefulWidget {
-  DetailNewsPage({Key? key, required this.title}) : super(key: key);
-  String title;
+  DetailNewsPage({Key? key, this.title}) : super(key: key);
+  String? title;
 
   @override
   State<DetailNewsPage> createState() => _DetailNewsPageState();

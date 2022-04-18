@@ -134,7 +134,11 @@ class _HomePageState extends State<HomePage> {
             crossAxisAlignment: CrossAxisAlignment.start, // 가로
             mainAxisAlignment: MainAxisAlignment.start, // 세로
             children: [
-              logo(size),
+              InkWell(
+                onTap : () {
+                  
+                },
+                child: logo(size)),
               InkWell(
                 onTap: () {
                   Navigator.push(
