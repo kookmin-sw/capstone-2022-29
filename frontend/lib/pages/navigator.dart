@@ -16,10 +16,12 @@ import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:line_icons/line_icons.dart';
 
 class NavigatorPage extends StatefulWidget {
-  NavigatorPage({Key? key, required this.index, this.query, this.topicNum}) : super(key: key);
+  NavigatorPage({Key? key, required this.index, this.query, this.topicNum, this.title, this.content}) : super(key: key);
   int index = 0;
   String? query;
   double? topicNum;
+  String? title;
+  String? content;
 
   @override
   State<NavigatorPage> createState() => _NavigatorPageState();
@@ -33,9 +35,8 @@ class _NavigatorPageState extends State<NavigatorPage> {
         NewsPage(query: widget.query),
         TimelinePage(query: widget.query),
         DetailNewsPage(title: widget.query),
-        MorePage(),
         NoticePage(),
-        NoticeDetailPage(),
+        NoticeDetailPage(title: widget.title, content: widget.content),
         QnAPage(),
         MyKeywordPage(),
       ];

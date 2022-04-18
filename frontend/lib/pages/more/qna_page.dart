@@ -12,9 +12,9 @@ class QnAPage extends StatefulWidget {
 }
 
 class _QnAPageState extends State<QnAPage> {
-  final titleController = TextEditingController();
-  final contentController = TextEditingController();
-  final emailController = TextEditingController();
+  TextEditingController titleController = TextEditingController();
+  TextEditingController contentController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
 
   void onClickPressed() {
     print('title: ' + titleController.text);
@@ -24,6 +24,14 @@ class _QnAPageState extends State<QnAPage> {
 
   void onCanclePressed() {
     print('cancle');
+  }
+
+  @override
+  void dispose() {
+    titleController.dispose();
+    contentController.dispose();
+    emailController.dispose();
+    super.dispose();
   }
   
   @override
