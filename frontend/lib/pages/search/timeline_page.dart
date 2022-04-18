@@ -42,7 +42,7 @@ class _TimelinePageState extends State<TimelinePage> {
     return Scaffold(
       extendBody: true,
       backgroundColor: Color.fromRGBO(247, 247, 247, 1),
-      appBar: appBar(size, ' ', context),
+      appBar: appBar(size, ' ', context, false),
       body: SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

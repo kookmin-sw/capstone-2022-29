@@ -1,8 +1,9 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
+import 'package:share_plus/share_plus.dart';
 
-AppBar appBar(Size size, String title, BuildContext context) {
+AppBar appBar(Size size, String title, BuildContext context, bool isShow) {
   return AppBar(
     backgroundColor: Colors.transparent,
     leading: Container(
@@ -23,5 +24,17 @@ AppBar appBar(Size size, String title, BuildContext context) {
     ) : null,
     centerTitle: true,
     elevation: 0.0,
+    actions: [
+      isShow? Container(
+        margin: EdgeInsets.only(right: size.width * 0.05),
+        child: IconButton(
+          icon: Icon(Icons.share_outlined),
+          color: Colors.black,
+          onPressed: () {
+            Share.share('Hello Welcome to FlutterCampus', subject: 'Welcome Message');
+          },
+        ),
+      ) : Container(),
+    ],
   );
 }

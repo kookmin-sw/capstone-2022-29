@@ -56,7 +56,7 @@ class _MyKeywordPageState extends State<MyKeywordPage> {
     return MaterialApp(
       title: "wellcome",
       home: Scaffold(
-        appBar: appBar(size, '나의 키워드', context),
+        appBar: appBar(size, '나의 키워드', context, false),
         body: Column(
           children: [
             Autocomplete<String>(

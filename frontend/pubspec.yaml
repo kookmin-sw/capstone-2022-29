@@ -39,6 +39,7 @@ dependencies:
   flutter_tagging: ^3.0.0
   flutter_syntax_view: ^4.0.0
   timelines: ^0.1.0
+  share_plus: ^4.0.4
 
 dev_dependencies:
   flutter_test:

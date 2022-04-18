@@ -31,7 +31,7 @@ class _QnAPageState extends State<QnAPage> {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: Color.fromRGBO(247, 247, 247, 1),
-      appBar: appBar(size, 'Q&A', context),
+      appBar: appBar(size, 'Q&A', context, false),
       body: Column(
         children: <Widget>[
             Center(

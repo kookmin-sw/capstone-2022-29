@@ -39,7 +39,7 @@ class _NewsPageState extends State<NewsPage> {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: Color(0xffF7F7F7),
-      appBar: appBar(size, '${widget.query} 뉴스', context),
+      appBar: appBar(size, '${widget.query} 뉴스', context, false),
       body: SafeArea(
         child: SizedBox(
           height: size.height * 0.67,
