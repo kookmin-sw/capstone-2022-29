@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:frontend/components/logo.dart';
 import 'package:frontend/components/search_bar.dart';
 import 'package:frontend/components/slide_news/slide.dart';
-import 'package:frontend/pages/more/more_page.dart';
 import 'package:frontend/pages/navigator.dart';
 import 'package:bubble_chart/bubble_chart.dart';
 

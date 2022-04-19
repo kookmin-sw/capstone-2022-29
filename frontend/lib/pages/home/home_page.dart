@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, use_key_in_widget_constructors
 import 'dart:math';
 
 import 'package:flutter/material.dart';
@@ -7,7 +7,7 @@ import 'package:frontend/components/search_bar.dart';
 import 'package:frontend/components/slide_news/slide.dart';
 import 'package:frontend/pages/navigator.dart';
 import 'package:bubble_chart/bubble_chart.dart';
-
+import 'package:flutter_kakao_login/flutter_kakao_login.dart';
 
 final Color backgroundColor = Color(0xFFf7f7f7);
 
@@ -25,15 +25,16 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
   late final Animation<double> _menuScaleAnimation;
   late final Animation<Offset> _slideAnimation;
   List<BubbleNode> childNode = [];
+  List <String> userInfo = [];
 
   @override
   void initState() {
-    super.initState();
      _controller = AnimationController(vsync: this, duration: duration);
     _scaleAnimation = Tween<double>(begin: 1, end: 0.8).animate(_controller);
     _menuScaleAnimation = Tween<double>(begin: 0.5, end: 1).animate(_controller);
     _slideAnimation = Tween<Offset>(begin: Offset(-1, 0), end: Offset(0, 0)).animate(_controller);
     _addNewNode();
+    super.initState();
   }
 
   _addNewNode() {
@@ -161,62 +162,130 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
       child: ScaleTransition(
         scale: _menuScaleAnimation,
         child: Padding(
-          padding: const EdgeInsets.only(left: 16.0),
+          padding: EdgeInsets.only(top: screenHeight*0.1, bottom: screenHeight*0.05, left: screenWidth*0.05),
           child: Align(
             alignment: Alignment.centerLeft,
             child: Column(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              // mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                InkWell(
-                  child: Text("공지사항", style: TextStyle(color: Colors.black, fontSize: 20)),
-                  onTap: () { 
-                    _controller.forward();
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) {
-                          return NavigatorPage(
-                            index: 6,
-                          );
-                        },
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      width: screenWidth * 0.25,
+                      height: screenWidth * 0.25,
+                      decoration: BoxDecoration(
+                        color: Color(0xffffffff),
+                        borderRadius: BorderRadius.circular(30),
                       ),
-                    );
-                  }
+                      // child: Image.network(userProfileImagePath ?? '')
+                    ),
+                    SizedBox(height:screenHeight * 0.02),
+                    Text('최혜원'),
+                    Text("[뉴스를 익히다]", style: TextStyle(color: Color(0xff4B3187))),
+                    SizedBox(height:screenHeight*0.04),
+                    InkWell(
+                      child: SizedBox(
+                        width: screenWidth * 0.5,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Row(children: [
+                              Icon(Icons.list_outlined),
+                              SizedBox(width:screenWidth * 0.02),
+                              Text("공지사항", style: TextStyle(color: Colors.black, fontSize: 16)),
+                            ],),
+                            Icon(Icons.arrow_forward_ios, size: screenWidth*0.04),
+                          ],
+                        ),
+                      ),
+                      onTap: () { 
+                        _controller.forward();
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) {
+                              return NavigatorPage(
+                                index: 6,
+                              );
+                            },
+                          ),
+                        );
+                      }
+                    ),
+                    SizedBox(height:screenHeight*0.02),
+                    InkWell(
+                      child: SizedBox(
+                        width: screenWidth * 0.5,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Row(children: [
+                              Icon(Icons.person_outline),
+                              SizedBox(width:screenWidth * 0.02),
+                              Text("Q&A", style: TextStyle(color: Colors.black, fontSize: 16)),
+                            ],),
+                            Icon(Icons.arrow_forward_ios, size: screenWidth*0.04),
+                          ],
+                        ),
+                      ),
+                      onTap: () { 
+                        _controller.forward();
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) {
+                              return NavigatorPage(
+                                index: 8,
+                              );
+                            },
+                          ),
+                        );
+                      }
+                    ),
+                    SizedBox(height:screenHeight*0.02),
+                    InkWell(
+                      child: SizedBox(
+                        width: screenWidth * 0.5,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Row(children: [
+                              Icon(Icons.favorite_border_outlined),
+                              SizedBox(width:screenWidth * 0.02),
+                              Text("나의 키워드", style: TextStyle(color: Colors.black, fontSize: 16)),
+                            ],),
+                            Icon(Icons.arrow_forward_ios, size: screenWidth*0.04),
+                          ],
+                        ),
+                      ),
+                      onTap: () { 
+                        _controller.forward();
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) {
+                              return NavigatorPage(
+                                index: 9,
+                              );
+                            },
+                          ),
+                        );
+                      }
+                    ),  
+                  ],
                 ),
-                SizedBox(height:40),
                 InkWell(
-                  child: Text("Q&A", style: TextStyle(color: Colors.black, fontSize: 20)),
+                  child: Row(
+                    children: [
+                      Icon(Icons.logout_outlined),
+                      SizedBox(width:screenWidth * 0.02),
+                      Text("로그아웃", style: TextStyle(color: Colors.black, fontSize: 16)),
+                    ],
+                  ),
                   onTap: () { 
-                    _controller.forward();
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) {
-                          return NavigatorPage(
-                            index: 8,
-                          );
-                        },
-                      ),
-                    );
-                  }
-                ),
-                SizedBox(height:40),
-                InkWell(
-                  child: Text("나의 키워드", style: TextStyle(color: Colors.black, fontSize: 20)),
-                  onTap: () { 
-                    _controller.forward();
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) {
-                          return NavigatorPage(
-                            index: 9,
-                          );
-                        },
-                      ),
-                    );
                   }
                 ),  
               ],
