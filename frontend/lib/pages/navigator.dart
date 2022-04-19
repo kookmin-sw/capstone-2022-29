@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:frontend/pages/bookmark/bookmark_page.dart';
 import 'package:frontend/pages/home/home_page.dart';
 import 'package:frontend/pages/home/news_page.dart';
-import 'package:frontend/pages/more/more_page.dart';
 import 'package:frontend/pages/more/my_keyword_page.dart';
 import 'package:frontend/pages/more/notice_detail_page.dart';
 import 'package:frontend/pages/more/notice_page.dart';
