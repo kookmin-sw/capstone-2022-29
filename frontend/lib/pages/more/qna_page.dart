@@ -12,26 +12,34 @@ class QnAPage extends StatefulWidget {
 }
 
 class _QnAPageState extends State<QnAPage> {
-  final titleController = TextEditingController();
-  final contentController = TextEditingController();
-  final emailController = TextEditingController();
+  TextEditingController titleController = TextEditingController();
+  TextEditingController contentController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
 
-  // void onClickPressed() {
-  //   print('title: ' + titleController.text);
-  //   print('content: ' + contentController.text);
-  //   print('email: ' + emailController.text);      
-  // }
+  void onClickPressed() {
+    print('title: ' + titleController.text);
+    print('content: ' + contentController.text);
+    print('email: ' + emailController.text);      
+  }
 
-  // void onCanclePressed() {
-  //   print('cancle');
-  // }
+  void onCanclePressed() {
+    print('cancle');
+  }
+
+  @override
+  void dispose() {
+    titleController.dispose();
+    contentController.dispose();
+    emailController.dispose();
+    super.dispose();
+  }
   
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: Color.fromRGBO(247, 247, 247, 1),
-      appBar: appBar(size, 'Q&A'),
+      appBar: appBar(size, 'Q&A', context, false),
       body: Column(
         children: <Widget>[
             Center(
@@ -95,7 +103,7 @@ class _QnAPageState extends State<QnAPage> {
                 ),
               ),
             ),
-            buttonTwo(size, '취소', '저장'),
+            buttonTwo(size, '취소', '저장', onCanclePressed, onClickPressed),
         ],
       )
     );

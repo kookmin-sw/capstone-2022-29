@@ -2,23 +2,30 @@
 
 import 'package:flutter/material.dart';
 import 'package:frontend/components/app_bar.dart';
+class NoticeDetailPage extends StatefulWidget {
+  NoticeDetailPage({Key? key, this.title, this.content}) : super(key: key);
+  String? title;
+  String? content;
 
-class NoticeDetailPage extends StatelessWidget {
-  const NoticeDetailPage({Key? key}) : super(key: key);
 
+  @override
+  State<NoticeDetailPage> createState() => _NoticeDetailPageState();
+}
+
+class _NoticeDetailPageState extends State<NoticeDetailPage> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: Color.fromRGBO(231, 243, 255, 1),
-      appBar: appBar(size, ''),
+      appBar: appBar(size, '', context, false),
       body: Container(
         child: Column(
           children: [
             Container(
               width: size.width,    
               height: 40,
-              child: Center(child: Text('공지사항 제목')),
+              child: Center(child: Text(widget.title ?? '')),
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(30),
@@ -27,7 +34,7 @@ class NoticeDetailPage extends StatelessWidget {
             Container(
               width: size.width,    
               height: 400,
-              child: SingleChildScrollView(child:Text('공지사항 내용입니다.')),
+              child: SingleChildScrollView(child:Text(widget.content ?? '')),
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(30),
