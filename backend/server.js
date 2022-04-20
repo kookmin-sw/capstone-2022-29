@@ -7,8 +7,7 @@ const bodyParser = require("body-parser");
 const mongoose = require('mongoose');
 mongoose
     .connect(process.env.MONGODB_URI, {
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
+        useNewUrlParser: true, useUnifiedTopology: true,
     })
     .then(() => console.log("MongoDB Connected"))
     .catch((err) => console.log(err));
@@ -26,8 +25,7 @@ app.use('/', router);
 // const userSchema = require('./models/user');
 // require('./routes/user')(app, userSchema);
 
-const PORT = process.env.PORT || 9000;
-// app.listen(app.get('port'), () => console.log(`listening on port ${app.get('port')}`));
+const PORT = process.env.PORT || 5000;
 app.listen(PORT, (err, res) => {
     if(err) throw err;
     console.log("Node js & MongoDB Connected");

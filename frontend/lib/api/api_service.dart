@@ -9,7 +9,8 @@ import 'package:http/http.dart' as http;
 
 class ApiService {
   static final ApiService _apiService = ApiService._init();
-  // static const API_URL = 'http://127.0.0.1:9000/';
+  // static const API_URL = 'http://127.0.0.1:5000/';
+  // static const API_URL = 'http://ec2-3-101-17-221.us-west-1.compute.amazonaws.com';
 
   factory ApiService() {
     return _apiService;
@@ -19,7 +20,7 @@ class ApiService {
 
   // post user info
   Future<http.Response> postUserInfo(User user) async {
-    final url = Uri.http("127.0.0.1:9000", "users");
+    final url = Uri.http("127.0.0.1:5000", "users");
     http.Response response = await http.post(
       url,
       headers: {
@@ -38,7 +39,7 @@ class ApiService {
     final queryParameters = {
       'accessToken': accessToken,
     };
-    final url = Uri.http("127.0.0.1:9000", "users", queryParameters);
+    final url = Uri.http("127.0.0.1:5000", "users", queryParameters);
     http.Response response = await http.get(url, headers: {
       "Content-type": "application/json",
     });
@@ -57,7 +58,7 @@ class ApiService {
     final queryParameters = {
       'nickname': nickname,
     };
-    final url = Uri.http("127.0.0.1:9000", "users/find", queryParameters);
+    final url = Uri.http("127.0.0.1:5000", "users/find", queryParameters);
     http.Response response = await http.get(url, headers: {
       "Content-type": "application/json",
     });
@@ -76,7 +77,7 @@ class ApiService {
     final queryParameters = {
       'nickname': nickname,
     };
-    final url = Uri.http("127.0.0.1:9000", "users", queryParameters);
+    final url = Uri.http("127.0.0.1:5000", "users", queryParameters);
     http.Response response = await http.put(
       url,
       headers: {
@@ -92,7 +93,7 @@ class ApiService {
 
   // post news
   // Future<http.Response> postNews(News news) async {
-  //   final url = Uri.http("127.0.0.1:9000", "news");
+  //   final url = Uri.http("127.0.0.1:5000", "news");
   //   http.Response response = await http.post(
   //     url,
   //     body: jsonEncode(news.toJson()),
@@ -112,7 +113,7 @@ class ApiService {
     final queryParameters = {
       'query': query,
     };
-    final url = Uri.http("127.0.0.1:9000", "news", queryParameters);
+    final url = Uri.http("127.0.0.1:5000", "news", queryParameters);
     http.Response response = await http.get(url, headers: {
       "Content-type": "application/json",
     });
@@ -128,7 +129,7 @@ class ApiService {
 
   // post bookmark (user_id, query, count)
   Future<http.Response> postBookmark(Bookmark bookmark) async {
-    final url = Uri.http("127.0.0.1:9000", "bookmarks");
+    final url = Uri.http("127.0.0.1:5000", "bookmarks");
     http.Response response = await http.post(
       url,
       headers: {
@@ -148,7 +149,7 @@ class ApiService {
     final queryParameters = {
       'user_id': user_id,
     };
-    final url = Uri.http("127.0.0.1:9000", "bookmarks", queryParameters);
+    final url = Uri.http("127.0.0.1:5000", "bookmarks", queryParameters);
     http.Response response = await http.get(url, headers: {
       "Content-type": "application/json",
     });
@@ -169,7 +170,7 @@ class ApiService {
       'user_id': user_id,
       'query': query,
     };
-    final url = Uri.http("127.0.0.1:9000", "bookmarks", queryParameters);
+    final url = Uri.http("127.0.0.1:5000", "bookmarks", queryParameters);
     http.Response response = await http.put(
       url,
       headers: {
