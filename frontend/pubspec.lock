@@ -188,6 +188,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "3.0.0"
+  flutter_tagging_plus:
+    dependency: "direct main"
+    description:
+      name: flutter_tagging_plus
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "4.0.0"
   flutter_tags:
     dependency: "direct main"
     description:
@@ -206,7 +213,7 @@ packages:
       name: flutter_typeahead
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "3.2.4"
+    version: "3.2.5"
   flutter_web_plugins:
     dependency: transitive
     description: flutter
