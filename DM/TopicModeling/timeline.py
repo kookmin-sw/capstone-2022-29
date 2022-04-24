@@ -1,7 +1,7 @@
 import pandas as pd
 
 
-def timelining(num_topics, per_contrib, num_news_threshold)
+def timelining(num_topics, per_contrib, num_news_threshold):
   timeline_df = pd.DataFrame(columns = ['Keywords', 'Date'])
 
   for i in range(1, num_topics+1): # 
