@@ -1,5 +1,4 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, prefer_const_constructors_in_immutables, prefer_final_fields
-
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, use_key_in_widget_constructors
 import 'dart:math';
 
 import 'package:flutter/material.dart';
@@ -10,22 +9,34 @@ import 'package:frontend/pages/navigator.dart';
 import 'package:bubble_chart/bubble_chart.dart';
 import 'package:localstorage/localstorage.dart';
 import 'package:frontend/api/api_service.dart';
+import 'package:flutter_kakao_login/flutter_kakao_login.dart';
+
+final Color backgroundColor = Color(0xFFf7f7f7);
 
 class HomePage extends StatefulWidget {
-  HomePage({Key? key}) : super(key: key);
-
   @override
-  State<HomePage> createState() => _HomePageState();
+  _HomePageState createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin {
+  bool isCollapsed = true;
+  double screenHeight=0.0, screenWidth = 0.0;
+  final Duration duration = const Duration(milliseconds: 300);
+  late final AnimationController _controller;
+  late final Animation<double> _scaleAnimation;
+  late final Animation<double> _menuScaleAnimation;
+  late final Animation<Offset> _slideAnimation;
   List<BubbleNode> childNode = [];
   final LocalStorage localStorage = LocalStorage('user');
-
+  
   @override
   void initState() {
-    super.initState();
+     _controller = AnimationController(vsync: this, duration: duration);
+    _scaleAnimation = Tween<double>(begin: 1, end: 0.8).animate(_controller);
+    _menuScaleAnimation = Tween<double>(begin: 0.5, end: 1).animate(_controller);
+    _slideAnimation = Tween<Offset>(begin: Offset(-1, 0), end: Offset(0, 0)).animate(_controller);
     _addNewNode();
+    super.initState();
   }
 
   _addNewNode() {
@@ -130,23 +141,206 @@ class _HomePageState extends State<HomePage> {
   }
 
   @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
+    screenHeight = size.height;
+    screenWidth = size.width;
+
+    return Scaffold(
+      backgroundColor: isCollapsed? Color(0xfff7f7f7): Color(0xFFe7f3ff),
+      body: Stack(
+        children: <Widget>[
+          menu(context),
+          dashboard(context),
+        ],
+      ),
+    );
+  }
+
+  Widget menu(context) {
+    return SlideTransition(
+      position: _slideAnimation,
+      child: ScaleTransition(
+        scale: _menuScaleAnimation,
+        child: Padding(
+          padding: EdgeInsets.only(top: screenHeight*0.1, bottom: screenHeight*0.05, left: screenWidth*0.05),
+          child: Align(
+            alignment: Alignment.centerLeft,
+            child: Column(
+              // mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      width: screenWidth * 0.25,
+                      height: screenWidth * 0.25,
+                      decoration: BoxDecoration(
+                        color: Color(0xffffffff),
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                      // child: Image.network(userProfileImagePath ?? '')
+                    ),
+                    SizedBox(height:screenHeight * 0.02),
+                    Text('최혜원'),
+                    Text("[뉴스를 익히다]", style: TextStyle(color: Color(0xff4B3187))),
+                    SizedBox(height:screenHeight*0.04),
+                    InkWell(
+                      child: SizedBox(
+                        width: screenWidth * 0.5,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Row(children: [
+                              Icon(Icons.list_outlined),
+                              SizedBox(width:screenWidth * 0.02),
+                              Text("공지사항", style: TextStyle(color: Colors.black, fontSize: 16)),
+                            ],),
+                            Icon(Icons.arrow_forward_ios, size: screenWidth*0.04),
+                          ],
+                        ),
+                      ),
+                      onTap: () { 
+                        _controller.forward();
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) {
+                              return NavigatorPage(
+                                index: 6,
+                              );
+                            },
+                          ),
+                        );
+                      }
+                    ),
+                    SizedBox(height:screenHeight*0.02),
+                    InkWell(
+                      child: SizedBox(
+                        width: screenWidth * 0.5,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Row(children: [
+                              Icon(Icons.person_outline),
+                              SizedBox(width:screenWidth * 0.02),
+                              Text("Q&A", style: TextStyle(color: Colors.black, fontSize: 16)),
+                            ],),
+                            Icon(Icons.arrow_forward_ios, size: screenWidth*0.04),
+                          ],
+                        ),
+                      ),
+                      onTap: () { 
+                        _controller.forward();
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) {
+                              return NavigatorPage(
+                                index: 8,
+                              );
+                            },
+                          ),
+                        );
+                      }
+                    ),
+                    SizedBox(height:screenHeight*0.02),
+                    InkWell(
+                      child: SizedBox(
+                        width: screenWidth * 0.5,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Row(children: [
+                              Icon(Icons.favorite_border_outlined),
+                              SizedBox(width:screenWidth * 0.02),
+                              Text("나의 키워드", style: TextStyle(color: Colors.black, fontSize: 16)),
+                            ],),
+                            Icon(Icons.arrow_forward_ios, size: screenWidth*0.04),
+                          ],
+                        ),
+                      ),
+                      onTap: () { 
+                        _controller.forward();
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) {
+                              return NavigatorPage(
+                                index: 9,
+                              );
+                            },
+                          ),
+                        );
+                      }
+                    ),  
+                  ],
+                ),
+                InkWell(
+                  child: Row(
+                    children: [
+                      Icon(Icons.logout_outlined),
+                      SizedBox(width:screenWidth * 0.02),
+                      Text("로그아웃", style: TextStyle(color: Colors.black, fontSize: 16)),
+                    ],
+                  ),
+                  onTap: () { 
+                  }
+                ),  
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget dashboard(context) {
     Size size = MediaQuery.of(context).size;
     return WillPopScope(
       onWillPop: () => Future.value(false),
-      child: Scaffold(
-        extendBody: true,
-        backgroundColor: Color(0xffF7F7F7),
-        body: SafeArea(
-          child: FutureBuilder(
-            future: getBookmark(localStorage.getItem('user_id')),
-            builder: (BuildContext context, AsyncSnapshot snapshot) {
-              if (data.length != 0) {
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.start, // 가로
-                  mainAxisAlignment: MainAxisAlignment.start, // 세로
-                  children: [
-                    logo(size),
+      child: AnimatedPositioned(
+        duration: duration,
+        top: 0,
+        bottom: 0,
+        left: isCollapsed ? 0 : 0.6 * screenWidth,
+        right: isCollapsed ? 0 : -0.2 * screenWidth,
+        child: ScaleTransition(
+          scale: _scaleAnimation,
+          child: Material(
+            animationDuration: duration,
+            borderRadius: BorderRadius.all(Radius.circular(40)),
+            color: backgroundColor,
+            child: SingleChildScrollView(
+              scrollDirection: Axis.vertical,
+              physics: ClampingScrollPhysics(),
+              child: SafeArea(
+                child: Container(
+                padding: EdgeInsets.only(left: size.width*0.05, right: size.width*0.05, top: size.height * 0.01),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    InkWell(
+                      child: logo(size),
+                      onTap: () {
+                        setState(() {
+                          if (isCollapsed)
+                            _controller.forward();
+                          else
+                            _controller.reverse();
+    
+                          isCollapsed = !isCollapsed;
+                        });
+                      },
+                    ),
                     InkWell(
                       onTap: () {
                         Navigator.push(
@@ -161,24 +355,24 @@ class _HomePageState extends State<HomePage> {
                         );
                       },
                       child: AbsorbPointer(
-                        child: searchBar(size),
+                        child: searchBar(size, false,""),
                       ),
                     ),
                     SizedBox(
                       height: size.height * 0.67,
-                      child: ListView(
-                        shrinkWrap: true,
-                        children: getSlide(size),
+                      child: SingleChildScrollView(
+                        scrollDirection: Axis.vertical,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: getSlide(size),
+                        )
                       ),
                     ),
                   ],
-                );
-              } else {
-                return Center(
-                  child: CircularProgressIndicator(),
-                );
-              }
-            },
+                ),
+              ),
+              ),
+            ),
           ),
         ),
       ),

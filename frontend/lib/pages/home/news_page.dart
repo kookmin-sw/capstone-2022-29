@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors, prefer_is_empty
+// ignore_for_file: prefer_const_constructors, prefer_is_empty,must_be_immutable, prefer_const_constructors
 
 import 'package:flutter/material.dart';
 import 'package:frontend/api/api_service.dart';
@@ -43,7 +43,7 @@ class _NewsPageState extends State<NewsPage> {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: Color(0xffF7F7F7),
-      appBar: appBar(size, '${widget.query} 뉴스'),
+      appBar: appBar(size, '${widget.query} 뉴스', context, false),
       body: SafeArea(
         child: FutureBuilder(
           future: getNews(widget.query),
