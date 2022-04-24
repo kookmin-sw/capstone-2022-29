@@ -7,6 +7,8 @@ import 'package:frontend/components/search_bar.dart';
 import 'package:frontend/components/slide_news/slide.dart';
 import 'package:frontend/pages/navigator.dart';
 import 'package:bubble_chart/bubble_chart.dart';
+import 'package:localstorage/localstorage.dart';
+import 'package:frontend/api/api_service.dart';
 import 'package:flutter_kakao_login/flutter_kakao_login.dart';
 
 final Color backgroundColor = Color(0xFFf7f7f7);
@@ -16,23 +18,26 @@ class HomePage extends StatefulWidget {
   _HomePageState createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin {
+class _HomePageState extends State<HomePage>
+    with SingleTickerProviderStateMixin {
   bool isCollapsed = true;
-  double screenHeight=0.0, screenWidth = 0.0;
+  double screenHeight = 0.0, screenWidth = 0.0;
   final Duration duration = const Duration(milliseconds: 300);
   late final AnimationController _controller;
   late final Animation<double> _scaleAnimation;
   late final Animation<double> _menuScaleAnimation;
   late final Animation<Offset> _slideAnimation;
   List<BubbleNode> childNode = [];
-  List <String> userInfo = [];
+  final LocalStorage localStorage = LocalStorage('user');
 
   @override
   void initState() {
-     _controller = AnimationController(vsync: this, duration: duration);
+    _controller = AnimationController(vsync: this, duration: duration);
     _scaleAnimation = Tween<double>(begin: 1, end: 0.8).animate(_controller);
-    _menuScaleAnimation = Tween<double>(begin: 0.5, end: 1).animate(_controller);
-    _slideAnimation = Tween<Offset>(begin: Offset(-1, 0), end: Offset(0, 0)).animate(_controller);
+    _menuScaleAnimation =
+        Tween<double>(begin: 0.5, end: 1).animate(_controller);
+    _slideAnimation = Tween<Offset>(begin: Offset(-1, 0), end: Offset(0, 0))
+        .animate(_controller);
     _addNewNode();
     super.initState();
   }
@@ -59,12 +64,17 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
     });
   }
 
-  List data = [
-    {"query": "코로나", "count": 20},
-    {"query": "우크라이나", "count": 50},
-    {"query": "국민대학교", "count": 10},
-    {"query": "메타버스", "count": 15},
-  ];
+  List<Map> data = [];
+
+  Future<void> getBookmark(dynamic user_id) async {
+    data.clear();
+    List<dynamic> bookmark = await ApiService().getBookmark(user_id);
+    // print("page: ${news.length}");
+    for (var i = 0; i < bookmark.length; i++) {
+      data.add({'query': bookmark[i]['query'], 'count': bookmark[i]['count']});
+    }
+    data.sort(((a, b) => (b['count']).compareTo(a['count'])));
+  }
 
   List<BubbleNode> getData(Size size) {
     List<BubbleNode> list = [];
@@ -146,7 +156,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
     screenWidth = size.width;
 
     return Scaffold(
-      backgroundColor: isCollapsed? Color(0xfff7f7f7): Color(0xFFe7f3ff),
+      backgroundColor: isCollapsed ? Color(0xfff7f7f7) : Color(0xFFe7f3ff),
       body: Stack(
         children: <Widget>[
           menu(context),
@@ -162,7 +172,10 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
       child: ScaleTransition(
         scale: _menuScaleAnimation,
         child: Padding(
-          padding: EdgeInsets.only(top: screenHeight*0.1, bottom: screenHeight*0.05, left: screenWidth*0.05),
+          padding: EdgeInsets.only(
+              top: screenHeight * 0.1,
+              bottom: screenHeight * 0.05,
+              left: screenWidth * 0.05),
           child: Align(
             alignment: Alignment.centerLeft,
             child: Column(
@@ -182,112 +195,125 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                       ),
                       // child: Image.network(userProfileImagePath ?? '')
                     ),
-                    SizedBox(height:screenHeight * 0.02),
+                    SizedBox(height: screenHeight * 0.02),
                     Text('최혜원'),
-                    Text("[뉴스를 익히다]", style: TextStyle(color: Color(0xff4B3187))),
-                    SizedBox(height:screenHeight*0.04),
+                    Text("[뉴스를 익히다]",
+                        style: TextStyle(color: Color(0xff4B3187))),
+                    SizedBox(height: screenHeight * 0.04),
                     InkWell(
-                      child: SizedBox(
-                        width: screenWidth * 0.5,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Row(children: [
-                              Icon(Icons.list_outlined),
-                              SizedBox(width:screenWidth * 0.02),
-                              Text("공지사항", style: TextStyle(color: Colors.black, fontSize: 16)),
-                            ],),
-                            Icon(Icons.arrow_forward_ios, size: screenWidth*0.04),
-                          ],
-                        ),
-                      ),
-                      onTap: () { 
-                        _controller.forward();
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) {
-                              return NavigatorPage(
-                                index: 6,
-                              );
-                            },
+                        child: SizedBox(
+                          width: screenWidth * 0.5,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Row(
+                                children: [
+                                  Icon(Icons.list_outlined),
+                                  SizedBox(width: screenWidth * 0.02),
+                                  Text("공지사항",
+                                      style: TextStyle(
+                                          color: Colors.black, fontSize: 16)),
+                                ],
+                              ),
+                              Icon(Icons.arrow_forward_ios,
+                                  size: screenWidth * 0.04),
+                            ],
                           ),
-                        );
-                      }
-                    ),
-                    SizedBox(height:screenHeight*0.02),
+                        ),
+                        onTap: () {
+                          _controller.forward();
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) {
+                                return NavigatorPage(
+                                  index: 6,
+                                );
+                              },
+                            ),
+                          );
+                        }),
+                    SizedBox(height: screenHeight * 0.02),
                     InkWell(
-                      child: SizedBox(
-                        width: screenWidth * 0.5,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Row(children: [
-                              Icon(Icons.person_outline),
-                              SizedBox(width:screenWidth * 0.02),
-                              Text("Q&A", style: TextStyle(color: Colors.black, fontSize: 16)),
-                            ],),
-                            Icon(Icons.arrow_forward_ios, size: screenWidth*0.04),
-                          ],
-                        ),
-                      ),
-                      onTap: () { 
-                        _controller.forward();
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) {
-                              return NavigatorPage(
-                                index: 8,
-                              );
-                            },
+                        child: SizedBox(
+                          width: screenWidth * 0.5,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Row(
+                                children: [
+                                  Icon(Icons.person_outline),
+                                  SizedBox(width: screenWidth * 0.02),
+                                  Text("Q&A",
+                                      style: TextStyle(
+                                          color: Colors.black, fontSize: 16)),
+                                ],
+                              ),
+                              Icon(Icons.arrow_forward_ios,
+                                  size: screenWidth * 0.04),
+                            ],
                           ),
-                        );
-                      }
-                    ),
-                    SizedBox(height:screenHeight*0.02),
+                        ),
+                        onTap: () {
+                          _controller.forward();
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) {
+                                return NavigatorPage(
+                                  index: 8,
+                                );
+                              },
+                            ),
+                          );
+                        }),
+                    SizedBox(height: screenHeight * 0.02),
                     InkWell(
-                      child: SizedBox(
-                        width: screenWidth * 0.5,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Row(children: [
-                              Icon(Icons.favorite_border_outlined),
-                              SizedBox(width:screenWidth * 0.02),
-                              Text("나의 키워드", style: TextStyle(color: Colors.black, fontSize: 16)),
-                            ],),
-                            Icon(Icons.arrow_forward_ios, size: screenWidth*0.04),
-                          ],
-                        ),
-                      ),
-                      onTap: () { 
-                        _controller.forward();
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) {
-                              return NavigatorPage(
-                                index: 9,
-                              );
-                            },
+                        child: SizedBox(
+                          width: screenWidth * 0.5,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Row(
+                                children: [
+                                  Icon(Icons.favorite_border_outlined),
+                                  SizedBox(width: screenWidth * 0.02),
+                                  Text("나의 키워드",
+                                      style: TextStyle(
+                                          color: Colors.black, fontSize: 16)),
+                                ],
+                              ),
+                              Icon(Icons.arrow_forward_ios,
+                                  size: screenWidth * 0.04),
+                            ],
                           ),
-                        );
-                      }
-                    ),  
+                        ),
+                        onTap: () {
+                          _controller.forward();
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) {
+                                return NavigatorPage(
+                                  index: 9,
+                                );
+                              },
+                            ),
+                          );
+                        }),
                   ],
                 ),
                 InkWell(
-                  child: Row(
-                    children: [
-                      Icon(Icons.logout_outlined),
-                      SizedBox(width:screenWidth * 0.02),
-                      Text("로그아웃", style: TextStyle(color: Colors.black, fontSize: 16)),
-                    ],
-                  ),
-                  onTap: () { 
-                  }
-                ),  
+                    child: Row(
+                      children: [
+                        Icon(Icons.logout_outlined),
+                        SizedBox(width: screenWidth * 0.02),
+                        Text("로그아웃",
+                            style:
+                                TextStyle(color: Colors.black, fontSize: 16)),
+                      ],
+                    ),
+                    onTap: () {}),
               ],
             ),
           ),
@@ -317,53 +343,67 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
               physics: ClampingScrollPhysics(),
               child: SafeArea(
                 child: Container(
-                padding: EdgeInsets.only(left: size.width*0.05, right: size.width*0.05, top: size.height * 0.01),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    InkWell(
-                      child: logo(size),
-                      onTap: () {
-                        setState(() {
-                          if (isCollapsed)
-                            _controller.forward();
-                          else
-                            _controller.reverse();
-    
-                          isCollapsed = !isCollapsed;
-                        });
-                      },
-                    ),
-                    InkWell(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) {
-                              return NavigatorPage(
-                                index: 1,
-                              );
-                            },
-                          ),
-                        );
-                      },
-                      child: AbsorbPointer(
-                        child: searchBar(size, false,""),
-                      ),
-                    ),
-                    SizedBox(
-                      height: size.height * 0.67,
-                      child: SingleChildScrollView(
-                        scrollDirection: Axis.vertical,
-                        child: Column(
+                  padding: EdgeInsets.only(
+                      left: size.width * 0.05,
+                      right: size.width * 0.05,
+                      top: size.height * 0.01),
+                  child: FutureBuilder(
+                    future: getBookmark(localStorage.getItem('user_id')),
+                    builder: (BuildContext context, AsyncSnapshot snapshot) {
+                      if (data.isNotEmpty) {
+                        return Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
-                          children: getSlide(size),
-                        )
-                      ),
-                    ),
-                  ],
+                          children: <Widget>[
+                            InkWell(
+                              child: logo(size),
+                              onTap: () {
+                                setState(() {
+                                  if (isCollapsed)
+                                    _controller.forward();
+                                  else
+                                    _controller.reverse();
+
+                                  isCollapsed = !isCollapsed;
+                                });
+                              },
+                            ),
+                            InkWell(
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) {
+                                      return NavigatorPage(
+                                        index: 1,
+                                      );
+                                    },
+                                  ),
+                                );
+                              },
+                              child: AbsorbPointer(
+                                child: searchBar(size, false, ""),
+                              ),
+                            ),
+                            SizedBox(
+                              height: size.height * 0.67,
+                              child: SingleChildScrollView(
+                                  scrollDirection: Axis.vertical,
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: getSlide(size),
+                                  )),
+                            ),
+                          ],
+                        );
+                      } else {
+                        return Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      }
+                    },
+                  ),
                 ),
-              ),
               ),
             ),
           ),

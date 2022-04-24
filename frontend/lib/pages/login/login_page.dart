@@ -5,7 +5,10 @@ import 'package:flutter_signin_button/flutter_signin_button.dart';
 import 'package:flutter_kakao_login/flutter_kakao_login.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:frontend/api/api_service.dart';
+import 'package:frontend/models/user_model.dart';
 import 'package:frontend/pages/navigator.dart';
+import 'package:localstorage/localstorage.dart';
 
 class LoginPage extends StatefulWidget {
   LoginPage({Key? key}) : super(key: key);
@@ -44,14 +47,40 @@ class _LoginPageState extends State<LoginPage> {
       final result = await kakaoSignIn.getUserMe();
       final KakaoAccountResult? account = result.account;
       if (account != null) {
-        final KakaoAccountResult? account = result.account;
+        final KakaoAccountResult? account = result.account!;
         // final userID = account?.userID;
-        final userEmail = account?.userEmail;
+        // final userEmail = account?.userEmail;
         final userNickname = account?.userNickname;
         final userProfileImagePath = account?.userProfileImagePath;
-        debugPrint("userEmail: ${userEmail}");
         debugPrint("userNickName: ${userNickname}");
         debugPrint("userProfileImagePath: ${userProfileImagePath}");
+        debugPrint("token: ${_accessToken}");
+
+        LocalStorage('user').setItem('access_token', _accessToken);
+
+        var user = await ApiService().findUser(userNickname);
+        if (user == null) {
+          await ApiService().postUserInfo(
+            User(
+              accessToken: _accessToken,
+              nickname: userNickname!,
+              profile: userProfileImagePath!,
+              // email: userEmail!,
+            ),
+          );
+          var result = await ApiService().findUser(userNickname);
+          LocalStorage('user').setItem('user_id', result['_id']);
+        } else {
+          LocalStorage('user').setItem('user_id', user['_id']);
+          await ApiService().updateUserInfo(
+            userNickname,
+            User(
+              accessToken: _accessToken,
+              nickname: userNickname!,
+              profile: userProfileImagePath!,
+            ),
+          );
+        }
       }
     } on PlatformException catch (e) {
       debugPrint("${e.code} ${e.message}");
@@ -120,7 +149,7 @@ class _LoginPageState extends State<LoginPage> {
         _updateStateLogin(true, result);
         break;
       case KakaoLoginStatus.loggedOut:
-        _updateLoginMessage('Logged In by the user.');
+        _updateLoginMessage('Logged Out by the user.');
         _updateStateLogin(false, result);
         break;
       case KakaoLoginStatus.unlinked:

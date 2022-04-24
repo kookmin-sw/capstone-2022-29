@@ -32,14 +32,9 @@ dependencies:
   
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
-  cupertino_icons: ^1.0.2
-  flutter_chip_tags: ^1.0.4
-  flutter_tags: ^0.4.9+1
-  flutter_typeahead: ^3.2.4
-  flutter_tagging: ^3.0.0
-  flutter_syntax_view: ^4.0.0
   timelines: ^0.1.0
   share_plus: ^4.0.4
+  flutter_tagging_plus: ^4.0.0
 
 dev_dependencies:
   flutter_test:
@@ -53,17 +48,17 @@ dev_dependencies:
 
   flutter_kakao_login: ^3.4.0
 
-  flutter_dotenv: ^5.0.2
+  flutter_dotenv:
 
-  http: ^0.13.4
+  http: 
+
+  localstorage: ^4.0.0+1
 
   google_nav_bar: ^5.0.6
   line_icons: ^2.0.1
 
   syncfusion_flutter_charts: ^20.1.47+1
   bubble_chart: ^0.4.0
-  textfield_tags: ^2.0.0
-  material_tag_editor: ^0.1.2
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
