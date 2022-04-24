@@ -7,6 +7,8 @@ import 'package:frontend/components/search_bar.dart';
 import 'package:frontend/components/slide_news/slide.dart';
 import 'package:frontend/pages/navigator.dart';
 import 'package:bubble_chart/bubble_chart.dart';
+import 'package:localstorage/localstorage.dart';
+import 'package:frontend/api/api_service.dart';
 import 'package:flutter_kakao_login/flutter_kakao_login.dart';
 
 final Color backgroundColor = Color(0xFFf7f7f7);
@@ -25,8 +27,8 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
   late final Animation<double> _menuScaleAnimation;
   late final Animation<Offset> _slideAnimation;
   List<BubbleNode> childNode = [];
-  List <String> userInfo = [];
-
+  final LocalStorage localStorage = LocalStorage('user');
+  
   @override
   void initState() {
      _controller = AnimationController(vsync: this, duration: duration);
@@ -59,12 +61,17 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
     });
   }
 
-  List data = [
-    {"query": "코로나", "count": 20},
-    {"query": "우크라이나", "count": 50},
-    {"query": "국민대학교", "count": 10},
-    {"query": "메타버스", "count": 15},
-  ];
+  List<Map> data = [];
+
+  Future<void> getBookmark(dynamic user_id) async {
+    data.clear();
+    List<dynamic> bookmark = await ApiService().getBookmark(user_id);
+    // print("page: ${news.length}");
+    for (var i = 0; i < bookmark.length; i++) {
+      data.add({'query': bookmark[i]['query'], 'count': bookmark[i]['count']});
+    }
+    data.sort(((a, b) => (b['count']).compareTo(a['count'])));
+  }
 
   List<BubbleNode> getData(Size size) {
     List<BubbleNode> list = [];

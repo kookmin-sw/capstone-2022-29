@@ -1,5 +1,7 @@
 // ignore_for_file: prefer_const_constructors_in_immutables, prefer_const_constructors, prefer_const_literals_to_create_immutables
 
+// import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:frontend/pages/login/login_page.dart';
 import 'package:http/http.dart' as http;
@@ -18,10 +20,14 @@ class _SplashPageState extends State<SplashPage> {
     fetch();
   }
 
-  void fetch() async {
-    final response = await http.get(Uri.parse('https://flutter.dev/'));
+  Future fetch() async {
+    final response = await http.get(
+      Uri.parse('http://127.0.0.1:5000/'),
+    );
 
     if (response.statusCode == 200) {
+      print(response.body);
+
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(

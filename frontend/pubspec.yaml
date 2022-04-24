@@ -48,9 +48,11 @@ dev_dependencies:
 
   flutter_kakao_login: ^3.4.0
 
-  flutter_dotenv: ^5.0.2
+  flutter_dotenv:
 
-  http: ^0.13.4
+  http: 
+
+  localstorage: ^4.0.0+1
 
   google_nav_bar: ^5.0.6
   line_icons: ^2.0.1
