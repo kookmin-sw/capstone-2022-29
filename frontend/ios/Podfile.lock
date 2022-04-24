@@ -19,7 +19,8 @@ PODS:
     - KakaoSDKCommon/Common (= 2.7.1)
   - KakaoSDKUser (2.7.1):
     - KakaoSDKAuth (= 2.7.1)
-  - path_provider_ios (0.0.1)
+  - path_provider_ios (0.0.1):
+    - Flutter
   - share_plus (0.0.1):
     - Flutter
   - url_launcher_ios (0.0.1):
@@ -28,8 +29,8 @@ PODS:
 DEPENDENCIES:
   - Flutter (from `Flutter`)
   - flutter_kakao_login (from `.symlinks/plugins/flutter_kakao_login/ios`)
-  - path_provider_ios (from `.symlinks/plugins/path_provider_ios/ios`)
   - flutter_keyboard_visibility (from `.symlinks/plugins/flutter_keyboard_visibility/ios`)
+  - path_provider_ios (from `.symlinks/plugins/path_provider_ios/ios`)
   - share_plus (from `.symlinks/plugins/share_plus/ios`)
   - url_launcher_ios (from `.symlinks/plugins/url_launcher_ios/ios`)
 
@@ -45,10 +46,10 @@ EXTERNAL SOURCES:
     :path: Flutter
   flutter_kakao_login:
     :path: ".symlinks/plugins/flutter_kakao_login/ios"
-  path_provider_ios:
-    :path: ".symlinks/plugins/path_provider_ios/ios"
   flutter_keyboard_visibility:
     :path: ".symlinks/plugins/flutter_keyboard_visibility/ios"
+  path_provider_ios:
+    :path: ".symlinks/plugins/path_provider_ios/ios"
   share_plus:
     :path: ".symlinks/plugins/share_plus/ios"
   url_launcher_ios:

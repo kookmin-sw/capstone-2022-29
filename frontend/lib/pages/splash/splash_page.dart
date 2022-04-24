@@ -4,6 +4,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:frontend/pages/login/login_page.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 
 class SplashPage extends StatefulWidget {
@@ -14,6 +15,8 @@ class SplashPage extends StatefulWidget {
 }
 
 class _SplashPageState extends State<SplashPage> {
+  String _apiURI = dotenv.get('API_URI');
+
   @override
   void initState() {
     super.initState();
@@ -22,7 +25,7 @@ class _SplashPageState extends State<SplashPage> {
 
   Future fetch() async {
     final response = await http.get(
-      Uri.parse('http://127.0.0.1:5000/'),
+      Uri.parse('http://' + _apiURI),
     );
 
     if (response.statusCode == 200) {
