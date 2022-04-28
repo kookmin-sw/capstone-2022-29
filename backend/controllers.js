@@ -72,6 +72,30 @@ const getNews = async (req, res) => {
 //     }).clone().catch(function(err){console.log(err)});
 // };
 
+const Bubble = models.Bubble;
+
+const postBubble = async (req, res) => {
+    const newBubble = new Bubble(req.body);
+    print(req.body);
+    await newBubble.save(function(err){
+        if(err){
+            console.error(err);
+            res.json({ message : 'fail' });
+            return;
+        }
+        res.json({ message : 'success' });
+    });
+};
+
+const getBubble = async (req, res) => {
+    const regex = new RegExp(req.query.user_id);
+    await Bubble.find({'user_id':{'$regex':regex}}, function(err, bookmark){
+        if(err) return res.status(500).json({ error: err });
+        if(!bookmark) return res.status(404).json({ error: '해당 회원의 버블이 존재하지 않습니다.' });
+        res.json(bookmark);
+    }).clone().catch(function(err){console.log(err)});
+};
+
 const Bookmark = models.Bookmark;
 
 const postBookmark = async (req, res) => {
@@ -112,6 +136,9 @@ module.exports = {
     // news
     postNews,
     getNews,
+    // bubble
+    postBubble,
+    getBubble,
     // bookmark
     postBookmark,
     getBookmark,
