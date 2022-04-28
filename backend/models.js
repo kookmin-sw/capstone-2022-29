@@ -17,21 +17,21 @@ const NewsSchema = new mongoose.Schema({
 }, { collection: "news" });
 
 const BubbleSchema = new mongoose.Schema({
-    user_id: { type: mongoose.Schema.Types.ObjectId, required: true },
+    user_id: { type: String, required: true },
     // query: { type: String, required : true },
     // count: { type: Number, required: true }, // 검색어 -> 토픽 -> 뉴스 기사 클릭하면 count+1
-    bubble: {type: Map, default: { query: '', count: 0 }, required: true, },
+    bubble: {type: Object, default: { query: '', count: 0 }, required: true, },
 }, { collection: "bubbles" });
 
 const TopicSchema = new mongoose.Schema({
-    date: { type: Date, required: true },
+    date: { type: String, required: true },
     query: { type: String, required : true },
     topic: { type: Array, required: true },
 }, { collection: "topics" });
 
 const BookmarkSchema = new mongoose.Schema({
-    user_id: { type: mongoose.Schema.Types.ObjectId, required : true },
-    news_id: { type: mongoose.Schema.Types.ObjectId, required : true },
+    user_id: { type: String, required : true },
+    news_id: { type: String, required : true },
     query: { type: String, required : true },
     topic: { type: String, required: true },
 }, { collection: "bookmarks" });
