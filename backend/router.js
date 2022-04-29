@@ -1,19 +1,37 @@
 const router = require("express").Router();
-const controller = require("./controllers");
+
+// controllers
+const user = require("./controllers/user");
+const news = require("./controllers/news");
+const bubble = require("./controllers/bubble");
+const topic = require("./controllers/topic");
+const bookmark = require("./controllers/bookmark");
 
 // user
-router.post("/users", controller.postUserInfo);
-router.get("/users", controller.getUserInfo);
-router.get("/users/find", controller.findUser);
-router.put("/users", controller.updateUser);
+router.post("/users", user.postUserInfo);
+router.get("/users", user.getUserInfo);
+router.put("/users", user.updateUser);
+router.get("/users", user.getAllUserInfo);
 
 // news
-router.post("/news", controller.postNews);
-router.get("/news", controller.getNews);
+router.post("/news", news.postNews);
+router.get("/news", news.getNews);
+router.get("/news", news.getAllNews);
+
+// bubble
+router.post("/bubbles", bubble.postBubble);
+router.get("/bubbles", bubble.getBubble);
+router.put("/bubbles", bubble.updateBubble);
+router.get("/bubbles", bubble.getAllBubble);
+router.get("/buubles", bubble.getBubbleQuery);
+router.put("/buubles", bubble.updateBubbleCount);
+
+// topic
+
 
 // bookmark
-router.post("/bookmarks", controller.postBookmark);
-router.get("/bookmarks", controller.getBookmark);
-router.put("/bookmarks", controller.updateBookmark);
+router.post("/bookmarks", bookmark.postBookmark);
+router.get("/bookmarks", bookmark.getBookmark);
+router.put("/bookmarks", bookmark.updateBookmark);
 
 module.exports = router;
