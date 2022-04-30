@@ -27,7 +27,9 @@ router.post("/topics", topic.postTopic);
 router.get("/topics", topic.getTopic);
 
 // bookmark
-
+router.post("/bookmarks", bookmark.postBookmark);
+router.get("/bookmarks", bookmark.getBookmark);
+router.put("/bookmarks", bookmark.updateBookmark);
 
 // keyword
 
