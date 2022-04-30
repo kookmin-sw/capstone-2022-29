@@ -21,7 +21,7 @@ const BubbleSchema = new mongoose.Schema({ // -> Bubble chart(user_id 로 찾음
         type: Array,
         of: {
             query: { type: String, required: true },
-            count: { type: Number, required: true }, // 검색어 -> 토픽 -> 뉴스 기사 클릭하면 count+1
+            count: { type: Number, required: true, default: 1 }, // 검색어 -> 토픽 -> 뉴스 기사 클릭하면 count+1
         },
         required: true
     },
