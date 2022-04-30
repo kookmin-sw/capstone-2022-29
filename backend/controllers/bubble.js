@@ -1,3 +1,4 @@
+const { response } = require("express");
 const models = require("../models");
 
 const Bubble = models.Bubble;
@@ -15,53 +16,59 @@ const postBubble = async (req, res) => { // -> 사용자가 한번도 bubble을 
 };
 
 const getBubble = async (req, res) => { // -> 사용자의 bubble을 조회할 때
-    const regex = new RegExp(req.query.user_id);
-    await Bubble.find({'user_id':{'$regex':regex}}, function(err, bookmark){
-        if(err) return res.status(500).json({ error: err });
-        if(!bookmark) return res.status(404).json({ error: '해당 회원의 버블이 존재하지 않습니다.' });
-        res.json(bookmark);
-    }).clone().catch(function(err){console.log(err)});
-};
-
-const getBubbleQuery = async (req, res) => { // -> 사용자의 bubble의 query가 있는지 조회할 때
+    // user_id을 query로 넘기면 user_id만 filtering
+    const regexUID = new RegExp(req.query.user_id);
+    // query를 query로 넘기면 query만 filtering
+    const regexQuery = new RegExp(req.query.query);
+    // user_id와 query를 둘 다 넘기면 둘다 filtering
     await Bubble.find(
-        {'$and':[{user_id: req.query.user_id}, {query: req.query.query}]},
-        function(err, bookmark){
+        {'user_id': {'$regex': regexUID}, 'bubble':{'$elemMatch':{'query': {'$regex': regexQuery}}}}, 
+        function(err, bubble){
             if(err) return res.status(500).json({ error: err });
-            if(!bookmark) return res.status(404).json({ error: '해당 회원의 버블이 존재하지 않습니다.' });
-            res.json(bookmark);
+            if(!bubble) return res.status(404).json({ error: '해당 회원의 버블이 존재하지 않습니다.' });
+            res.json(bubble);
         }
     ).clone().catch(function(err){console.log(err)});
 };
 
-const getAllBubble = async (req, res) => { // -> search page 의 ranking 을 위함
-    await Bubble.find(function(err, bubble){
-        if(err) return res.status(500).json({ error: err });
-        if(!bubble) return res.status(404).json({ error: '버블이 존재하지 않습니다.' });
-        res.json(bubble);
-    }).clone().catch(function(err){console.log(err)});
-};
+const updateBubble = async (req, res) => { // -> 사용자의 bubble의 query가 있으면 count+1, query가 없으면 새로 추가
+    const regexUID = new RegExp(req.query.user_id);
 
-const updateBubble = async (req, res) => { // -> 사용자가 이전에 bubble을 등록 O
-    await Bubble.updateOne(
-        {user_id: req.query.user_id},
-        {$push: {'bubble': {'query': req.body.bubble.query, 'count': req.body.bubble.count}}},
-    ).clone().catch(function(err){console.log(err)});
-}
+    if(req.query.query == undefined){
+        await Bubble.findOneAndUpdate(
+            {'user_id': {'$regex': regexUID}}, 
+            {$addToSet: {'bubble': {'query': req.body.bubble.query}}},
+            function(err){
+                if(err){
+                    console.error(err);
+                    res.json({ message : 'fail' });
+                    return;
+                }
+                res.json({ message : 'success' });
+            }
+        ).catch(function(err){console.log(err)});
+    }
+    else{
+        const regexQuery = new RegExp(req.query.query);
 
-const updateBubbleCount = async (req, res) => { // -> 사용자가 bubble의 count를 증가시킬 때
-    await Bubble.updateOne(
-        {user_id: req.query.user_id, query: req.query.query},
-        {$push: {'bubble': {'count': req.body.bubble.count}}},
-    ).clone().catch(function(err){console.log(err)});
+        await Bubble.findOneAndUpdate(
+            {'user_id': {'$regex': regexUID}}, 
+            {$inc: {'bubble.$[elem].count': 1}},
+            {arrayFilters: [{'elem.query': {'$regex': regexQuery}}]},
+            function(err){
+                if(err){
+                    console.error(err);
+                    res.json({ message : 'fail' });
+                    return;
+                }
+                res.json({ message : 'success' });
+            }
+        ).catch(function(err){console.log(err)});
+    }
 }
 
 module.exports = {
-    // bubble
     postBubble,
     getBubble,
     updateBubble,
-    getAllBubble,
-    getBubbleQuery,
-    updateBubbleCount,
 }

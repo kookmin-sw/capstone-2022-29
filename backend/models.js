@@ -4,7 +4,6 @@ const UserSchema = new mongoose.Schema({
     access_token: { type: String, required: true },
     nickname: { type: String, required : true },
     profile: { type: String, required : true },
-    // email: { type: String },
 }, { collection: "users" });
 
 const NewsSchema = new mongoose.Schema({
@@ -18,13 +17,11 @@ const NewsSchema = new mongoose.Schema({
 
 const BubbleSchema = new mongoose.Schema({ // -> Bubble chart(user_id 로 찾음), Ranking(전체 user)
     user_id: { type: String, required: true }, // ObjectId
-    // query: { type: String, required : true },
-    // count: { type: Number, required: true }, // 검색어 -> 토픽 -> 뉴스 기사 클릭하면 count+1
     bubble: {
         type: Array,
         of: {
             query: { type: String, required: true },
-            count: { type: Number, required: true },
+            count: { type: Number, required: true }, // 검색어 -> 토픽 -> 뉴스 기사 클릭하면 count+1
         },
         required: true
     },
@@ -35,7 +32,7 @@ const TopicSchema = new mongoose.Schema({
     topicNum: {
         type: Array,
         of: {
-            num: { type: Number, required: true },
+            num: { type: Number, required: true }, // 0, 1, 2
             topics: {
                 type: Array,
                 of: {
