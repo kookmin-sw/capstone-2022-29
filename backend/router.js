@@ -23,7 +23,8 @@ router.get("/bubbles", bubble.getBubble);
 router.put("/bubbles", bubble.updateBubble);
 
 // topic
-
+router.post("/topics", topic.postTopic);
+router.get("/topics", topic.getTopic);
 
 // bookmark
 
