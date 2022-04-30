@@ -32,6 +32,8 @@ router.get("/bookmarks", bookmark.getBookmark);
 router.put("/bookmarks", bookmark.updateBookmark);
 
 // keyword
-
+router.post("/keywords", keyword.postKeyword);
+router.get("/keywords", keyword.getKeyword);
+router.put("/keywords", keyword.updateKeyword);
 
 module.exports = router;
