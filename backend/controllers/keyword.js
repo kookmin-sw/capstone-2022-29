@@ -27,19 +27,34 @@ const getKeyword = async (req, res) => { // -> 사용자의 keyword를 조회할
 };
 
 const updateKeyword = async (req, res) => { // -> 사용자가 keyword를 등록한 적이 있으면 update
-    const regex = new RegExp(req.query.user_id);
-    await Keyword.findOneAndUpdate(
-        {'user_id': {'$regex': regex}}, 
-        {$addToSet: {'keywords': {'keyword': req.body.keywords.keyword}}},
-        function(err){
-            if(err){
-                console.error(err);
-                res.json({ message : 'fail' });
-                return;
+    const regexUID = new RegExp(req.query.user_id);
+    if(req.query.keyword == undefined){
+        await Keyword.findOneAndUpdate( // 사용자의 기존 keyword에 새로운 keyword 추가
+            {'user_id': {'$regex': regexUID}}, 
+            {$addToSet: {'keywords': {'keyword': req.body.keywords.keyword}}},
+            function(err){
+                if(err){
+                    console.error(err);
+                    res.json({ message : 'fail' });
+                    return;
+                }
+                res.json({ message : 'success' });
             }
-            res.json({ message : 'success' });
-        }
-    ).catch(function(err){console.log(err)});
+        ).catch(function(err){console.log(err)});
+    }
+    else{
+        const regexKeyword = new RegExp(req.query.keyword);
+        await Keyword.findOneAndUpdate( // 사용자의 기존 keyword에서 원하는 keyword 삭제
+            {'user_id': {$regex: regexUID}},
+            {$pull: {'keywords': {'keyword': {$regex: regexKeyword}}}},
+            {new: true},
+            function(err, keyword){
+                if(err) return res.status(500).json({ error: err });
+                if(!keyword) return res.status(404).json({ error: '해당 사용자의 키워드가 존재하지 않습니다.' });
+                res.json(keyword);
+            }
+        ).catch(function(err){console.log(err)});
+    }
 }
 
 module.exports = {
