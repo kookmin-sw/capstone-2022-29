@@ -1,7 +1,6 @@
 // ignore_for_file: prefer_const_constructors, unnecessary_string_interpolations
 
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:frontend/components/slide_news/card_news.dart';
 import 'package:frontend/pages/navigator.dart';
 import 'package:frontend/api/api_service.dart';
