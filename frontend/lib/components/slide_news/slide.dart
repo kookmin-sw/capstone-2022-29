@@ -6,7 +6,7 @@ import 'package:frontend/components/slide_news/card_news.dart';
 import 'package:frontend/pages/navigator.dart';
 import 'package:frontend/api/api_service.dart';
 
-Widget slide(BuildContext context, double width, double height, String query) {
+Widget slide(BuildContext context, Size size, String query) {
   List<Map> data = [];
   List<Widget> list = [];
 
@@ -19,12 +19,11 @@ Widget slide(BuildContext context, double width, double height, String query) {
     }
   }
 
-  List<Widget> getCardNews(double width, double height) {
+  List<Widget> getCardNews(Size size) {
     for (var i = 0; i < data.length; i++) {
       list.add(
         cardNews(
-          width,
-          height,
+          size,
           data[i]['journal'],
           data[i]['title'],
         ),
@@ -35,11 +34,11 @@ Widget slide(BuildContext context, double width, double height, String query) {
 
   return Center(
     child: Container(
-      height: height * 0.23,
-      width: width * 0.9,
+      height: size.height * 0.23,
+      width: size.width * 0.9,
       margin: EdgeInsets.only(
-        top: height * 0.01,
-        bottom: height * 0.01,
+        top: size.height * 0.01,
+        bottom: size.height * 0.01,
       ),
       decoration: BoxDecoration(
         color: Colors.white,
@@ -56,49 +55,50 @@ Widget slide(BuildContext context, double width, double height, String query) {
                 SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Row(
                         children: [
                           Container(
                             margin: EdgeInsets.only(
-                              left: width * 0.05,
+                              left: size.width * 0.05,
                             ),
                             padding: EdgeInsets.symmetric(
-                              vertical: height * 0.005,
-                              horizontal: width * 0.03,
+                              vertical: size.height * 0.005,
+                              horizontal: size.width * 0.03,
                             ),
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(30),
                               border: Border.all(
                                 color: Color(0xff000000),
-                                width: width * 0.0025,
+                                width: size.width * 0.0025,
                               ),
                             ),
                             child: Text(
                               "$query",
                               style: TextStyle(
-                                fontSize: width * 0.035,
+                                fontSize: size.width * 0.035,
                               ),
                             ),
                           ),
                           Container(
                             margin: EdgeInsets.only(
-                              left: width * 0.015,
+                              left: size.width * 0.015,
                             ),
                             child: Text(
                               "뉴스",
                               style: TextStyle(
-                                fontSize: width * 0.05,
+                                fontSize: size.width * 0.05,
                               ),
                             ),
                           ),
                         ],
                       ),
+                        SizedBox(width: size.width*0.35),
                       Container(
-                        height: height * 0.033,
+                        height: size.height * 0.033,
                         margin: EdgeInsets.only(
-                          right: width * 0.05,
+                          right: size.width * 0.05,
                         ),
                         child: OutlinedButton(
                           onPressed: () {
@@ -115,7 +115,7 @@ Widget slide(BuildContext context, double width, double height, String query) {
                             "바로가기",
                             style: TextStyle(
                               color: Color(0xff000000),
-                              fontSize: width * 0.035,
+                              fontSize: size.width * 0.035,
                             ),
                           ),
                           style: OutlinedButton.styleFrom(
@@ -123,7 +123,7 @@ Widget slide(BuildContext context, double width, double height, String query) {
                               borderRadius: BorderRadius.circular(50),
                             ),
                             side: BorderSide(
-                              width: width * 0.0025,
+                              width: size.width * 0.0025,
                               color: Color(0xff000000),
                             ),
                           ),
@@ -133,14 +133,14 @@ Widget slide(BuildContext context, double width, double height, String query) {
                   ),
                 ),
                 Container(
-                  height: height * 0.15,
-                  width: width,
+                  height: size.height * 0.15,
+                  width: size.width,
                   padding: EdgeInsets.symmetric(
-                    horizontal: width * 0.02,
+                    horizontal: size.width * 0.02,
                   ),
                   child: ListView(
                     scrollDirection: Axis.horizontal,
-                    children: getCardNews(width, height),
+                    children: getCardNews(size),
                   ),
                 ),
               ],

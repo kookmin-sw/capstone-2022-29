@@ -140,8 +140,7 @@ class _HomePageState extends State<HomePage>
       list.add(
         slide(
           context,
-          screenWidth,
-          screenHeight,
+          size,
           data[i]["query"],
         ),
       );
