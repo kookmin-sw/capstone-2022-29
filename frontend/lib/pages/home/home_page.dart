@@ -78,6 +78,7 @@ class _HomePageState extends State<HomePage>
       }
     }
     data.sort(((a, b) => (b['count']).compareTo(a['count'])));
+    // print('*nickname: ${localStorage.getItem('nickname')}');
   }
 
   List<BubbleNode> getData(Size size) {
