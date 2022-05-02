@@ -66,12 +66,17 @@ class _HomePageState extends State<HomePage>
 
   List<Map> data = [];
 
-  Future<void> getBookmark(dynamic user_id) async {
+  Future<void> getBubble(dynamic user_id) async {
+    // print("user_id = ${user_id}");
     data.clear();
-    List<dynamic> bookmark = await ApiService().getBookmark(user_id);
-    // print("page: ${news.length}");
-    for (var i = 0; i < bookmark.length; i++) {
-      data.add({'query': bookmark[i]['query'], 'count': bookmark[i]['count']});
+    List<dynamic> bubble = await ApiService().getBubbleUserId(user_id);
+    for (var i = 0; i < bubble.length; i++) {
+      for (var j = 0; j < bubble[i]['bubble'].length; j++) {
+        data.add({
+          'query': bubble[i]['bubble'][j]['query'],
+          'count': bubble[i]['bubble'][j]['count']
+        });
+      }
     }
     data.sort(((a, b) => (b['count']).compareTo(a['count'])));
   }
@@ -348,7 +353,7 @@ class _HomePageState extends State<HomePage>
                       right: size.width * 0.05,
                       top: size.height * 0.01),
                   child: FutureBuilder(
-                    future: getBookmark(localStorage.getItem('user_id')),
+                    future: getBubble(localStorage.getItem('user_id')),
                     builder: (BuildContext context, AsyncSnapshot snapshot) {
                       if (data.isNotEmpty) {
                         return Column(

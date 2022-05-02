@@ -4,6 +4,7 @@ class News {
   late String title;
   late String url;
   late String content;
+  late String summary;
 
   News({
     required this.journal,
@@ -11,6 +12,7 @@ class News {
     required this.title,
     required this.url,
     required this.content,
+    required this.summary,
   });
 
   News.fromJson(Map<String, dynamic> json) {
@@ -19,6 +21,7 @@ class News {
     title = json['title'];
     url = json['url'];
     content = json['content'];
+    summary = json['summary'];
   }
 
   Map<String, dynamic> toJson() {
@@ -28,6 +31,7 @@ class News {
     data['title'] = this.title;
     data['url'] = this.url;
     data['content'] = this.content;
+    data['summary'] = this.summary;
     return data;
   }
 }
