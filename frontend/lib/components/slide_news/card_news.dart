@@ -2,19 +2,19 @@
 
 import 'package:flutter/material.dart';
 
-Widget cardNews(Size size, String journal, String title) {
+Widget cardNews(double width, double height, String journal, String title) {
   return Center(
     child: Container(
       margin: EdgeInsets.symmetric(
-        horizontal: size.width * 0.02,
+        horizontal: width * 0.02,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Container(
-            height: size.height * 0.03,
-            width: size.width * 0.3,
+            height: height * 0.03,
+            width: width * 0.3,
             decoration: BoxDecoration(
               color: Color(0xffC6E4FF),
               borderRadius: BorderRadius.only(
@@ -26,14 +26,14 @@ Widget cardNews(Size size, String journal, String title) {
               child: Text(
                 "$journal",
                 style: TextStyle(
-                  fontSize: size.width * 0.035,
+                  fontSize: width * 0.035,
                 ),
               ),
             ),
           ),
           Container(
-            height: size.height * 0.12,
-            width: size.width * 0.3,
+            height: height * 0.12,
+            width: width * 0.3,
             decoration: BoxDecoration(
               color: Color(0xffF7F7F7),
               borderRadius: BorderRadius.only(
@@ -45,7 +45,7 @@ Widget cardNews(Size size, String journal, String title) {
               child: Text(
                 "$title",
                 style: TextStyle(
-                  fontSize: size.width * 0.035,
+                  fontSize: width * 0.035,
                 ),
               ),
             ),

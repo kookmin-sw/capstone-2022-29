@@ -9,7 +9,6 @@ import 'package:frontend/pages/navigator.dart';
 import 'package:bubble_chart/bubble_chart.dart';
 import 'package:localstorage/localstorage.dart';
 import 'package:frontend/api/api_service.dart';
-import 'package:flutter_kakao_login/flutter_kakao_login.dart';
 
 final Color backgroundColor = Color(0xFFf7f7f7);
 
@@ -140,7 +139,8 @@ class _HomePageState extends State<HomePage>
       list.add(
         slide(
           context,
-          size,
+          screenWidth,
+          screenHeight,
           data[i]["query"],
         ),
       );
