@@ -44,7 +44,7 @@ class _NavigatorPageState extends State<NavigatorPage> {
           user_id: widget.user_id,
         ),
         SearchPage(),
-        BookmarkPage(),
+        BookmarkPage(user_id: widget.user_id),
         NewsPage(query: widget.query),
         TimelinePage(query: widget.query),
         DetailNewsPage(title: widget.query),

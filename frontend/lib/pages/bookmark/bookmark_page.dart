@@ -3,37 +3,85 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/components/app_bar.dart';
 import 'package:frontend/components/list_color.dart';
+import 'package:frontend/api/api_service.dart';
 
-List<String> bookmarkKeyword = <String>['북마크 뉴스 키워드 1', '북마크 뉴스 키워드 2', '북마크 뉴스 키워드 3', '북마크 뉴스 키워드 4', '북마크 뉴스 키워드 5', '북마크 뉴스 키워드 6'];
-List<String> bookmarkTitle = <String>['북마크 뉴스 제목 1', '북마크 뉴스 제목 2', '북마크 뉴스 제목 3', '북마크 뉴스 제목 4', '북마크 뉴스 제목 5', '북마크 뉴스 제목 6'];
-List<bool> isBookmark = <bool>[true,false,true,true,true,true];
+class BookmarkPage extends StatefulWidget {
+  BookmarkPage({Key? key, this.user_id}) : super(key: key);
+  String? user_id;
 
-class BookmarkPage extends StatelessWidget {
-  const BookmarkPage({Key? key}) : super(key: key);
-  // print(bookmarkTitle);
+  @override
+  State<BookmarkPage> createState() => _BookmarkPageState();
+}
+
+class _BookmarkPageState extends State<BookmarkPage> {
+  List<Map> data = [];
+
+  Future<void> getBookmark(dynamic user_id) async {
+    data.clear();
+    List<dynamic> bookmark = await ApiService().getBookmark(user_id);
+    for (var i = 0; i < bookmark.length; i++) {
+      for (var j = 0; j < bookmark[i]['bookmark'].length; j++) {
+        data.add({
+          'news_id': bookmark[i]['bookmark'][j]['news_id'],
+          'news_title': bookmark[i]['bookmark'][j]['news_id'],
+          'query': bookmark[i]['bookmark'][j]['query']
+        });
+      }
+    }
+    for (var i = 0; i < data.length; i++) {
+      await getNewsTitle(data[i]['news_title'], i);
+    }
+  }
+
+  Future getNewsTitle(dynamic news_id, int i) async {
+    List<dynamic> news = await ApiService().getNewsID(news_id);
+    data[i]['news_title'] = news[0]['title'];
+  }
+
+  Future<void> deleteBookmark(dynamic user_id, dynamic news_id) async {
+    await ApiService().deleteBookmark(user_id, news_id);
+    setState(() {
+      data.removeWhere((element) => element['news_id'] == news_id);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return WillPopScope(
-      onWillPop: ()=>Future.value(false),
+      onWillPop: () => Future.value(false),
       child: Scaffold(
         extendBody: true,
         backgroundColor: Color(0xffF7F7F7),
         appBar: appBar(size, '북마크', context, false),
         body: Container(
-          margin: EdgeInsets.all(size.width*0.05), 
+          margin: EdgeInsets.all(size.width * 0.05),
           decoration: BoxDecoration(
             color: Colors.white,
-            borderRadius: BorderRadius.circular(30), 
+            borderRadius: BorderRadius.circular(30),
           ),
-          child: ListView.builder(
-            itemCount: bookmarkKeyword.length,
-            itemBuilder: (context, index) {
-              return ColorList(
-                title: bookmarkKeyword[index],
-                content: bookmarkTitle[index],
-                status: isBookmark[index],
-              );
+          child: FutureBuilder(
+            future: getBookmark(widget.user_id),
+            builder: (BuildContext context, AsyncSnapshot snapshot) {
+              if (data.isNotEmpty) {
+                return ListView.builder(
+                  itemCount: data.length,
+                  itemBuilder: (context, index) {
+                    return ColorList(
+                      title: data[index]['query'],
+                      content: data[index]['news_title'],
+                      status: true,
+                      user_id: widget.user_id,
+                      news_id: data[index]['news_id'],
+                      deleteBookmark: deleteBookmark,
+                    );
+                  },
+                );
+              } else {
+                return Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
             },
           ),
         ),
