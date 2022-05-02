@@ -52,7 +52,7 @@ dev_dependencies:
 
   http: 
 
-  localstorage: ^4.0.0+1
+  localstorage: 
 
   google_nav_bar: ^5.0.6
   line_icons: ^2.0.1

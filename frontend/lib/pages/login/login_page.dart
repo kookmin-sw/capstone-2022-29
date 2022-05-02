@@ -56,6 +56,7 @@ class _LoginPageState extends State<LoginPage> {
         debugPrint("userProfileImagePath: ${userProfileImagePath}");
         debugPrint("token: ${_accessToken}");
 
+        // LocalStorage('user').setItem('nickname', userNickname);
         // LocalStorage('user').setItem('access_token', _accessToken);
 
         var user = await ApiService().getUserInfo(userNickname);
@@ -81,7 +82,9 @@ class _LoginPageState extends State<LoginPage> {
             ),
           );
         } else {
+          debugPrint(user['_id']);
           LocalStorage('user').setItem('user_id', user['_id']);
+          debugPrint(user['nickname']);
           LocalStorage('user').setItem('nickname', user['nickname']);
 
           Navigator.pushReplacement(

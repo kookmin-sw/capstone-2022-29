@@ -27,7 +27,7 @@ class _HomePageState extends State<HomePage>
   late final Animation<double> _menuScaleAnimation;
   late final Animation<Offset> _slideAnimation;
   List<BubbleNode> childNode = [];
-  final LocalStorage localStorage = LocalStorage('user');
+  final LocalStorage localStorage = LocalStorage('user.json');
 
   @override
   void initState() {
@@ -79,6 +79,7 @@ class _HomePageState extends State<HomePage>
     }
     data.sort(((a, b) => (b['count']).compareTo(a['count'])));
     // print('*nickname: ${localStorage.getItem('nickname')}');
+    // print('*user_id: ${localStorage.getItem('user_id')}');
   }
 
   List<BubbleNode> getData(Size size) {

@@ -103,7 +103,7 @@ class ApiService {
       "Content-type": "application/json",
     });
     if (response.statusCode == 200) {
-      print(response.body);
+      // print(response.body);
     }
     var decodedData = jsonDecode(response.body);
     for (dynamic n in decodedData) {
