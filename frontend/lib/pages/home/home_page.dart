@@ -7,12 +7,15 @@ import 'package:frontend/components/search_bar.dart';
 import 'package:frontend/components/slide_news/slide.dart';
 import 'package:frontend/pages/navigator.dart';
 import 'package:bubble_chart/bubble_chart.dart';
-import 'package:localstorage/localstorage.dart';
 import 'package:frontend/api/api_service.dart';
 
 final Color backgroundColor = Color(0xFFf7f7f7);
 
 class HomePage extends StatefulWidget {
+  HomePage({Key? key, this.nickname, this.user_id}) : super(key: key);
+  String? nickname;
+  String? user_id;
+
   @override
   _HomePageState createState() => _HomePageState();
 }
@@ -27,7 +30,6 @@ class _HomePageState extends State<HomePage>
   late final Animation<double> _menuScaleAnimation;
   late final Animation<Offset> _slideAnimation;
   List<BubbleNode> childNode = [];
-  final LocalStorage localStorage = LocalStorage('user.json');
 
   @override
   void initState() {
@@ -66,7 +68,6 @@ class _HomePageState extends State<HomePage>
   List<Map> data = [];
 
   Future<void> getBubble(dynamic user_id) async {
-    // print("user_id = ${user_id}");
     data.clear();
     List<dynamic> bubble = await ApiService().getBubbleUserId(user_id);
     for (var i = 0; i < bubble.length; i++) {
@@ -78,8 +79,6 @@ class _HomePageState extends State<HomePage>
       }
     }
     data.sort(((a, b) => (b['count']).compareTo(a['count'])));
-    // print('*nickname: ${localStorage.getItem('nickname')}');
-    // print('*user_id: ${localStorage.getItem('user_id')}');
   }
 
   List<BubbleNode> getData(Size size) {
@@ -355,7 +354,7 @@ class _HomePageState extends State<HomePage>
                       right: size.width * 0.05,
                       top: size.height * 0.01),
                   child: FutureBuilder(
-                    future: getBubble(localStorage.getItem('user_id')),
+                    future: getBubble(widget.user_id),
                     builder: (BuildContext context, AsyncSnapshot snapshot) {
                       if (data.isNotEmpty) {
                         return Column(

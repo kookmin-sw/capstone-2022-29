@@ -15,8 +15,19 @@ import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:line_icons/line_icons.dart';
 
 class NavigatorPage extends StatefulWidget {
-  NavigatorPage({Key? key, required this.index, this.query, this.topicNum, this.title, this.content}) : super(key: key);
+  NavigatorPage(
+      {Key? key,
+      required this.index,
+      this.nickname,
+      this.user_id,
+      this.query,
+      this.topicNum,
+      this.title,
+      this.content})
+      : super(key: key);
   int index = 0;
+  String? nickname;
+  String? user_id;
   String? query;
   double? topicNum;
   String? title;
@@ -28,7 +39,10 @@ class NavigatorPage extends StatefulWidget {
 
 class _NavigatorPageState extends State<NavigatorPage> {
   List<Widget> _widgetOptions() => <Widget>[
-        HomePage(),
+        HomePage(
+          nickname: widget.nickname,
+          user_id: widget.user_id,
+        ),
         SearchPage(),
         BookmarkPage(),
         NewsPage(query: widget.query),

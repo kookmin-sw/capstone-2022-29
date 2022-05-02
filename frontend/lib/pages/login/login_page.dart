@@ -8,7 +8,6 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:frontend/api/api_service.dart';
 import 'package:frontend/models/user_model.dart';
 import 'package:frontend/pages/navigator.dart';
-import 'package:localstorage/localstorage.dart';
 
 class LoginPage extends StatefulWidget {
   LoginPage({Key? key}) : super(key: key);
@@ -56,9 +55,6 @@ class _LoginPageState extends State<LoginPage> {
         debugPrint("userProfileImagePath: ${userProfileImagePath}");
         debugPrint("token: ${_accessToken}");
 
-        // LocalStorage('user').setItem('nickname', userNickname);
-        // LocalStorage('user').setItem('access_token', _accessToken);
-
         var user = await ApiService().getUserInfo(userNickname);
         if (user == null) {
           await ApiService().postUserInfo(
@@ -70,28 +66,25 @@ class _LoginPageState extends State<LoginPage> {
             ),
           );
           var result = await ApiService().getUserInfo(userNickname);
-          LocalStorage('user').setItem('user_id', result['_id']);
-          LocalStorage('user').setItem('nickname', result['nickname']);
 
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(
               builder: (context) => NavigatorPage(
                 index: 0,
+                nickname: userNickname,
+                user_id: user['_id'],
               ),
             ),
           );
         } else {
-          debugPrint(user['_id']);
-          LocalStorage('user').setItem('user_id', user['_id']);
-          debugPrint(user['nickname']);
-          LocalStorage('user').setItem('nickname', user['nickname']);
-
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(
               builder: (context) => NavigatorPage(
                 index: 0,
+                nickname: userNickname,
+                user_id: user['_id'],
               ),
             ),
           );
