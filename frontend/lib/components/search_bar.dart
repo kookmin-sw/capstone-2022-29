@@ -24,6 +24,7 @@ class searchBar extends StatelessWidget {
           bottom: size.height * 0.01,
         ),
         child: OutlineSearchBar(
+          hideSearchButton: color? true:false,
           borderRadius: BorderRadius.circular(30),
           backgroundColor: Colors.white,
           borderColor: color? Colors.black:Colors.transparent,

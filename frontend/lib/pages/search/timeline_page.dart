@@ -6,11 +6,14 @@ import 'package:frontend/components/search_bar.dart';
 import 'package:frontend/pages/navigator.dart';
 import 'package:timelines/timelines.dart';
 import 'dart:convert';
+import 'package:provider/provider.dart';
+import 'package:frontend/pages/search/search_provider.dart';
 
 class TimelinePage extends StatefulWidget {
-  TimelinePage({Key? key, this.query, this.user_id}) : super(key: key);
+  TimelinePage({Key? key, this.query, this.user_id, this.topicNum}) : super(key: key);
   String? query;
   String? user_id;
+  int? topicNum;
 
   @override
   State<TimelinePage> createState() => _TimelinePageState();
@@ -20,7 +23,6 @@ class _TimelinePageState extends State<TimelinePage> {
   double _currentSliderValue = 0;
   final timelineData =
       '[{"date": "2022.04", "content": "거리두기"},{"date": "2022.03", "content": "오미크론"},{"date": "2022.02", "content": "대유행"},{"date": "2022.01", "content": "3차 접종"}]';
-
   List data = [];
 
   Future<String> getData() async {
@@ -70,7 +72,7 @@ class _TimelinePageState extends State<TimelinePage> {
                                   ),
                                   Slider(
                                     value: _currentSliderValue,
-                                    max: 4,
+                                    max: 3,
                                     divisions: 3,
                                     onChanged: (double value) {
                                       setState(() {
@@ -91,15 +93,16 @@ class _TimelinePageState extends State<TimelinePage> {
                                       ),
                                     ),
                                     onPressed: () {
-                                      // Navigator.of(context).push(
-                                      //   MaterialPageRoute(
-                                      //     builder: (context) => NavigatorPage(
-                                      //       index: 4,
-                                      //       query: '',
-                                      //       user_id: widget.user_id,
-                                      //     ),
-                                      //   ),
-                                      // );
+                                      Navigator.of(context).push(
+                                        MaterialPageRoute(
+                                          builder: (context) => NavigatorPage(
+                                            index: 4,
+                                            query: Provider.of<SearchProvider>(context).searchQuery,
+                                            user_id: widget.user_id,
+                                            topicNum: _currentSliderValue.toInt(),
+                                          ),
+                                        ),
+                                      );
                                     },
                                     child: Text("검색하기"),
                                   ),
