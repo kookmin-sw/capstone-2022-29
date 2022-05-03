@@ -31,10 +31,10 @@ class Bookmarks {
     required this.topic,
   });
 
-  Bookmarks.fromJson(Map<String, dynamic> json) {
-    news_id = json['news_id'];
-    query = json['query'];
-    topic = json['topic'];
+  Bookmarks.fromJson(List<dynamic> json) {
+    news_id = json[0]['news_id'];
+    query = json[0]['query'];
+    topic = json[0]['topic'];
   }
 
   Map<String, dynamic> toJson() {
