@@ -27,8 +27,8 @@ class Keywords {
     required this.keyword,
   });
 
-  Keywords.fromJson(Map<String, dynamic> json) {
-    keyword = json['keyword'];
+  Keywords.fromJson(List<dynamic> json) {
+    keyword = json[0]['keyword'];
   }
 
   Map<String, dynamic> toJson() {

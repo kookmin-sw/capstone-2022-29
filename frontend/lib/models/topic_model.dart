@@ -29,9 +29,9 @@ class TopicNum {
     required this.topics,
   });
 
-  TopicNum.fromJson(Map<String, dynamic> json) {
-    num = json['num'];
-    topics = Topics.fromJson(json['topics']);
+  TopicNum.fromJson(List<dynamic> json) {
+    num = json[0]['num'];
+    topics = Topics.fromJson(json[0]['topics']);
   }
 
   Map<String, dynamic> toJson() {
@@ -53,10 +53,10 @@ class Topics {
     required this.newsId,
   });
 
-  Topics.fromJson(Map<String, dynamic> json) {
-    date = json['date'];
-    topic = json['topic'];
-    newsId = NewsId.fromJson(json['news']);
+  Topics.fromJson(List<dynamic> json) {
+    date = json[0]['date'];
+    topic = json[0]['topic'];
+    newsId = NewsId.fromJson(json[0]['news']);
   }
 
   Map<String, dynamic> toJson() {
@@ -75,8 +75,8 @@ class NewsId {
     required this.news_id,
   });
 
-  NewsId.fromJson(Map<String, dynamic> json) {
-    news_id = json['news_id'];
+  NewsId.fromJson(List<dynamic> json) {
+    news_id = json[0]['news_id'];
   }
 
   Map<String, dynamic> toJson() {
