@@ -112,6 +112,26 @@ class ApiService {
     return news;
   }
 
+  // get news with news_id
+  Future<dynamic> getNewsID(dynamic news_id) async {
+    List<dynamic> news = [];
+    final queryParameters = {
+      'news_id': news_id,
+    };
+    final url = Uri.http(_apiURI, "news", queryParameters);
+    http.Response response = await http.get(url, headers: {
+      "Content-type": "application/json",
+    });
+    if (response.statusCode == 200) {
+      // print(response.body);
+    }
+    var decodedData = jsonDecode(response.body);
+    for (dynamic n in decodedData) {
+      news.add(n);
+    }
+    return news;
+  }
+
   // post bubble
   Future<http.Response> postBubble(Bubble bubble) async {
     final url = Uri.http(_apiURI, "bubbles");
@@ -187,6 +207,23 @@ class ApiService {
     var decodedData = jsonDecode(response.body);
     for (dynamic b in decodedData) {
       // return b;
+      bubble.add(b);
+    }
+    return bubble;
+  }
+
+  // get all bubble
+  Future<dynamic> getAllBubble() async {
+    List<dynamic> bubble = [];
+    final url = Uri.http(_apiURI, "bubbles");
+    http.Response response = await http.get(url, headers: {
+      "Content-type": "application/json",
+    });
+    if (response.statusCode == 200) {
+      print(response.body);
+    }
+    var decodedData = jsonDecode(response.body);
+    for (dynamic b in decodedData) {
       bubble.add(b);
     }
     return bubble;
@@ -326,8 +363,7 @@ class ApiService {
   }
 
   // update bookmark with user_id & news_id -> bookmark 삭제
-  Future<dynamic> deleteBookmark(
-      dynamic user_id, dynamic news_id, Bookmark bookmark) async {
+  Future<dynamic> deleteBookmark(dynamic user_id, dynamic news_id) async {
     final queryParameters = {
       'user_id': user_id,
       'news_id': news_id,
@@ -338,7 +374,6 @@ class ApiService {
       headers: {
         "Content-type": "application/json",
       },
-      body: jsonEncode(bookmark.toJson()),
     );
     if (response.statusCode == 200) {
       print(response.body);

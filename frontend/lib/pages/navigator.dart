@@ -39,18 +39,15 @@ class NavigatorPage extends StatefulWidget {
 
 class _NavigatorPageState extends State<NavigatorPage> {
   List<Widget> _widgetOptions() => <Widget>[
-        HomePage(
-          nickname: widget.nickname,
-          user_id: widget.user_id,
-        ),
-        SearchPage(),
-        BookmarkPage(),
-        NewsPage(query: widget.query),
-        TimelinePage(query: widget.query),
+        HomePage(nickname: widget.nickname, user_id: widget.user_id),
+        SearchPage(user_id: widget.user_id),
+        BookmarkPage(user_id: widget.user_id),
+        NewsPage(query: widget.query, user_id: widget.user_id),
+        TimelinePage(query: widget.query, user_id: widget.user_id),
         DetailNewsPage(title: widget.query),
-        NoticePage(),
+        NoticePage(user_id: widget.user_id),
         NoticeDetailPage(title: widget.title, content: widget.content),
-        QnAPage(),
+        QnAPage(user_id: widget.user_id),
         MyKeywordPage(user_id: widget.user_id),
       ];
 

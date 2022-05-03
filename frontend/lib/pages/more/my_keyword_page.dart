@@ -57,7 +57,7 @@ class _MyKeywordPageState extends State<MyKeywordPage> {
 
   @override
   Widget build(BuildContext context) {
-    Size size =  MediaQuery.of(context).size;
+    Size size = MediaQuery.of(context).size;
     return MaterialApp(
       home: Scaffold(
         appBar: appBar(size, '나의 키워드', context, false),

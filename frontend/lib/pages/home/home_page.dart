@@ -32,6 +32,8 @@ class _HomePageState extends State<HomePage>
   List<BubbleNode> childNode = [];
   var userInfo;
 
+  late final String? user_id = widget.user_id;
+
   @override
   void initState() {
     _controller = AnimationController(vsync: this, duration: duration);
@@ -238,6 +240,7 @@ class _HomePageState extends State<HomePage>
                                     builder: (context) {
                                       return NavigatorPage(
                                         index: 6,
+                                        user_id: widget.user_id,
                                       );
                                     },
                                   ),
@@ -272,6 +275,7 @@ class _HomePageState extends State<HomePage>
                                     builder: (context) {
                                       return NavigatorPage(
                                         index: 8,
+                                        user_id: widget.user_id,
                                       );
                                     },
                                   ),
@@ -306,6 +310,7 @@ class _HomePageState extends State<HomePage>
                                     builder: (context) {
                                       return NavigatorPage(
                                         index: 9,
+                                        user_id: widget.user_id,
                                       );
                                     },
                                   ),
@@ -363,7 +368,7 @@ class _HomePageState extends State<HomePage>
                       right: size.width * 0.05,
                       top: size.height * 0.01),
                   child: FutureBuilder(
-                    future: getBubble(widget.user_id),
+                    future: getBubble(user_id),
                     builder: (BuildContext context, AsyncSnapshot snapshot) {
                       if (data.isNotEmpty) {
                         return Column(
@@ -390,6 +395,7 @@ class _HomePageState extends State<HomePage>
                                     builder: (context) {
                                       return NavigatorPage(
                                         index: 1,
+                                        user_id: user_id,
                                       );
                                     },
                                   ),
