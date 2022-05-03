@@ -7,9 +7,9 @@ class Bubble {
     required this.bubbles,
   });
 
-  Bubble.fromJson(Map<String, dynamic> json) {
-    user_id = json['user_id'];
-    bubbles = Bubbles.fromJson(json['bubble']);
+  Bubble.fromJson(List<dynamic> json) {
+    user_id = json[0]['user_id'];
+    bubbles = Bubbles.fromJson(json[0]['bubble']);
   }
 
   Map<String, dynamic> toJson() {
@@ -29,9 +29,9 @@ class Bubbles {
     required this.count,
   });
 
-  Bubbles.fromJson(Map<String, dynamic> json) {
-    query = json['query'];
-    count = json['count'];
+  Bubbles.fromJson(List<dynamic> json) {
+    query = json[0]['query'];
+    count = json[0]['count'];
   }
 
   Map<String, dynamic> toJson() {

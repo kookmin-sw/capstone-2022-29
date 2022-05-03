@@ -18,6 +18,7 @@ class MyKeywordPage extends StatefulWidget {
 class _MyKeywordPageState extends State<MyKeywordPage> {
   String _selectedValuesJson = 'Nothing to show';
   late List<Tag> _selectedLanguages;
+  List<dynamic> keywordList = [];
 
   @override
   void initState() {
@@ -31,33 +32,42 @@ class _MyKeywordPageState extends State<MyKeywordPage> {
     super.dispose();
   }
 
-
   Future<void> getKeyword(dynamic user_id) async {
-    List<dynamic> keyword = await ApiService().getKeyword(user_id);
+    keywordList.clear();
     _selectedLanguages.clear();
-    for (var i = 0; i < keyword.length; i++) {
-      for (var j = 0; j < keyword[i]['keywords'].length; j++) {
-        _selectedLanguages.add(Tag(name: keyword[i]['keywords'][j]['keyword']));
+    keywordList = await ApiService().getKeyword(user_id);
+    for (var i = 0; i < keywordList.length; i++) {
+      for (var j = 0; j < keywordList[i]['keywords'].length; j++) {
+        _selectedLanguages
+            .add(Tag(name: keywordList[i]['keywords'][j]['keyword']));
       }
     }
   }
 
-  Future<void> updateKeyword(String user_id, String keyword) async {
-    await ApiService().updateKeyword(
-      user_id,
-      Keyword(
-        user_id: user_id,
-        keywords: Keywords(keyword: keyword),
-      ),
-    );
+  Future<void> postKeyword(String user_id, String keyword) async {
+    if (_selectedLanguages.isEmpty) {
+      await ApiService().postKeyword(
+        Keyword(
+          user_id: user_id,
+          keywords: Keywords(keyword: keyword),
+        ),
+      );
+    } else {
+      await ApiService().updateKeyword(
+        user_id,
+        Keyword(
+          user_id: user_id,
+          keywords: Keywords(keyword: keyword),
+        ),
+      );
+    }
   }
 
-  //  Future<void> deleteKeyword(dynamic user_id, dynamic keyword) async {
-  //   await ApiService().deleteKeyword(user_id, keyword);
-  //   // setState(() {
-  //   //   data.removeWhere((element) => element['news_id'] == news_id);
-  //   // });
-  // }
+  Future<void> deleteKeyword(String user_id, String keyword) async {
+    dynamic response = await ApiService()
+        .deleteKeyword(user_id, keyword, Keyword.fromJson(keywordList[0]));
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -79,11 +89,16 @@ class _MyKeywordPageState extends State<MyKeywordPage> {
                       textFieldConfiguration: TextFieldConfiguration(
                         decoration: InputDecoration(
                           border: OutlineInputBorder(
-                            borderSide: BorderSide(width: 1, color: Colors.white),
+                            borderSide:
+                                BorderSide(width: 1, color: Colors.white),
                             borderRadius: BorderRadius.circular(30),
                           ),
-                          focusedBorder: InputBorder.none,
-                          contentPadding: EdgeInsets.only(left: size.width*0.05, bottom: size.height*0.01, top: size.height*0.01, right:  size.width*0.05),
+                          // focusedBorder: InputBorder.none,
+                          contentPadding: EdgeInsets.only(
+                              left: size.width * 0.05,
+                              bottom: size.height * 0.01,
+                              top: size.height * 0.01,
+                              right: size.width * 0.05),
                           // filled: true,
                           fillColor: Colors.white,
                           hintText: '키워드를 입력해주세요',
@@ -95,7 +110,8 @@ class _MyKeywordPageState extends State<MyKeywordPage> {
                         return Tag(name: value);
                       },
                       onAdded: (keyword) {
-                        updateKeyword(widget.user_id??'', keyword.name);
+                        postKeyword(
+                            widget.user_id!, keyword.name); // update keyword
                         return Tag(name: keyword.name);
                       },
                       configureSuggestion: (lang) {
@@ -117,47 +133,57 @@ class _MyKeywordPageState extends State<MyKeywordPage> {
                         );
                       },
                       configureChip: (lang) {
+                        // delete
+                        // deleteKeyword(widget.user_id!, lang.name);
                         return ChipConfiguration(
                           label: Text(lang.name),
                           backgroundColor: Color(0xffE7F3FF),
                           labelStyle: TextStyle(color: Colors.black),
                           deleteIconColor: Color.fromARGB(255, 94, 94, 94),
+                          deleteIcon: GestureDetector(
+                            child: Icon(Icons.cancel),
+                            onTap: () {
+                              deleteKeyword(widget.user_id!, lang.name);
+                            },
+                          ),
                         );
                       },
+                      // onChanged: () {
+                      //   setState(() {
+                      //     _selectedValuesJson = _selectedLanguages
+                      //         .map<String>((lang) => '\n${lang.toJson()}')
+                      //         .toList()
+                      //         .toString();
+                      //     _selectedValuesJson =
+                      //         _selectedValuesJson.replaceFirst('}]', '}\n]');
+                      //   });
+                      // },
                       onChanged: () {
-                        setState(() {
-                          _selectedValuesJson = _selectedLanguages
-                              .map<String>((lang) => '\n${lang.toJson()}')
-                              .toList()
-                              .toString();
-                          _selectedValuesJson = _selectedValuesJson.replaceFirst('}]', '}\n]');
-                        });
+                        print(_selectedLanguages);
                       },
                     ),
                   ),
                 ],
               );
-            }
-            else {
+            } else {
               return Container();
             }
-          }
+          },
         ),
-      )
+      ),
     );
   }
 }
 
 /// Mocks fetching Keyword from network API with delay of 500ms.
 Future<List<Tag>> getLanguages(String query) async {
-  await Future.delayed(Duration(milliseconds: 300), null);
-  return <Tag>[
-    Tag(name: '코로나19'),
-    Tag(name: '메타버스'),
-    Tag(name: '국민대학교'),
-  ]
-      .where((lang) => lang.name.toLowerCase().contains(query.toLowerCase()))
-      .toList();
+  // await Future.delayed(Duration(milliseconds: 300), null);
+  // return <Tag>[
+  //   Tag(name: ''),
+  // ]
+  //     .where((lang) => lang.name.toLowerCase().contains(query.toLowerCase()))
+  //     .toList();
+  return [];
 }
 
 class Tag extends Taggable {
