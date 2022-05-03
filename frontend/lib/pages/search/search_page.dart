@@ -10,7 +10,8 @@ import 'package:frontend/pages/search/timeline_page.dart';
 import 'package:frontend/api/api_service.dart';
 
 class SearchPage extends StatefulWidget {
-  SearchPage({Key? key}) : super(key: key);
+  SearchPage({Key? key, this.user_id}) : super(key: key);
+  String? user_id;
 
   @override
   State<SearchPage> createState() => _SearchPageState();
@@ -22,6 +23,7 @@ class _SearchPageState extends State<SearchPage> {
   Set ranking = {};
 
   Future<dynamic> getRanking() async {
+    print(widget.user_id);
     data.clear();
     tmp.clear();
     ranking.clear();
@@ -106,6 +108,7 @@ class _SearchPageState extends State<SearchPage> {
                                           return NavigatorPage(
                                             index: 4,
                                             query: '코로나',
+                                            user_id: widget.user_id,
                                           );
                                         },
                                       ),

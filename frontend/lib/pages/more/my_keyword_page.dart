@@ -5,11 +5,13 @@ import 'package:frontend/components/app_bar.dart';
 import 'package:flutter_tagging_plus/flutter_tagging_plus.dart';
 
 class MyKeywordPage extends StatefulWidget {
-  const MyKeywordPage({Key? key}) : super(key: key);
+  MyKeywordPage({Key? key, this.user_id}) : super(key: key);
+  String? user_id;
 
   @override
   State<MyKeywordPage> createState() => _MyKeywordPageState();
 }
+
 List<String> userKeyword = <String>['코로나'];
 
 class _MyKeywordPageState extends State<MyKeywordPage> {
@@ -30,12 +32,12 @@ class _MyKeywordPageState extends State<MyKeywordPage> {
 
   @override
   Widget build(BuildContext context) {
-    Size size =  MediaQuery.of(context).size;
+    Size size = MediaQuery.of(context).size;
     return MaterialApp(
-      home: Scaffold(
-        appBar: appBar(size, '나의 키워드', context, false),
-        body: Column(
-          children: <Widget>[
+        home: Scaffold(
+      appBar: appBar(size, '나의 키워드', context, false),
+      body: Column(
+        children: <Widget>[
           Container(
             // color: Colors.white,
             margin: EdgeInsets.all(size.width * 0.05),
@@ -48,7 +50,11 @@ class _MyKeywordPageState extends State<MyKeywordPage> {
                     borderRadius: BorderRadius.circular(30),
                   ),
                   focusedBorder: InputBorder.none,
-                  contentPadding: EdgeInsets.only(left: size.width*0.05, bottom: size.height*0.01, top: size.height*0.01, right:  size.width*0.05),
+                  contentPadding: EdgeInsets.only(
+                      left: size.width * 0.05,
+                      bottom: size.height * 0.01,
+                      top: size.height * 0.01,
+                      right: size.width * 0.05),
                   // filled: true,
                   fillColor: Colors.white,
                   hintText: '키워드를 입력해주세요',
@@ -103,8 +109,7 @@ class _MyKeywordPageState extends State<MyKeywordPage> {
           ),
         ],
       ),
-      )
-    );
+    ));
   }
 }
 
