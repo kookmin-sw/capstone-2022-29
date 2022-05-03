@@ -34,7 +34,7 @@ class _NoticePageState extends State<NoticePage> {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: Color.fromRGBO(247, 247, 247, 1),
-      appBar: appBar(size, '공지사항', context, false),
+      appBar: appBar(size, '공지사항', context, true, false),
       body: Container(
         margin: EdgeInsets.all(20),
         decoration: BoxDecoration(

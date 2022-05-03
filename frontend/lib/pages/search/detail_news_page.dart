@@ -99,7 +99,7 @@ class _DetailNewsPageState extends State<DetailNewsPage> {
 
     return Scaffold(
       extendBody: true,
-      appBar: appBar(size, widget.title, context, false),
+      appBar: appBar(size, widget.title, context, true, false),
       backgroundColor: Color(0xffF7F7F7),
       body: SafeArea(
         child: Column(
