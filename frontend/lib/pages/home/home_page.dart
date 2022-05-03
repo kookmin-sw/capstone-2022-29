@@ -30,6 +30,7 @@ class _HomePageState extends State<HomePage>
   late final Animation<double> _menuScaleAnimation;
   late final Animation<Offset> _slideAnimation;
   List<BubbleNode> childNode = [];
+  var userInfo;
 
   late final String? user_id = widget.user_id;
 
@@ -83,6 +84,11 @@ class _HomePageState extends State<HomePage>
     data.sort(((a, b) => (b['count']).compareTo(a['count'])));
   }
 
+  Future<void> getUser(dynamic nickname) async {
+    userInfo = await ApiService().getUserInfo(nickname);
+    // print(userInfo["nickname"]);
+  }
+
   List<BubbleNode> getData(Size size) {
     List<BubbleNode> list = [];
     for (var i = 0; i < data.length; i++) {
@@ -95,14 +101,7 @@ class _HomePageState extends State<HomePage>
               options: BubbleOptions(
                 color: () {
                   Random random = Random();
-                  return Colors
-                      .primaries[random.nextInt(Colors.primaries.length)]
-                      .shade100;
-                  // return Gradient.linear(
-                  //     const Offset(0, 20), const Offset(150, 20), <Color>[
-                  //   Colors.white,
-                  //   Colors.primaries[random.nextInt(Colors.primaries.length)],
-                  // ]);
+                  return Colors.primaries[random.nextInt(Colors.primaries.length)].shade100;
                 }(),
                 child: Container(
                   padding: EdgeInsets.all(size.height * 0.01),
@@ -141,6 +140,7 @@ class _HomePageState extends State<HomePage>
     for (var i = 0; i < data.length; i++) {
       list.add(
         slide(
+          isCollapsed,
           context,
           size,
           data[i]["query"],
@@ -185,147 +185,157 @@ class _HomePageState extends State<HomePage>
               left: screenWidth * 0.05),
           child: Align(
             alignment: Alignment.centerLeft,
-            child: Column(
-              // mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                      width: screenWidth * 0.25,
-                      height: screenWidth * 0.25,
-                      decoration: BoxDecoration(
-                        color: Color(0xffffffff),
-                        borderRadius: BorderRadius.circular(30),
+            child: FutureBuilder(
+              future: getUser(widget.nickname),
+              builder: (BuildContext context, AsyncSnapshot snapshot) {
+                // print(">> $userInfo");
+                // print(userInfo["nickname"]);
+                if (userInfo != null) {
+                  return Column(
+                  // mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                            width: screenWidth * 0.25,
+                            height: screenWidth * 0.25,
+                            // decoration: BoxDecoration(
+                            //   color: Color(0xffffffff),
+                            //   borderRadius: BorderRadius.circular(30),
+                            // ),
+                            child: Image.network(userInfo["profile"]),
+                          ),
+                          SizedBox(height: screenHeight * 0.01),
+                          Text(userInfo["nickname"]),
+                          Text("[뉴스를 익히다]",style: TextStyle(color: Color(0xff4B3187))),
+                          SizedBox(height: screenHeight * 0.04),
+                          InkWell(
+                              child: SizedBox(
+                                width: screenWidth * 0.5,
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Row(
+                                      children: [
+                                        Icon(Icons.list_outlined),
+                                        SizedBox(width: screenWidth * 0.02),
+                                        Text("공지사항",
+                                            style: TextStyle(
+                                                color: Colors.black, fontSize: 16)),
+                                      ],
+                                    ),
+                                    Icon(Icons.arrow_forward_ios,
+                                        size: screenWidth * 0.04),
+                                  ],
+                                ),
+                              ),
+                              onTap: () {
+                                _controller.forward();
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) {
+                                      return NavigatorPage(
+                                        index: 6,
+                                        user_id: widget.user_id,
+                                      );
+                                    },
+                                  ),
+                                );
+                              }),
+                          SizedBox(height: screenHeight * 0.02),
+                          InkWell(
+                              child: SizedBox(
+                                width: screenWidth * 0.5,
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Row(
+                                      children: [
+                                        Icon(Icons.person_outline),
+                                        SizedBox(width: screenWidth * 0.02),
+                                        Text("Q&A",
+                                            style: TextStyle(
+                                                color: Colors.black, fontSize: 16)),
+                                      ],
+                                    ),
+                                    Icon(Icons.arrow_forward_ios,
+                                        size: screenWidth * 0.04),
+                                  ],
+                                ),
+                              ),
+                              onTap: () {
+                                _controller.forward();
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) {
+                                      return NavigatorPage(
+                                        index: 8,
+                                        user_id: widget.user_id,
+                                      );
+                                    },
+                                  ),
+                                );
+                              }),
+                          SizedBox(height: screenHeight * 0.02),
+                          InkWell(
+                              child: SizedBox(
+                                width: screenWidth * 0.5,
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Row(
+                                      children: [
+                                        Icon(Icons.favorite_border_outlined),
+                                        SizedBox(width: screenWidth * 0.02),
+                                        Text("나의 키워드",
+                                            style: TextStyle(
+                                                color: Colors.black, fontSize: 16)),
+                                      ],
+                                    ),
+                                    Icon(Icons.arrow_forward_ios,
+                                        size: screenWidth * 0.04),
+                                  ],
+                                ),
+                              ),
+                              onTap: () {
+                                _controller.forward();
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) {
+                                      return NavigatorPage(
+                                        index: 9,
+                                        user_id: widget.user_id,
+                                      );
+                                    },
+                                  ),
+                                );
+                              }),
+                        ],
                       ),
-                      // child: Image.network(userProfileImagePath ?? '')
-                    ),
-                    SizedBox(height: screenHeight * 0.02),
-                    Text('최혜원'),
-                    Text("[뉴스를 익히다]",
-                        style: TextStyle(color: Color(0xff4B3187))),
-                    SizedBox(height: screenHeight * 0.04),
-                    InkWell(
-                        child: SizedBox(
-                          width: screenWidth * 0.5,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Row(
-                                children: [
-                                  Icon(Icons.list_outlined),
-                                  SizedBox(width: screenWidth * 0.02),
-                                  Text("공지사항",
-                                      style: TextStyle(
-                                          color: Colors.black, fontSize: 16)),
-                                ],
-                              ),
-                              Icon(Icons.arrow_forward_ios,
-                                  size: screenWidth * 0.04),
-                            ],
-                          ),
+                      InkWell(
+                        child: Row(
+                          children: [
+                            Icon(Icons.logout_outlined),
+                            SizedBox(width: screenWidth * 0.02),
+                            Text("로그아웃", style: TextStyle(color: Colors.black, fontSize: 16)),
+                          ],
                         ),
-                        onTap: () {
-                          _controller.forward();
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) {
-                                return NavigatorPage(
-                                  index: 6,
-                                  user_id: widget.user_id,
-                                );
-                              },
-                            ),
-                          );
-                        }),
-                    SizedBox(height: screenHeight * 0.02),
-                    InkWell(
-                        child: SizedBox(
-                          width: screenWidth * 0.5,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Row(
-                                children: [
-                                  Icon(Icons.person_outline),
-                                  SizedBox(width: screenWidth * 0.02),
-                                  Text("Q&A",
-                                      style: TextStyle(
-                                          color: Colors.black, fontSize: 16)),
-                                ],
-                              ),
-                              Icon(Icons.arrow_forward_ios,
-                                  size: screenWidth * 0.04),
-                            ],
-                          ),
-                        ),
-                        onTap: () {
-                          _controller.forward();
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) {
-                                return NavigatorPage(
-                                  index: 8,
-                                  user_id: widget.user_id,
-                                );
-                              },
-                            ),
-                          );
-                        }),
-                    SizedBox(height: screenHeight * 0.02),
-                    InkWell(
-                        child: SizedBox(
-                          width: screenWidth * 0.5,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Row(
-                                children: [
-                                  Icon(Icons.favorite_border_outlined),
-                                  SizedBox(width: screenWidth * 0.02),
-                                  Text("나의 키워드",
-                                      style: TextStyle(
-                                          color: Colors.black, fontSize: 16)),
-                                ],
-                              ),
-                              Icon(Icons.arrow_forward_ios,
-                                  size: screenWidth * 0.04),
-                            ],
-                          ),
-                        ),
-                        onTap: () {
-                          _controller.forward();
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) {
-                                return NavigatorPage(
-                                  index: 9,
-                                  user_id: widget.user_id,
-                                );
-                              },
-                            ),
-                          );
-                        }),
-                  ],
-                ),
-                InkWell(
-                    child: Row(
-                      children: [
-                        Icon(Icons.logout_outlined),
-                        SizedBox(width: screenWidth * 0.02),
-                        Text("로그아웃",
-                            style:
-                                TextStyle(color: Colors.black, fontSize: 16)),
-                      ],
-                    ),
-                    onTap: () {}),
-              ],
-            ),
+                        onTap: () {}
+                      ),
+                    ],
+                  );
+                }
+                else{
+                  return Container();
+                }
+              }
+            )
           ),
         ),
       ),

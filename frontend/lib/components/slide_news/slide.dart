@@ -1,12 +1,11 @@
 // ignore_for_file: prefer_const_constructors, unnecessary_string_interpolations
 
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:frontend/components/slide_news/card_news.dart';
 import 'package:frontend/pages/navigator.dart';
 import 'package:frontend/api/api_service.dart';
 
-Widget slide(BuildContext context, Size size, String query) {
+Widget slide(bool isCollapsed, BuildContext context, Size size, String query) {
   List<Map> data = [];
   List<Widget> list = [];
 
@@ -48,14 +47,13 @@ Widget slide(BuildContext context, Size size, String query) {
         future: getNews(query),
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           if (data.length != 0) {
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                    // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            return 
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Row(
                         children: [
@@ -94,8 +92,8 @@ Widget slide(BuildContext context, Size size, String query) {
                           ),
                         ],
                       ),
-                        SizedBox(width: size.width*0.35),
-                      Container(
+                        // SizedBox(width: size.width*0.35),
+                       if(isCollapsed) Container(
                         height: size.height * 0.033,
                         margin: EdgeInsets.only(
                           right: size.width * 0.05,
@@ -131,19 +129,19 @@ Widget slide(BuildContext context, Size size, String query) {
                       ),
                     ],
                   ),
-                ),
-                Container(
-                  height: size.height * 0.15,
-                  width: size.width,
-                  padding: EdgeInsets.symmetric(
-                    horizontal: size.width * 0.02,
+                  Container(
+                    height: size.height * 0.15,
+                    width: size.width,
+                    padding: EdgeInsets.symmetric(
+                      horizontal: size.width * 0.02,
+                    ),
+                    child: ListView(
+                      scrollDirection: Axis.horizontal,
+                      children: getCardNews(size),
+                    ),
                   ),
-                  child: ListView(
-                    scrollDirection: Axis.horizontal,
-                    children: getCardNews(size),
-                  ),
-                ),
-              ],
+                ],
+              // ),
             );
           } else {
             return Center(
