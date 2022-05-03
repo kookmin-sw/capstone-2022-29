@@ -421,7 +421,6 @@ class ApiService {
   Future<dynamic> updateKeyword(dynamic user_id, Keyword keyword) async {
     final queryParameters = {
       'user_id': user_id,
-      'keyword': keyword,
     };
     final url = Uri.http(_apiURI, "keywords", queryParameters);
     http.Response response = await http.put(
