@@ -212,6 +212,23 @@ class ApiService {
     return bubble;
   }
 
+  // get all bubble
+  Future<dynamic> getAllBubble() async {
+    List<dynamic> bubble = [];
+    final url = Uri.http(_apiURI, "bubbles");
+    http.Response response = await http.get(url, headers: {
+      "Content-type": "application/json",
+    });
+    if (response.statusCode == 200) {
+      print(response.body);
+    }
+    var decodedData = jsonDecode(response.body);
+    for (dynamic b in decodedData) {
+      bubble.add(b);
+    }
+    return bubble;
+  }
+
   // update bubble with user_id -> bubble 추가
   Future<dynamic> updateNewBubble(dynamic user_id, Bubble bubble) async {
     final queryParameters = {
