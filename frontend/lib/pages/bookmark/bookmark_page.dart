@@ -53,7 +53,7 @@ class _BookmarkPageState extends State<BookmarkPage> {
       child: Scaffold(
         extendBody: true,
         backgroundColor: Color(0xffF7F7F7),
-        appBar: appBar(size, '북마크', context, false),
+        appBar: appBar(size, '북마크', context, false, false),
         body: Container(
           margin: EdgeInsets.all(size.width * 0.05),
           decoration: BoxDecoration(

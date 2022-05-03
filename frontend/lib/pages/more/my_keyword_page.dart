@@ -42,10 +42,14 @@ class _MyKeywordPageState extends State<MyKeywordPage> {
     }
   }
 
-  Future<void> updateKeyword(String keyword) async {
-    // await ApiService().updateKeyword(
-    //   Keyword(user_id:  widget.user_id ?? '', keywords: keyword)
-    // );
+  Future<void> updateKeyword(String user_id, String keyword) async {
+    await ApiService().updateKeyword(
+      user_id,
+      Keyword(
+        user_id: user_id,
+        keywords: Keywords(keyword: keyword),
+      ),
+    );
   }
 
   //  Future<void> deleteKeyword(dynamic user_id, dynamic keyword) async {
@@ -60,7 +64,7 @@ class _MyKeywordPageState extends State<MyKeywordPage> {
     Size size = MediaQuery.of(context).size;
     return MaterialApp(
       home: Scaffold(
-        appBar: appBar(size, '나의 키워드', context, false),
+        appBar: appBar(size, '나의 키워드', context, true, false),
         body: FutureBuilder(
           future: getKeyword(widget.user_id),
           builder: (BuildContext context, AsyncSnapshot snapshot) {
@@ -91,7 +95,7 @@ class _MyKeywordPageState extends State<MyKeywordPage> {
                         return Tag(name: value);
                       },
                       onAdded: (keyword) {
-                        // postKeyword(keyword.name);
+                        updateKeyword(widget.user_id??'', keyword.name);
                         return Tag(name: keyword.name);
                       },
                       configureSuggestion: (lang) {
