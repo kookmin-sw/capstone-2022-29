@@ -1,3 +1,72 @@
-PODFILE CHECKSUM: 145db09314730361a62c5d7f3d6085f6bbd43761
+PODS:
+  - Alamofire (5.5.0)
+  - Flutter (1.0.0)
+  - flutter_kakao_login (1.0.0):
+    - Flutter
+    - KakaoSDKAuth (~> 2.7.0)
+    - KakaoSDKCommon (~> 2.7.0)
+    - KakaoSDKUser (~> 2.7.0)
+  - flutter_keyboard_visibility (0.0.1):
+    - Flutter
+  - KakaoSDKAuth (2.7.1):
+    - KakaoSDKCommon (= 2.7.1)
+  - KakaoSDKCommon (2.7.1):
+    - KakaoSDKCommon/Common (= 2.7.1)
+    - KakaoSDKCommon/Network (= 2.7.1)
+  - KakaoSDKCommon/Common (2.7.1)
+  - KakaoSDKCommon/Network (2.7.1):
+    - Alamofire (~> 5.1)
+    - KakaoSDKCommon/Common (= 2.7.1)
+  - KakaoSDKUser (2.7.1):
+    - KakaoSDKAuth (= 2.7.1)
+  - path_provider_ios (0.0.1):
+    - Flutter
+  - share_plus (0.0.1):
+    - Flutter
+  - url_launcher_ios (0.0.1):
+    - Flutter
+
+DEPENDENCIES:
+  - Flutter (from `Flutter`)
+  - flutter_kakao_login (from `.symlinks/plugins/flutter_kakao_login/ios`)
+  - flutter_keyboard_visibility (from `.symlinks/plugins/flutter_keyboard_visibility/ios`)
+  - path_provider_ios (from `.symlinks/plugins/path_provider_ios/ios`)
+  - share_plus (from `.symlinks/plugins/share_plus/ios`)
+  - url_launcher_ios (from `.symlinks/plugins/url_launcher_ios/ios`)
+
+SPEC REPOS:
+  trunk:
+    - Alamofire
+    - KakaoSDKAuth
+    - KakaoSDKCommon
+    - KakaoSDKUser
+
+EXTERNAL SOURCES:
+  Flutter:
+    :path: Flutter
+  flutter_kakao_login:
+    :path: ".symlinks/plugins/flutter_kakao_login/ios"
+  flutter_keyboard_visibility:
+    :path: ".symlinks/plugins/flutter_keyboard_visibility/ios"
+  path_provider_ios:
+    :path: ".symlinks/plugins/path_provider_ios/ios"
+  share_plus:
+    :path: ".symlinks/plugins/share_plus/ios"
+  url_launcher_ios:
+    :path: ".symlinks/plugins/url_launcher_ios/ios"
+
+SPEC CHECKSUMS:
+  Alamofire: 1c4fb5369c3fe93d2857c780d8bbe09f06f97e7c
+  Flutter: 50d75fe2f02b26cc09d224853bb45737f8b3214a
+  flutter_kakao_login: 86c80e6be43227e35ac3a9cbc667d60d5173fb48
+  flutter_keyboard_visibility: 0339d06371254c3eb25eeb90ba8d17dca8f9c069
+  KakaoSDKAuth: 70cfb1e4e60f543fd5f0ece2995c3b0e879c532e
+  KakaoSDKCommon: 48fe293e8970a8db8d10d5ca63600a7a8cc5f74c
+  KakaoSDKUser: 5609a2679b6beda86298d63c45961953c7203101
+  path_provider_ios: 14f3d2fd28c4fdb42f44e0f751d12861c43cee02
+  share_plus: 056a1e8ac890df3e33cb503afffaf1e9b4fbae68
+  url_launcher_ios: 839c58cdb4279282219f5e248c3321761ff3c4de
+
+PODFILE CHECKSUM: aa7478eb1b7e889af4b325531b624821999b822d
 
 COCOAPODS: 1.11.3
