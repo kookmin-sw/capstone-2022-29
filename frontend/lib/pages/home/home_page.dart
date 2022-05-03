@@ -84,7 +84,7 @@ class _HomePageState extends State<HomePage>
 
   Future<void> getUser(dynamic nickname) async {
     userInfo = await ApiService().getUserInfo(nickname);
-    print(userInfo["nickname"]);
+    // print(userInfo["nickname"]);
   }
 
   List<BubbleNode> getData(Size size) {
@@ -138,6 +138,7 @@ class _HomePageState extends State<HomePage>
     for (var i = 0; i < data.length; i++) {
       list.add(
         slide(
+          isCollapsed,
           context,
           size,
           data[i]["query"],

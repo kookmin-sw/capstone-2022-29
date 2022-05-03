@@ -51,7 +51,7 @@ class _NavigatorPageState extends State<NavigatorPage> {
         NoticePage(),
         NoticeDetailPage(title: widget.title, content: widget.content),
         QnAPage(),
-        MyKeywordPage(),
+        MyKeywordPage(user_id: widget.user_id),
       ];
 
   @override
