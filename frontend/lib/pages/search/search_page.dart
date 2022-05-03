@@ -1,13 +1,12 @@
-// ignore_for_file: prefer_const_constructors, must_be_immutable, use_key_in_widget_constructors, prefer_const_constructors_in_immutables
-
-import 'dart:convert';
+// ignore_for_file: prefer_const_constructors, must_be_immutable, use_key_in_widget_constructors, prefer_const_constructors_in_immutables, non_constant_identifier_names
 
 import 'package:flutter/material.dart';
 import 'package:frontend/components/logo.dart';
 import 'package:frontend/components/search_bar.dart';
 import 'package:frontend/pages/navigator.dart';
-import 'package:frontend/pages/search/timeline_page.dart';
 import 'package:frontend/api/api_service.dart';
+import 'package:provider/provider.dart';
+import 'package:frontend/pages/search/search_provider.dart';
 
 class SearchPage extends StatefulWidget {
   SearchPage({Key? key, this.user_id}) : super(key: key);
@@ -21,9 +20,9 @@ class _SearchPageState extends State<SearchPage> {
   List data = [];
   List<Map> tmp = [];
   Set ranking = {};
+  late SearchProvider _searchProvider;
 
   Future<dynamic> getRanking() async {
-    print(widget.user_id);
     data.clear();
     tmp.clear();
     ranking.clear();
@@ -56,6 +55,7 @@ class _SearchPageState extends State<SearchPage> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     double _currentSliderValue = 0;
+    
     return Scaffold(
       extendBody: true,
       backgroundColor: Color(0xffF7F7F7),
@@ -71,13 +71,16 @@ class _SearchPageState extends State<SearchPage> {
                     context: context,
                     barrierDismissible: true,
                     builder: (context) {
-                      return StatefulBuilder(builder:
-                          (BuildContext context, StateSetter setState) {
+                      return StatefulBuilder(builder:(BuildContext context, StateSetter setState) {
                         return AlertDialog(
                           content: SingleChildScrollView(
                             child: ListBody(
                               children: <Widget>[
-                                Container(child: searchBar(size, true, "")),
+                                searchBar(
+                                  size: size, 
+                                  color: true, 
+                                  value: ""
+                                ),
                                 Slider(
                                   value: _currentSliderValue,
                                   max: 4,
@@ -107,7 +110,7 @@ class _SearchPageState extends State<SearchPage> {
                                         builder: (context) {
                                           return NavigatorPage(
                                             index: 4,
-                                            query: '코로나',
+                                            query: Provider.of<SearchProvider>(context).searchQuery,
                                             user_id: widget.user_id,
                                           );
                                         },
@@ -124,7 +127,11 @@ class _SearchPageState extends State<SearchPage> {
                     });
               },
               child: AbsorbPointer(
-                child: searchBar(size, false, ""),
+                child: searchBar(
+                  size: size, 
+                  color: false, 
+                  value: ""
+                ),
               ),
             ),
             Container(

@@ -3,7 +3,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/components/app_bar.dart';
 import 'package:frontend/components/search_bar.dart';
-import 'package:frontend/pages/home/news_page.dart';
 import 'package:frontend/pages/navigator.dart';
 import 'package:timelines/timelines.dart';
 import 'dart:convert';
@@ -64,7 +63,11 @@ class _TimelinePageState extends State<TimelinePage> {
                             content: SingleChildScrollView(
                               child: ListBody(
                                 children: <Widget>[
-                                  Container(child: searchBar(size, true, "")),
+                                  searchBar(
+                                    size: size, 
+                                    color: true, 
+                                    value: ""
+                                  ),
                                   Slider(
                                     value: _currentSliderValue,
                                     max: 4,
@@ -88,15 +91,15 @@ class _TimelinePageState extends State<TimelinePage> {
                                       ),
                                     ),
                                     onPressed: () {
-                                      Navigator.of(context).push(
-                                        MaterialPageRoute(
-                                          builder: (context) => NavigatorPage(
-                                            index: 4,
-                                            query: '',
-                                            user_id: widget.user_id,
-                                          ),
-                                        ),
-                                      );
+                                      // Navigator.of(context).push(
+                                      //   MaterialPageRoute(
+                                      //     builder: (context) => NavigatorPage(
+                                      //       index: 4,
+                                      //       query: '',
+                                      //       user_id: widget.user_id,
+                                      //     ),
+                                      //   ),
+                                      // );
                                     },
                                     child: Text("검색하기"),
                                   ),
@@ -108,7 +111,11 @@ class _TimelinePageState extends State<TimelinePage> {
                       });
                 },
                 child: AbsorbPointer(
-                  child: searchBar(size, false, widget.query ?? ''),
+                  child: searchBar(
+                    size: size, 
+                    color: false, 
+                    value:  widget.query ?? ''
+                  ),
                 ),
               ),
               Container(
