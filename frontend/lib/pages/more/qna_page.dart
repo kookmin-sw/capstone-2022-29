@@ -5,7 +5,8 @@ import 'package:frontend/components/app_bar.dart';
 import 'package:frontend/components/button2.dart';
 
 class QnAPage extends StatefulWidget {
-  QnAPage({Key? key}) : super(key: key);
+  QnAPage({Key? key, this.user_id}) : super(key: key);
+  String? user_id;
 
   @override
   State<QnAPage> createState() => _QnAPageState();
@@ -19,7 +20,7 @@ class _QnAPageState extends State<QnAPage> {
   void onClickPressed() {
     print('title: ' + titleController.text);
     print('content: ' + contentController.text);
-    print('email: ' + emailController.text);      
+    print('email: ' + emailController.text);
   }
 
   void onCanclePressed() {
@@ -33,15 +34,15 @@ class _QnAPageState extends State<QnAPage> {
     emailController.dispose();
     super.dispose();
   }
-  
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
-      backgroundColor: Color.fromRGBO(247, 247, 247, 1),
-      appBar: appBar(size, 'Q&A', context, false),
-      body: Column(
-        children: <Widget>[
+        backgroundColor: Color.fromRGBO(247, 247, 247, 1),
+        appBar: appBar(size, 'Q&A', context, false),
+        body: Column(
+          children: <Widget>[
             Center(
               child: Container(
                 child: TextField(
@@ -53,10 +54,11 @@ class _QnAPageState extends State<QnAPage> {
                   ),
                   cursorColor: Colors.black,
                 ),
-                width: size.width * 0.8,    
+                width: size.width * 0.8,
                 height: size.height * 0.05,
                 margin: EdgeInsets.only(top: size.height * 0.02),
-                padding: EdgeInsets.only(left: size.width*0.05, right:size.width*0.05),
+                padding: EdgeInsets.only(
+                    left: size.width * 0.05, right: size.width * 0.05),
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(30),
@@ -69,18 +71,22 @@ class _QnAPageState extends State<QnAPage> {
                 keyboardType: TextInputType.multiline,
                 maxLines: 20,
                 decoration: InputDecoration(
-                    border: InputBorder.none,
-                    hintText: 'Q&A 내용을 입력해주세요',
-                  ),
-                  cursorColor: Colors.black,
-              ),
-              width: size.width * 0.8,    
-              margin: EdgeInsets.only(top: size.height * 0.02),
-              padding: EdgeInsets.only(left: size.width*0.05,top: size.height*0.01,right:size.width*0.05, bottom:size.height*0.01),
-              decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(30),
+                  border: InputBorder.none,
+                  hintText: 'Q&A 내용을 입력해주세요',
                 ),
+                cursorColor: Colors.black,
+              ),
+              width: size.width * 0.8,
+              margin: EdgeInsets.only(top: size.height * 0.02),
+              padding: EdgeInsets.only(
+                  left: size.width * 0.05,
+                  top: size.height * 0.01,
+                  right: size.width * 0.05,
+                  bottom: size.height * 0.01),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(30),
+              ),
             ),
             Center(
               child: Container(
@@ -93,10 +99,11 @@ class _QnAPageState extends State<QnAPage> {
                   ),
                   cursorColor: Colors.black,
                 ),
-                width: size.width * 0.8,    
+                width: size.width * 0.8,
                 height: size.height * 0.05,
                 margin: EdgeInsets.only(top: size.height * 0.02),
-                padding: EdgeInsets.only(left: size.width*0.05, right:size.width*0.05),
+                padding: EdgeInsets.only(
+                    left: size.width * 0.05, right: size.width * 0.05),
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(30),
@@ -104,8 +111,7 @@ class _QnAPageState extends State<QnAPage> {
               ),
             ),
             buttonTwo(size, '취소', '저장', onCanclePressed, onClickPressed),
-        ],
-      )
-    );
+          ],
+        ));
   }
 }

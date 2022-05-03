@@ -6,8 +6,9 @@ import 'package:frontend/components/app_bar.dart';
 import 'package:frontend/components/news_title.dart';
 
 class NewsPage extends StatefulWidget {
-  NewsPage({Key? key, this.query}) : super(key: key);
+  NewsPage({Key? key, this.query, this.user_id}) : super(key: key);
   String? query;
+  String? user_id;
 
   @override
   State<NewsPage> createState() => _NewsPageState();
