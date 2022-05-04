@@ -17,7 +17,7 @@ const postNotice = async (req, res) => {
 const getNotice = async (req, res) => {
     await Notice.find(function(err, notice){
         if(err) return res.status(500).json({ error: err });
-        if(!news) return res.status(404).json({ error: '뉴스가 존재하지 않습니다.' });
+        if(!notice) return res.status(404).json({ error: '뉴스가 존재하지 않습니다.' });
         res.json(notice);
     }).clone().catch(function(err){console.log(err)});
 };
