@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors_in_immutables, prefer_const_constructors
 
 import 'package:flutter/material.dart';
+import 'package:frontend/api/api_service.dart';
 import 'package:frontend/components/app_bar.dart';
 import 'package:frontend/components/search_bar.dart';
 import 'package:frontend/pages/navigator.dart';
@@ -25,20 +26,27 @@ class _TimelinePageState extends State<TimelinePage> {
       '[{"date": "2022.04", "content": "거리두기"},{"date": "2022.03", "content": "오미크론"},{"date": "2022.02", "content": "대유행"},{"date": "2022.01", "content": "3차 접종"}]';
   List data = [];
 
-  Future<String> getData() async {
-    // http.Response response = await http.get(
-    //   Uri.encodeFull('http://jsonplaceholder.typicode.com/posts'),
-    //   headers: {"Accept": "application/json"}
-    // );
-    data = jsonDecode(timelineData);
-
-    return "success";
+  Future<void> getTopicTimeLine() async {
+    data.clear();
+    // List<dynamic> topicData = await ApiService().getTopic(widget.query, widget.topicNum.toString());
+    List<dynamic> topicData = await ApiService().getTopic("코로나", "0");
+    // for (var i = 0; i < bubble.length; i++) {
+    //   for (var j = 0; j < bubble[i]['bubble'].length; j++) {
+    //     data.add({
+    //       'query': bubble[i]['bubble'][j]['query'],
+    //       'count': bubble[i]['bubble'][j]['count']
+    //     });
+    //   }
+    // }
+    // data.sort(((a, b) => (b['count']).compareTo(a['count'])));
+    print(topicData);
   }
+
 
   @override
   void initState() {
     super.initState();
-    getData();
+    getTopicTimeLine();
   }
 
   @override

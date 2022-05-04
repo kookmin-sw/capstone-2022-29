@@ -300,8 +300,10 @@ class ApiService {
       print(response.body);
     }
     var decodedData = jsonDecode(response.body);
+    print(query);
+    print(topicNum);
+    print(decodedData);
     for (dynamic t in decodedData) {
-      // return u;
       topic.add(t);
     }
     return topic;
