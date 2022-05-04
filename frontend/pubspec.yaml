@@ -35,6 +35,7 @@ dependencies:
   timelines: ^0.1.0
   share_plus: ^4.0.4
   flutter_tagging_plus: ^4.0.0
+  provider: ^6.0.2
 
 dev_dependencies:
   flutter_test:
@@ -51,8 +52,6 @@ dev_dependencies:
   flutter_dotenv:
 
   http: 
-
-  localstorage: ^4.0.0+1
 
   google_nav_bar: ^5.0.6
   line_icons: ^2.0.1

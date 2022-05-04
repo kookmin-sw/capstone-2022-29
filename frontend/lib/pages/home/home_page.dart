@@ -7,13 +7,15 @@ import 'package:frontend/components/search_bar.dart';
 import 'package:frontend/components/slide_news/slide.dart';
 import 'package:frontend/pages/navigator.dart';
 import 'package:bubble_chart/bubble_chart.dart';
-import 'package:localstorage/localstorage.dart';
 import 'package:frontend/api/api_service.dart';
-import 'package:flutter_kakao_login/flutter_kakao_login.dart';
 
 final Color backgroundColor = Color(0xFFf7f7f7);
 
 class HomePage extends StatefulWidget {
+  HomePage({Key? key, this.nickname, this.user_id}) : super(key: key);
+  String? nickname;
+  String? user_id;
+
   @override
   _HomePageState createState() => _HomePageState();
 }
@@ -28,7 +30,9 @@ class _HomePageState extends State<HomePage>
   late final Animation<double> _menuScaleAnimation;
   late final Animation<Offset> _slideAnimation;
   List<BubbleNode> childNode = [];
-  final LocalStorage localStorage = LocalStorage('user');
+  var userInfo;
+
+  late final String? user_id = widget.user_id;
 
   @override
   void initState() {
@@ -66,14 +70,23 @@ class _HomePageState extends State<HomePage>
 
   List<Map> data = [];
 
-  Future<void> getBookmark(dynamic user_id) async {
+  Future<void> getBubble(dynamic user_id) async {
     data.clear();
-    List<dynamic> bookmark = await ApiService().getBookmark(user_id);
-    // print("page: ${news.length}");
-    for (var i = 0; i < bookmark.length; i++) {
-      data.add({'query': bookmark[i]['query'], 'count': bookmark[i]['count']});
+    List<dynamic> bubble = await ApiService().getBubbleUserId(user_id);
+    for (var i = 0; i < bubble.length; i++) {
+      for (var j = 0; j < bubble[i]['bubble'].length; j++) {
+        data.add({
+          'query': bubble[i]['bubble'][j]['query'],
+          'count': bubble[i]['bubble'][j]['count']
+        });
+      }
     }
     data.sort(((a, b) => (b['count']).compareTo(a['count'])));
+  }
+
+  Future<void> getUser(dynamic nickname) async {
+    userInfo = await ApiService().getUserInfo(nickname);
+    // print(userInfo["nickname"]);
   }
 
   List<BubbleNode> getData(Size size) {
@@ -88,14 +101,7 @@ class _HomePageState extends State<HomePage>
               options: BubbleOptions(
                 color: () {
                   Random random = Random();
-                  return Colors
-                      .primaries[random.nextInt(Colors.primaries.length)]
-                      .shade100;
-                  // return Gradient.linear(
-                  //     const Offset(0, 20), const Offset(150, 20), <Color>[
-                  //   Colors.white,
-                  //   Colors.primaries[random.nextInt(Colors.primaries.length)],
-                  // ]);
+                  return Colors.primaries[random.nextInt(Colors.primaries.length)].shade100;
                 }(),
                 child: Container(
                   padding: EdgeInsets.all(size.height * 0.01),
@@ -134,6 +140,7 @@ class _HomePageState extends State<HomePage>
     for (var i = 0; i < data.length; i++) {
       list.add(
         slide(
+          isCollapsed,
           context,
           size,
           data[i]["query"],
@@ -178,144 +185,157 @@ class _HomePageState extends State<HomePage>
               left: screenWidth * 0.05),
           child: Align(
             alignment: Alignment.centerLeft,
-            child: Column(
-              // mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                      width: screenWidth * 0.25,
-                      height: screenWidth * 0.25,
-                      decoration: BoxDecoration(
-                        color: Color(0xffffffff),
-                        borderRadius: BorderRadius.circular(30),
+            child: FutureBuilder(
+              future: getUser(widget.nickname),
+              builder: (BuildContext context, AsyncSnapshot snapshot) {
+                // print(">> $userInfo");
+                // print(userInfo["nickname"]);
+                if (userInfo != null) {
+                  return Column(
+                  // mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                            width: screenWidth * 0.25,
+                            height: screenWidth * 0.25,
+                            // decoration: BoxDecoration(
+                            //   color: Color(0xffffffff),
+                            //   borderRadius: BorderRadius.circular(30),
+                            // ),
+                            child: Image.network(userInfo["profile"]),
+                          ),
+                          SizedBox(height: screenHeight * 0.01),
+                          Text(userInfo["nickname"]),
+                          Text("[뉴스를 익히다]",style: TextStyle(color: Color(0xff4B3187))),
+                          SizedBox(height: screenHeight * 0.04),
+                          InkWell(
+                              child: SizedBox(
+                                width: screenWidth * 0.5,
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Row(
+                                      children: [
+                                        Icon(Icons.list_outlined),
+                                        SizedBox(width: screenWidth * 0.02),
+                                        Text("공지사항",
+                                            style: TextStyle(
+                                                color: Colors.black, fontSize: 16)),
+                                      ],
+                                    ),
+                                    Icon(Icons.arrow_forward_ios,
+                                        size: screenWidth * 0.04),
+                                  ],
+                                ),
+                              ),
+                              onTap: () {
+                                _controller.forward();
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) {
+                                      return NavigatorPage(
+                                        index: 6,
+                                        user_id: widget.user_id,
+                                      );
+                                    },
+                                  ),
+                                );
+                              }),
+                          SizedBox(height: screenHeight * 0.02),
+                          InkWell(
+                              child: SizedBox(
+                                width: screenWidth * 0.5,
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Row(
+                                      children: [
+                                        Icon(Icons.person_outline),
+                                        SizedBox(width: screenWidth * 0.02),
+                                        Text("Q&A",
+                                            style: TextStyle(
+                                                color: Colors.black, fontSize: 16)),
+                                      ],
+                                    ),
+                                    Icon(Icons.arrow_forward_ios,
+                                        size: screenWidth * 0.04),
+                                  ],
+                                ),
+                              ),
+                              onTap: () {
+                                _controller.forward();
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) {
+                                      return NavigatorPage(
+                                        index: 8,
+                                        user_id: widget.user_id,
+                                      );
+                                    },
+                                  ),
+                                );
+                              }),
+                          SizedBox(height: screenHeight * 0.02),
+                          InkWell(
+                              child: SizedBox(
+                                width: screenWidth * 0.5,
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Row(
+                                      children: [
+                                        Icon(Icons.favorite_border_outlined),
+                                        SizedBox(width: screenWidth * 0.02),
+                                        Text("나의 키워드",
+                                            style: TextStyle(
+                                                color: Colors.black, fontSize: 16)),
+                                      ],
+                                    ),
+                                    Icon(Icons.arrow_forward_ios,
+                                        size: screenWidth * 0.04),
+                                  ],
+                                ),
+                              ),
+                              onTap: () {
+                                _controller.forward();
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) {
+                                      return NavigatorPage(
+                                        index: 9,
+                                        user_id: widget.user_id,
+                                      );
+                                    },
+                                  ),
+                                );
+                              }),
+                        ],
                       ),
-                      // child: Image.network(userProfileImagePath ?? '')
-                    ),
-                    SizedBox(height: screenHeight * 0.02),
-                    Text('최혜원'),
-                    Text("[뉴스를 익히다]",
-                        style: TextStyle(color: Color(0xff4B3187))),
-                    SizedBox(height: screenHeight * 0.04),
-                    InkWell(
-                        child: SizedBox(
-                          width: screenWidth * 0.5,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Row(
-                                children: [
-                                  Icon(Icons.list_outlined),
-                                  SizedBox(width: screenWidth * 0.02),
-                                  Text("공지사항",
-                                      style: TextStyle(
-                                          color: Colors.black, fontSize: 16)),
-                                ],
-                              ),
-                              Icon(Icons.arrow_forward_ios,
-                                  size: screenWidth * 0.04),
-                            ],
-                          ),
+                      InkWell(
+                        child: Row(
+                          children: [
+                            Icon(Icons.logout_outlined),
+                            SizedBox(width: screenWidth * 0.02),
+                            Text("로그아웃", style: TextStyle(color: Colors.black, fontSize: 16)),
+                          ],
                         ),
-                        onTap: () {
-                          _controller.forward();
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) {
-                                return NavigatorPage(
-                                  index: 6,
-                                );
-                              },
-                            ),
-                          );
-                        }),
-                    SizedBox(height: screenHeight * 0.02),
-                    InkWell(
-                        child: SizedBox(
-                          width: screenWidth * 0.5,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Row(
-                                children: [
-                                  Icon(Icons.person_outline),
-                                  SizedBox(width: screenWidth * 0.02),
-                                  Text("Q&A",
-                                      style: TextStyle(
-                                          color: Colors.black, fontSize: 16)),
-                                ],
-                              ),
-                              Icon(Icons.arrow_forward_ios,
-                                  size: screenWidth * 0.04),
-                            ],
-                          ),
-                        ),
-                        onTap: () {
-                          _controller.forward();
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) {
-                                return NavigatorPage(
-                                  index: 8,
-                                );
-                              },
-                            ),
-                          );
-                        }),
-                    SizedBox(height: screenHeight * 0.02),
-                    InkWell(
-                        child: SizedBox(
-                          width: screenWidth * 0.5,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Row(
-                                children: [
-                                  Icon(Icons.favorite_border_outlined),
-                                  SizedBox(width: screenWidth * 0.02),
-                                  Text("나의 키워드",
-                                      style: TextStyle(
-                                          color: Colors.black, fontSize: 16)),
-                                ],
-                              ),
-                              Icon(Icons.arrow_forward_ios,
-                                  size: screenWidth * 0.04),
-                            ],
-                          ),
-                        ),
-                        onTap: () {
-                          _controller.forward();
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) {
-                                return NavigatorPage(
-                                  index: 9,
-                                );
-                              },
-                            ),
-                          );
-                        }),
-                  ],
-                ),
-                InkWell(
-                    child: Row(
-                      children: [
-                        Icon(Icons.logout_outlined),
-                        SizedBox(width: screenWidth * 0.02),
-                        Text("로그아웃",
-                            style:
-                                TextStyle(color: Colors.black, fontSize: 16)),
-                      ],
-                    ),
-                    onTap: () {}),
-              ],
-            ),
+                        onTap: () {}
+                      ),
+                    ],
+                  );
+                }
+                else{
+                  return Container();
+                }
+              }
+            )
           ),
         ),
       ),
@@ -348,7 +368,7 @@ class _HomePageState extends State<HomePage>
                       right: size.width * 0.05,
                       top: size.height * 0.01),
                   child: FutureBuilder(
-                    future: getBookmark(localStorage.getItem('user_id')),
+                    future: getBubble(user_id),
                     builder: (BuildContext context, AsyncSnapshot snapshot) {
                       if (data.isNotEmpty) {
                         return Column(
@@ -375,13 +395,18 @@ class _HomePageState extends State<HomePage>
                                     builder: (context) {
                                       return NavigatorPage(
                                         index: 1,
+                                        user_id: user_id,
                                       );
                                     },
                                   ),
                                 );
                               },
                               child: AbsorbPointer(
-                                child: searchBar(size, false, ""),
+                                child: searchBar(
+                                  size: size, 
+                                  color: false, 
+                                  value: ""
+                                ),
                               ),
                             ),
                             SizedBox(

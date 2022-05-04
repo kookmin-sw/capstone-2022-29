@@ -7,7 +7,9 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:frontend/pages/more/my_keyword_page.dart';
 import 'package:frontend/pages/search/detail_news_page.dart';
 import 'package:frontend/pages/search/search_page.dart';
+import 'package:frontend/pages/search/search_provider.dart';
 import 'package:frontend/pages/splash/splash_page.dart';
+import 'package:provider/provider.dart';
 
 void main() async {
   await dotenv.load(fileName: ".env");
@@ -48,18 +50,23 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return ValueListenableBuilder<Brightness>(
-      valueListenable: _themeModeNotifier.appBrightness,
-      builder: (context, value, child) {
-        return MaterialApp(
-          title: '뉴익',
-          theme: ThemeData(
-            brightness: value,
-          ),
-          // home: DetailNewsPage(title: '마스크 대란'),
-          home: SplashPage(),
-        );
+    return ChangeNotifierProvider(
+      create: (context){
+        return SearchProvider();
       },
+      child: ValueListenableBuilder<Brightness>(
+        valueListenable: _themeModeNotifier.appBrightness,
+        builder: (context, value, child) {
+          return MaterialApp(
+            title: '뉴익',
+            theme: ThemeData(
+              brightness: value,
+            ),
+            // home: DetailNewsPage(title: '마스크 대란'),
+            home: SplashPage(),
+          );
+        },
+      ),
     );
   }
 }

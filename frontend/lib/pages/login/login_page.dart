@@ -8,7 +8,6 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:frontend/api/api_service.dart';
 import 'package:frontend/models/user_model.dart';
 import 'package:frontend/pages/navigator.dart';
-import 'package:localstorage/localstorage.dart';
 
 class LoginPage extends StatefulWidget {
   LoginPage({Key? key}) : super(key: key);
@@ -56,9 +55,7 @@ class _LoginPageState extends State<LoginPage> {
         debugPrint("userProfileImagePath: ${userProfileImagePath}");
         debugPrint("token: ${_accessToken}");
 
-        LocalStorage('user').setItem('access_token', _accessToken);
-
-        var user = await ApiService().findUser(userNickname);
+        var user = await ApiService().getUserInfo(userNickname);
         if (user == null) {
           await ApiService().postUserInfo(
             User(
@@ -68,10 +65,30 @@ class _LoginPageState extends State<LoginPage> {
               // email: userEmail!,
             ),
           );
-          var result = await ApiService().findUser(userNickname);
-          LocalStorage('user').setItem('user_id', result['_id']);
+          var result = await ApiService().getUserInfo(userNickname);
+
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => NavigatorPage(
+                index: 0,
+                nickname: userNickname,
+                user_id: user['_id'],
+              ),
+            ),
+          );
         } else {
-          LocalStorage('user').setItem('user_id', user['_id']);
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => NavigatorPage(
+                index: 0,
+                nickname: userNickname,
+                user_id: user['_id'],
+              ),
+            ),
+          );
+
           await ApiService().updateUserInfo(
             userNickname,
             User(
@@ -121,14 +138,6 @@ class _LoginPageState extends State<LoginPage> {
         _updateRefreshToken(result.token!.refreshToken!);
       }
 
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (context) => NavigatorPage(
-            index: 0,
-          ),
-        ),
-      );
       debugPrint("Kakao login success");
       debugPrint("access_token: $_accessToken");
       debugPrint("refresh_token: $_refreshToken");
@@ -145,14 +154,17 @@ class _LoginPageState extends State<LoginPage> {
   void _processLoginResult(KakaoLoginResult result) {
     switch (result.status) {
       case KakaoLoginStatus.loggedIn:
+        debugPrint('login');
         _updateLoginMessage('Logged In by the user.');
         _updateStateLogin(true, result);
         break;
       case KakaoLoginStatus.loggedOut:
+        debugPrint('logout');
         _updateLoginMessage('Logged Out by the user.');
         _updateStateLogin(false, result);
         break;
       case KakaoLoginStatus.unlinked:
+        debugPrint('unlink');
         _updateLoginMessage('Unlinked by the user');
         _updateStateLogin(false, result);
         break;

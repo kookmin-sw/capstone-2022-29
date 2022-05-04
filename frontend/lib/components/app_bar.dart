@@ -3,16 +3,16 @@
 import 'package:flutter/material.dart';
 import 'package:share_plus/share_plus.dart';
 
-AppBar appBar(Size size, String? title, BuildContext context, bool isShow) {
+AppBar appBar(Size size, String? title, BuildContext context, bool isBack, bool isShow) {
   return AppBar(
     backgroundColor: Colors.transparent,
-    leading: Container(
+    leading: isBack ? Container(
       margin: EdgeInsets.only(left: size.width * 0.05),
       child: IconButton(
         icon: Image.asset('lib/assets/images/backIcon.png', width: size.width * 0.1, height: size.width * 0.1),
         onPressed: () => Navigator.pop(context),
       ),
-    ),
+    ) : null,
     title: title != ' ' ? Container(
       child: Center( child: title != ''? Text(title ?? '',style: TextStyle(color: Colors.black)) : Image.asset('lib/assets/images/logo_mini.png')),
       width: size.width * 0.4,
