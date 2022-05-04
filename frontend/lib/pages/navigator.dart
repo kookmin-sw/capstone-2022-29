@@ -46,7 +46,10 @@ class _NavigatorPageState extends State<NavigatorPage> {
         TimelinePage(query: widget.query, user_id: widget.user_id),
         DetailNewsPage(title: widget.query),
         NoticePage(user_id: widget.user_id),
-        NoticeDetailPage(title: widget.title, content: widget.content),
+        NoticeDetailPage(
+            title: widget.title,
+            content: widget.content,
+            user_id: widget.user_id),
         QnAPage(user_id: widget.user_id),
         MyKeywordPage(user_id: widget.user_id),
       ];
@@ -67,7 +70,7 @@ class _NavigatorPageState extends State<NavigatorPage> {
         child: SafeArea(
           child: GNav(
             gap: 10,
-            backgroundColor: Color(0xffF7F7F7),
+            backgroundColor: Colors.transparent,
             iconSize: 24,
             padding: EdgeInsets.symmetric(
               horizontal: size.width * 0.06,
