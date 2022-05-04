@@ -43,7 +43,10 @@ class _NavigatorPageState extends State<NavigatorPage> {
         SearchPage(user_id: widget.user_id),
         BookmarkPage(user_id: widget.user_id),
         NewsPage(query: widget.query, user_id: widget.user_id),
-        TimelinePage(query: widget.query, user_id: widget.user_id, topicNum:widget.topicNum),
+        TimelinePage(
+            query: widget.query,
+            user_id: widget.user_id,
+            topicNum: widget.topicNum),
         DetailNewsPage(title: widget.query),
         NoticePage(user_id: widget.user_id),
         NoticeDetailPage(
@@ -59,6 +62,10 @@ class _NavigatorPageState extends State<NavigatorPage> {
     Size size = MediaQuery.of(context).size;
     final List<Widget> widgetOptions = _widgetOptions();
     return Scaffold(
+      // backgroundColor:
+      // widget.index == 7 ? Color(0xFFe7f3ff) : Color(0xfff7f7f7),
+      extendBodyBehindAppBar: true,
+      extendBody: true,
       body: Center(
         child: widgetOptions.elementAt(widget.index),
       ),
@@ -70,7 +77,6 @@ class _NavigatorPageState extends State<NavigatorPage> {
         child: SafeArea(
           child: GNav(
             gap: 10,
-            backgroundColor: Colors.transparent,
             iconSize: 24,
             padding: EdgeInsets.symmetric(
               horizontal: size.width * 0.06,

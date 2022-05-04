@@ -18,7 +18,6 @@ class _NoticePageState extends State<NoticePage> {
   List<Map> data = [];
 
   Future<void> getNotice() async {
-    data.clear();
     List<dynamic> notice = await ApiService().getNotice();
     for (var i = 0; i < notice.length; i++) {
       data.add({"title": notice[i]['title'], "content": notice[i]['content']});
@@ -32,6 +31,7 @@ class _NoticePageState extends State<NoticePage> {
       backgroundColor: Color.fromRGBO(247, 247, 247, 1),
       appBar: appBar(size, '공지사항', context, true, false),
       body: Container(
+        height: size.height * 0.75,
         margin: EdgeInsets.all(20),
         decoration: BoxDecoration(
           color: Colors.white,

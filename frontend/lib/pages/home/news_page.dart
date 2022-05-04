@@ -51,7 +51,7 @@ class _NewsPageState extends State<NewsPage> {
           builder: (BuildContext context, AsyncSnapshot snapshot) {
             if (data.length != 0) {
               return SizedBox(
-                height: size.height * 0.75,
+                height: size.height * 0.77,
                 child: ListView(
                   shrinkWrap: true,
                   children: getNewsList(size),
