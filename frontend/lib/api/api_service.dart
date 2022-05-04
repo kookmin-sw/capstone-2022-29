@@ -290,7 +290,7 @@ class ApiService {
     List<dynamic> topic = [];
     final queryParameters = {
       'query': query,
-      'topicNum': topicNum,
+      'num': topicNum,
     };
     final url = Uri.http(_apiURI, "topics", queryParameters);
     http.Response response = await http.get(url, headers: {
@@ -300,9 +300,6 @@ class ApiService {
       print(response.body);
     }
     var decodedData = jsonDecode(response.body);
-    print(query);
-    print(topicNum);
-    print(decodedData);
     for (dynamic t in decodedData) {
       topic.add(t);
     }
