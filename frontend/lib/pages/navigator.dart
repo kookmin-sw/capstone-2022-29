@@ -29,7 +29,7 @@ class NavigatorPage extends StatefulWidget {
   String? nickname;
   String? user_id;
   String? query;
-  double? topicNum;
+  int? topicNum;
   String? title;
   String? content;
 
@@ -43,7 +43,7 @@ class _NavigatorPageState extends State<NavigatorPage> {
         SearchPage(user_id: widget.user_id),
         BookmarkPage(user_id: widget.user_id),
         NewsPage(query: widget.query, user_id: widget.user_id),
-        TimelinePage(query: widget.query, user_id: widget.user_id),
+        TimelinePage(query: widget.query, user_id: widget.user_id, topicNum:widget.topicNum),
         DetailNewsPage(title: widget.query),
         NoticePage(user_id: widget.user_id),
         NoticeDetailPage(

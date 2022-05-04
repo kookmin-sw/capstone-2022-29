@@ -83,7 +83,7 @@ class _SearchPageState extends State<SearchPage> {
                                 ),
                                 Slider(
                                   value: _currentSliderValue,
-                                  max: 4,
+                                  max: 3,
                                   divisions: 3,
                                   onChanged: (double value) {
                                     setState(() {
@@ -112,6 +112,7 @@ class _SearchPageState extends State<SearchPage> {
                                             index: 4,
                                             query: Provider.of<SearchProvider>(context).searchQuery,
                                             user_id: widget.user_id,
+                                            topicNum: _currentSliderValue.toInt(),
                                           );
                                         },
                                       ),
