@@ -38,15 +38,20 @@ const updateBubble = async (req, res) => { // -> 사용자의 bubble의 query가
         await Bubble.findOneAndUpdate(
             {'user_id': {'$regex': regexUID}}, 
             {$addToSet: {'bubble': {'query': req.body.bubble.query}}},
-            function(err){
-                if(err){
-                    console.error(err);
-                    res.json({ message : 'fail' });
-                    return;
-                }
-                res.json({ message : 'success' });
-            }
-        ).catch(function(err){console.log(err)});
+            // function(err){
+            //     if(err){
+            //         console.error(err);
+            //         res.json({ message : 'fail' });
+            //         return;
+            //     }
+            //     res.json({ message : 'success' });
+            // }
+        )
+        .then(res.json({ message: 'success' }))
+        .catch(err => {
+            console.error(err);
+            res.json({ message : 'fail' });
+        });
     }
     else{
         const regexQuery = new RegExp(req.query.query);
@@ -55,15 +60,20 @@ const updateBubble = async (req, res) => { // -> 사용자의 bubble의 query가
             {'user_id': {'$regex': regexUID}}, 
             {$inc: {'bubble.$[elem].count': 1}},
             {arrayFilters: [{'elem.query': {'$regex': regexQuery}}]},
-            function(err){
-                if(err){
-                    console.error(err);
-                    res.json({ message : 'fail' });
-                    return;
-                }
-                res.json({ message : 'success' });
-            }
-        ).catch(function(err){console.log(err)});
+            // function(err){
+            //     if(err){
+            //         console.error(err);
+            //         res.json({ message : 'fail' });
+            //         return;
+            //     }
+            //     res.json({ message : 'success' });
+            // }
+        )
+        .then(res.json({ message: 'success' }))
+        .catch(err => {
+            console.error(err);
+            res.json({ message : 'fail' });
+        });
     }
 }
 

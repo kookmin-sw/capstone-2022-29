@@ -40,15 +40,20 @@ const updateBookmark = async (req, res) => { // -> 사용자가 bookmark를 등�
                     }
                 }
             },
-            function(err){
-                if(err){
-                    console.error(err);
-                    res.json({ message : 'fail' });
-                    return;
-                }
-                res.json({ message : 'success' });
-            }
-        ).catch(function(err){console.log(err)});
+            // function(err){
+            //     if(err){
+            //         console.error(err);
+            //         res.json({ message : 'fail' });
+            //         return;
+            //     }
+            //     res.json({ message : 'success' });
+            // }
+        )
+        .then(res.json({ message: 'success' }))
+        .catch(err => {
+            console.error(err);
+            res.json({ message : 'fail' });
+        });
     }
     else{
         const regexNID = new RegExp(req.query.news_id);
@@ -57,12 +62,17 @@ const updateBookmark = async (req, res) => { // -> 사용자가 bookmark를 등�
             // {$pull: {'bookmark': {$elemMatch: {'news_id': {$regex: regexNID}}}}},
             {$pull: {'bookmark': {'news_id': {$regex: regexNID}}}},
             {new: true},
-            function(err, bookmark){
-                if(err) return res.status(500).json({ error: err });
-                if(!bookmark) return res.status(404).json({ error: '해당 북마크의 뉴스가 존재하지 않습니다.' });
-                res.json(bookmark);
-            }
-        ).catch(function(err){console.log(err)});
+            // function(err, bookmark){
+            //     if(err) return res.status(500).json({ error: err });
+            //     if(!bookmark) return res.status(404).json({ error: '해당 북마크의 뉴스가 존재하지 않습니다.' });
+            //     res.json(bookmark);
+            // }
+        )
+        .then(bookmark => {
+            if(!bookmark) res.status(404).json({ error: '해당 북마크의 뉴스가 존재하지 않습니다.' });
+            else res.json(bookmark);
+        })
+        .catch(err => res.status(500).json({ error: err }));
     }
 }
 
