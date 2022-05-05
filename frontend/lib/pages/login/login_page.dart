@@ -74,6 +74,7 @@ class _LoginPageState extends State<LoginPage> {
                 index: 0,
                 nickname: userNickname,
                 user_id: user['_id'],
+                kakaoSignIn: kakaoSignIn,
               ),
             ),
           );
@@ -85,6 +86,7 @@ class _LoginPageState extends State<LoginPage> {
                 index: 0,
                 nickname: userNickname,
                 user_id: user['_id'],
+                kakaoSignIn: kakaoSignIn,
               ),
             ),
           );

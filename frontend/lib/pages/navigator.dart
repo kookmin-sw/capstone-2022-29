@@ -13,25 +13,24 @@ import 'package:frontend/pages/search/search_page.dart';
 import 'package:frontend/pages/search/timeline_page.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:line_icons/line_icons.dart';
+import 'package:flutter_kakao_login/flutter_kakao_login.dart';
 
 class NavigatorPage extends StatefulWidget {
-  NavigatorPage(
-    {
-      Key? key,
-      required this.index,
-      this.nickname,
-      this.user_id,
-      this.news_id,
-      this.query,
-      this.topicNum,
-      this.title,
-      this.content,
-      this.isSearch,
-      this.news,
-      this.topicStepNum,
-    }
-  )
-      : super(key: key);
+  NavigatorPage({
+    Key? key,
+    required this.index,
+    this.nickname,
+    this.user_id,
+    this.news_id,
+    this.query,
+    this.topicNum,
+    this.title,
+    this.content,
+    this.isSearch,
+    this.news,
+    this.topicStepNum,
+    this.kakaoSignIn,
+  }) : super(key: key);
   int index = 0;
   String? nickname;
   String? user_id;
@@ -43,6 +42,7 @@ class NavigatorPage extends StatefulWidget {
   bool? isSearch;
   List<dynamic>? news;
   int? topicStepNum;
+  FlutterKakaoLogin? kakaoSignIn;
 
   @override
   State<NavigatorPage> createState() => _NavigatorPageState();
@@ -50,16 +50,23 @@ class NavigatorPage extends StatefulWidget {
 
 class _NavigatorPageState extends State<NavigatorPage> {
   List<Widget> _widgetOptions() => <Widget>[
-        HomePage(nickname: widget.nickname, user_id: widget.user_id),
+        HomePage(
+            nickname: widget.nickname,
+            user_id: widget.user_id,
+            kakaoSignIn: widget.kakaoSignIn),
         SearchPage(user_id: widget.user_id),
         BookmarkPage(user_id: widget.user_id),
         NewsPage(
-          news: widget.news??[],
-          query: widget.query, 
+          news: widget.news ?? [],
+          query: widget.query,
           user_id: widget.user_id,
           topicNum: widget.topicNum,
-          topicStepNum: widget.topicStepNum,),
-        TimelinePage(query: widget.query, user_id: widget.user_id, topicNum:widget.topicNum),
+          topicStepNum: widget.topicStepNum,
+        ),
+        TimelinePage(
+            query: widget.query,
+            user_id: widget.user_id,
+            topicNum: widget.topicNum),
         DetailNewsPage(
           news_id: widget.news_id,
           user_id: widget.user_id,

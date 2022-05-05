@@ -8,13 +8,17 @@ import 'package:frontend/components/slide_news/slide.dart';
 import 'package:frontend/pages/navigator.dart';
 import 'package:bubble_chart/bubble_chart.dart';
 import 'package:frontend/api/api_service.dart';
+import 'package:flutter_kakao_login/flutter_kakao_login.dart';
+import 'package:frontend/pages/login/login_page.dart';
 
 final Color backgroundColor = Color(0xFFf7f7f7);
 
 class HomePage extends StatefulWidget {
-  HomePage({Key? key, this.nickname, this.user_id}) : super(key: key);
+  HomePage({Key? key, this.nickname, this.user_id, this.kakaoSignIn})
+      : super(key: key);
   String? nickname;
   String? user_id;
+  FlutterKakaoLogin? kakaoSignIn;
 
   @override
   _HomePageState createState() => _HomePageState();
@@ -153,6 +157,21 @@ class _HomePageState extends State<HomePage>
     return list;
   }
 
+  Future<void> _logout() async {
+    // final result = await widget.kakaoSignIn!.unlink();
+    // if (result == KakaoLoginStatus.loggedOut) {
+    //   debugPrint('logout');
+    // }
+    // debugPrint('no logout');
+    debugPrint('logout');
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (context) => LoginPage(),
+      ),
+    );
+  }
+
   @override
   void dispose() {
     _controller.dispose();
@@ -196,7 +215,7 @@ class _HomePageState extends State<HomePage>
                     if (userInfo != null) {
                       return Column(
                         // mainAxisSize: MainAxisSize.min,
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           Column(
@@ -291,42 +310,43 @@ class _HomePageState extends State<HomePage>
                                   }),
                               SizedBox(height: screenHeight * 0.02),
                               InkWell(
-                                  child: SizedBox(
-                                    width: screenWidth * 0.5,
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Row(
-                                          children: [
-                                            Icon(
-                                                Icons.favorite_border_outlined),
-                                            SizedBox(width: screenWidth * 0.02),
-                                            Text("나의 키워드",
-                                                style: TextStyle(
-                                                    color: Colors.black,
-                                                    fontSize: 16)),
-                                          ],
-                                        ),
-                                        Icon(Icons.arrow_forward_ios,
-                                            size: screenWidth * 0.04),
-                                      ],
-                                    ),
-                                  ),
-                                  onTap: () {
-                                    _controller.forward();
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) {
-                                          return NavigatorPage(
-                                            index: 9,
-                                            user_id: widget.user_id,
-                                          );
-                                        },
+                                child: SizedBox(
+                                  width: screenWidth * 0.5,
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Row(
+                                        children: [
+                                          Icon(Icons.favorite_border_outlined),
+                                          SizedBox(width: screenWidth * 0.02),
+                                          Text("나의 키워드",
+                                              style: TextStyle(
+                                                  color: Colors.black,
+                                                  fontSize: 16)),
+                                        ],
                                       ),
-                                    );
-                                  }),
+                                      Icon(Icons.arrow_forward_ios,
+                                          size: screenWidth * 0.04),
+                                    ],
+                                  ),
+                                ),
+                                onTap: () {
+                                  _controller.forward();
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) {
+                                        return NavigatorPage(
+                                          index: 9,
+                                          user_id: widget.user_id,
+                                        );
+                                      },
+                                    ),
+                                  );
+                                },
+                              ),
+                              SizedBox(height: screenHeight * 0.3),
                             ],
                           ),
                           InkWell(
@@ -339,7 +359,10 @@ class _HomePageState extends State<HomePage>
                                           color: Colors.black, fontSize: 16)),
                                 ],
                               ),
-                              onTap: () {}),
+                              onTap: () {
+                                _logout();
+                              }),
+                          SizedBox(height: screenHeight * 0.01),
                         ],
                       );
                     } else {
