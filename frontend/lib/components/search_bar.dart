@@ -40,7 +40,6 @@ class searchBar extends StatelessWidget {
           },
           onSearchButtonPressed: (String value) {
             context.read<SearchProvider>().onChange(value);
-            // debugPrint("submit: $value");
           },
         ),
       ),

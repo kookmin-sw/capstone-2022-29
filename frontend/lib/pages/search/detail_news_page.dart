@@ -1,53 +1,111 @@
 // ignore_for_file: prefer_const_constructors_in_immutables, prefer_const_constructors, curly_braces_in_flow_control_structures, must_be_immutable
 
 import 'package:flutter/material.dart';
+import 'package:frontend/api/api_service.dart';
 import 'package:frontend/components/app_bar.dart';
 import 'package:frontend/components/button.dart';
 import 'package:frontend/components/button2.dart';
+import 'package:frontend/models/bookmark_model.dart';
 import 'package:timelines/timelines.dart';
 import 'dart:convert';
+import 'package:provider/provider.dart';
+import 'package:frontend/pages/search/search_provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class DetailNewsPage extends StatefulWidget {
-  DetailNewsPage({Key? key, this.title}) : super(key: key);
-  String? title;
+  DetailNewsPage({Key? key, this.news_id, this.user_id, this.topicNum, this.topicStepNum}) : super(key: key);
+  String? news_id;
+  String? user_id;
+  int? topicNum;
+  int? topicStepNum;
 
   @override
   State<DetailNewsPage> createState() => _DetailNewsPageState();
 }
 
 class _DetailNewsPageState extends State<DetailNewsPage> {
-  final int num = 4;
-  final int topicStep = 2;
   final similarNews = '[{"title":"유사한 뉴스 기사 1", "url":"www.naver.com"},{"title":"유사한 뉴스 기사 2", "url":"www.naver.com"},{"title":"유사한 뉴스 기사 3", "url":"www.naver.com"},{"title":"유사한 뉴스 기사 4", "url":"www.naver.com"},{"title":"유사한 뉴스 기사 5", "url":"www.naver.com"},{"title":"유사한 뉴스 기사 6", "url":"www.naver.com"}]';
+  List<dynamic> data = [];
 
-  List data = [];
 
-  Future<String> getData() async { 
-    // http.Response response = await http.get( 
-    //   Uri.encodeFull('http://jsonplaceholder.typicode.com/posts'), 
-    //   headers: {"Accept": "application/json"}
-    // ); 
-    data = jsonDecode(similarNews); 
-    
-    return "success";
+  Future<void> getNews() async {
+    data = await ApiService().getNewsID(widget.news_id);
   }
 
   @override
   void initState() { 
     super.initState(); 
-    getData(); 
+    getNews();
   }
   
   @override
   Widget build(BuildContext context) {
+    final int num = widget.topicNum ?? 0;
+    final int topicStep = widget.topicStepNum ?? 0;
     Size size = MediaQuery.of(context).size;
-    
-    void onPressed() {
-      print("zz");
+    String query = Provider.of<SearchProvider>(context).searchQuery;
+
+    Future<void> postBookmark(String user_id) async {
+      List<dynamic> isBookmark = await ApiService().getBookmark(user_id);
+      if (isBookmark.isEmpty) {
+        await ApiService().postBookmark(
+          Bookmark(
+            user_id: user_id, 
+            bookmarks: Bookmarks(
+              news_id: widget.news_id!, 
+              query: query,
+              topic: "",
+            )
+          )
+        );
+      } else {
+        await ApiService().updateBookmark(
+          user_id,
+          Bookmark(
+            user_id: user_id, 
+            bookmarks: Bookmarks(
+              news_id: widget.news_id!, 
+              query: query,
+              topic: "",
+            )
+          )
+        );
+      }
+    }
+
+    void onShowPressed() async { 
+      Uri url = Uri.parse('https://flutter.dev');
+      if (!await launchUrl(url)) throw 'Could not launch $url';
     }
 
     void closeSimilar() {
       Navigator.pop(context);
+    }
+
+    void onConfirmDialog() {
+      showDialog(
+        context: context,
+        barrierDismissible: true,
+        builder: (context) {
+          return AlertDialog(
+            
+            content: Container(
+              height: size.height * 0.15,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text('북마크가 정상적으로 등록되었습니다.'),
+                  button(size, "닫기",closeSimilar),
+                ],
+              )
+            )
+          );
+        }
+      );
+    }
+    void onSavePressed() async{
+      await postBookmark(widget.user_id!);
+      onConfirmDialog();
     }
 
     void onSimailarPressed() {
@@ -69,7 +127,6 @@ class _DetailNewsPageState extends State<DetailNewsPage> {
                           shrinkWrap: true,
                           itemCount: data == [] ? 0 : data.length, 
                           itemBuilder: (BuildContext context, int index) { 
-                            print(data[index]["title"]);
                             return Container(
                               margin: EdgeInsets.only(left: size.width*0.05, right: size.width*0.05, top: size.height*0.02),
                               padding: EdgeInsets.only(left: size.width*0.05, right: size.width*0.05, top: size.height*0.02),
@@ -99,66 +156,74 @@ class _DetailNewsPageState extends State<DetailNewsPage> {
 
     return Scaffold(
       extendBody: true,
-      appBar: appBar(size, widget.title, context, true, false),
+      appBar: appBar(size, query, context, true, false),
       backgroundColor: Color(0xffF7F7F7),
       body: SafeArea(
-        child: Column(
-          children: [
-            SizedBox(
-              width: double.infinity,
-              height: size.height * 0.03,
-              child: Timeline.tileBuilder(
-                scrollDirection: Axis.horizontal,
-                builder: TimelineTileBuilder.connected(
-                // fromStyle(
-                  indicatorBuilder: (_, index) {
-                    if (topicStep-1 == index) return DotIndicator(color: Color.fromRGBO(48, 105, 171, 1));
-                    else return DotIndicator(color: Color.fromRGBO(198, 225, 255, 1));
-                  },
-                  connectorBuilder: (_, index, connectorType) {
-                    return SolidLineConnector(
-                      indent: connectorType == ConnectorType.start ? 0 : 2.0,
-                      endIndent: connectorType == ConnectorType.end ? 0 : 2.0,
-                      thickness: 4,
-                      color: Color.fromRGBO(198, 225, 255, 1),
-                    );
-                  },
-                  contentsAlign: ContentsAlign.basic,
-                  contentsBuilder: (context, index) => Padding(
-                    padding: EdgeInsets.only(left: size.width/(num)),
+        child: FutureBuilder(
+          future: getNews(),
+          builder: (BuildContext context, AsyncSnapshot snapshot) {
+            if (data.isNotEmpty) {
+            return Column(
+              children: [
+                SizedBox(
+                  width: double.infinity,
+                  height: size.height * 0.03,
+                  child: Timeline.tileBuilder(
+                    scrollDirection: Axis.horizontal,
+                    builder: TimelineTileBuilder.connected(
+                    // fromStyle(
+                      indicatorBuilder: (_, index) {
+                        if (topicStep-1 == index) return DotIndicator(color: Color.fromRGBO(48, 105, 171, 1));
+                        else return DotIndicator(color: Color.fromRGBO(198, 225, 255, 1));
+                      },
+                      connectorBuilder: (_, index, connectorType) {
+                        return SolidLineConnector(
+                          indent: connectorType == ConnectorType.start ? 0 : 2.0,
+                          endIndent: connectorType == ConnectorType.end ? 0 : 2.0,
+                          thickness: 4,
+                          color: Color.fromRGBO(198, 225, 255, 1),
+                        );
+                      },
+                      contentsAlign: ContentsAlign.basic,
+                      contentsBuilder: (context, index) => Padding(
+                        padding: EdgeInsets.only(left: size.width/(num)),
+                      ),
+                      itemCount: num,
+                    ),
                   ),
-                  itemCount: num,
                 ),
-              ),
-            ),
-            Center(
-              child: Container(
-                margin: EdgeInsets.only(top: size.height*0.02),
-                width: size.width * 0.8,
-                height: size.height * 0.07,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(30),
+                Center(
+                  child: Container(
+                    margin: EdgeInsets.only(top: size.height*0.02),
+                    width: size.width * 0.8,
+                    height: size.height * 0.07,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(30),
+                    ),
+                    child: Center(child: Text(data[0]['title'], style: TextStyle(fontSize: 24,))),
+                  ),
                 ),
-                child: Center(child: Text("대표 기사 제목 1", style: TextStyle(fontSize: 24,))),
-              ),
-            ),
-            Center(
-              child: Container(
-                margin: EdgeInsets.only(top: size.height*0.02),
-                padding: EdgeInsets.only(bottom: size.height*0.02, top: size.height*0.02, left: size.width*0.05, right: size.width*0.05),
-                width: size.width * 0.8,
-                height: size.height * 0.4,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(30),
+                Center(
+                  child: Container(
+                    margin: EdgeInsets.only(top: size.height*0.02),
+                    padding: EdgeInsets.only(bottom: size.height*0.02, top: size.height*0.02, left: size.width*0.05, right: size.width*0.05),
+                    width: size.width * 0.8,
+                    height: size.height * 0.4,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(30),
+                    ),
+                    child: Text(data[0]['summary']),
+                  ),
                 ),
-                child: Text("마스크 대란과 관련된 대표 기사 제목 1의 요약 정리입니다."),
-              ),
-            ),
-            buttonTwo(size, "저장하기", "원문보기", onPressed, onPressed),
-            button(size, "유사한 기사 보기",onSimailarPressed),
-          ],
+                buttonTwo(size, "저장하기", "원문보기", onSavePressed, onShowPressed),
+                button(size, "유사한 기사 보기",onSimailarPressed),
+              ],
+            );
+          }
+          else {return Container();}
+          }
         )
       )
     );
