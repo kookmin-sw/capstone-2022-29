@@ -62,10 +62,7 @@ class _NavigatorPageState extends State<NavigatorPage> {
         TimelinePage(query: widget.query, user_id: widget.user_id, topicNum:widget.topicNum),
         DetailNewsPage(
           news_id: widget.news_id,
-          // title: widget.title,
-          // content: widget.content,
           user_id: widget.user_id,
-          // newsUrl: widget.newsUrl,
           topicNum: widget.topicNum,
           topicStepNum: widget.topicStepNum,
         ),
@@ -83,6 +80,10 @@ class _NavigatorPageState extends State<NavigatorPage> {
     Size size = MediaQuery.of(context).size;
     final List<Widget> widgetOptions = _widgetOptions();
     return Scaffold(
+      // backgroundColor:
+      // widget.index == 7 ? Color(0xFFe7f3ff) : Color(0xfff7f7f7),
+      extendBodyBehindAppBar: true,
+      extendBody: true,
       body: Center(
         child: widgetOptions.elementAt(widget.index),
       ),
@@ -94,7 +95,6 @@ class _NavigatorPageState extends State<NavigatorPage> {
         child: SafeArea(
           child: GNav(
             gap: 10,
-            backgroundColor: Colors.transparent,
             iconSize: 24,
             padding: EdgeInsets.symmetric(
               horizontal: size.width * 0.06,
