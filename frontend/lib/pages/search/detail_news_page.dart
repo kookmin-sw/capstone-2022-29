@@ -5,6 +5,7 @@ import 'package:frontend/api/api_service.dart';
 import 'package:frontend/components/app_bar.dart';
 import 'package:frontend/components/button.dart';
 import 'package:frontend/components/button2.dart';
+import 'package:frontend/models/bookmark_model.dart';
 import 'package:timelines/timelines.dart';
 import 'dart:convert';
 import 'package:provider/provider.dart';
@@ -42,17 +43,69 @@ class _DetailNewsPageState extends State<DetailNewsPage> {
     final int num = widget.topicNum ?? 0;
     final int topicStep = widget.topicStepNum ?? 0;
     Size size = MediaQuery.of(context).size;
-    void onSavePressed() async{
-      print("zz");
+    String query = Provider.of<SearchProvider>(context).searchQuery;
+
+    Future<void> postBookmark(String user_id) async {
+      List<dynamic> isBookmark = await ApiService().getBookmark(user_id);
+      if (isBookmark.isEmpty) {
+        await ApiService().postBookmark(
+          Bookmark(
+            user_id: user_id, 
+            bookmarks: Bookmarks(
+              news_id: widget.news_id!, 
+              query: query,
+              topic: "",
+            )
+          )
+        );
+      } else {
+        await ApiService().updateBookmark(
+          user_id,
+          Bookmark(
+            user_id: user_id, 
+            bookmarks: Bookmarks(
+              news_id: widget.news_id!, 
+              query: query,
+              topic: "",
+            )
+          )
+        );
+      }
     }
 
     void onShowPressed() async { 
-            Uri url = Uri.parse('https://flutter.dev');
-            if (!await launchUrl(url)) throw 'Could not launch $url';
-          }
+      Uri url = Uri.parse('https://flutter.dev');
+      if (!await launchUrl(url)) throw 'Could not launch $url';
+    }
 
     void closeSimilar() {
       Navigator.pop(context);
+    }
+
+    void onConfirmDialog() {
+      showDialog(
+        context: context,
+        barrierDismissible: true,
+        builder: (context) {
+          return AlertDialog(
+            
+            content: Container(
+              height: size.height * 0.15,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text('북마크가 정상적으로 등록되었습니다.'),
+                  button(size, "닫기",closeSimilar),
+                ],
+              )
+            )
+          );
+        }
+      );
+    }
+    void onSavePressed() async{
+      await postBookmark(widget.user_id!);
+      onConfirmDialog();
     }
 
     void onSimailarPressed() {
@@ -103,7 +156,7 @@ class _DetailNewsPageState extends State<DetailNewsPage> {
 
     return Scaffold(
       extendBody: true,
-      appBar: appBar(size, Provider.of<SearchProvider>(context).searchQuery, context, true, false),
+      appBar: appBar(size, query, context, true, false),
       backgroundColor: Color(0xffF7F7F7),
       body: SafeArea(
         child: FutureBuilder(
