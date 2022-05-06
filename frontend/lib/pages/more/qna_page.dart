@@ -1,8 +1,9 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_constructors_in_immutables, avoid_print
+// ignore_for_file: prefer_const_constructors, prefer_const_constructors_in_immutables, avoid_print, must_be_immutable, non_constant_identifier_names
 
 import 'package:flutter/material.dart';
 import 'package:frontend/components/app_bar.dart';
 import 'package:frontend/components/button2.dart';
+import 'package:flutter_email_sender/flutter_email_sender.dart';
 
 class QnAPage extends StatefulWidget {
   QnAPage({Key? key, this.user_id}) : super(key: key);
@@ -17,14 +18,27 @@ class _QnAPageState extends State<QnAPage> {
   TextEditingController contentController = TextEditingController();
   TextEditingController emailController = TextEditingController();
 
-  void onClickPressed() {
+  void onClickPressed() async{
     print('title: ' + titleController.text);
     print('content: ' + contentController.text);
     print('email: ' + emailController.text);
+
+    // final Email email = Email(
+    //   body: contentController.text + '\n\n' + emailController.text,
+    //   subject: titleController.text,
+    //   recipients: ['ch2w2006@kookmin.ac.kr'],
+    //   cc: [],
+    //   bcc: [],
+    //   attachmentPaths: [],
+    //   isHTML: false,
+    // );
+
+    // await FlutterEmailSender.send(email);
   }
 
   void onCanclePressed() {
     print('cancle');
+    Navigator.pop(context);
   }
 
   @override
