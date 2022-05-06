@@ -1,12 +1,14 @@
 // ignore_for_file: prefer_const_constructors, prefer_is_empty,must_be_immutable, prefer_const_constructors
 
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:frontend/api/api_service.dart';
 import 'package:frontend/components/app_bar.dart';
 import 'package:frontend/components/news_title.dart';
 import 'package:frontend/pages/navigator.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:frontend/models/bookmark_model.dart';
+import 'package:frontend/models/bubble_model.dart';
 
 class NewsPage extends StatefulWidget {
   NewsPage(
@@ -69,7 +71,7 @@ class _NewsPageState extends State<NewsPage> {
           'url': news[0]["url"],
           'summary': news[0]["summary"],
           'navigate': () async {
-            await addBookmark(widget.user_id, widget.news![i]["news_id"],
+            await addBubble(widget.user_id, widget.news![i]["news_id"],
                 widget.query, query);
             Navigator.push(
               context,
@@ -91,24 +93,27 @@ class _NewsPageState extends State<NewsPage> {
     }
   }
 
-  Future<void> addBookmark(
+  Future<void> addBubble(
       dynamic user_id, dynamic news_id, dynamic query, dynamic topic) async {
-    List<dynamic> bookmark = await ApiService().getBookmark(user_id);
-    if (bookmark.isEmpty) {
-      await ApiService().postBookmark(
-        Bookmark(
-          user_id: user_id,
-          bookmarks: Bookmarks(news_id: news_id, query: query, topic: topic),
-        ),
+    List<dynamic> allBubble = await ApiService().getBubbleUserId(user_id);
+    if (allBubble.length == 0) {
+      await ApiService().postBubble(
+        Bubble(user_id: user_id, bubbles: Bubbles(query: query, count: 1)),
       );
     } else {
-      await ApiService().updateBookmark(
-        user_id,
-        Bookmark(
-          user_id: user_id,
-          bookmarks: Bookmarks(news_id: news_id, query: query, topic: topic),
-        ),
-      );
+      List<dynamic> bubble = await ApiService().getBubble(user_id, query);
+      if (bubble.length == 0) {
+        await ApiService().updateNewBubble(
+          user_id,
+          Bubble(user_id: user_id, bubbles: Bubbles(query: query, count: 0)),
+        );
+      } else {
+        await ApiService().updateBubbleCount(
+          user_id,
+          query,
+          Bubble(user_id: user_id, bubbles: Bubbles(query: query, count: 0)),
+        );
+      }
     }
   }
 
