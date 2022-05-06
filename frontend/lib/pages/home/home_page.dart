@@ -73,9 +73,12 @@ class _HomePageState extends State<HomePage>
   }
 
   List<Map> data = [];
+  List<String> dataKeyword = [];
 
-  Future<void> getBubble(dynamic user_id) async {
+  Future<void> getBubbleAndKeyword(dynamic user_id) async {
     data.clear();
+    dataKeyword.clear();
+
     List<dynamic> bubble = await ApiService().getBubbleUserId(user_id);
     for (var i = 0; i < bubble.length; i++) {
       for (var j = 0; j < bubble[i]['bubble'].length; j++) {
@@ -86,6 +89,13 @@ class _HomePageState extends State<HomePage>
       }
     }
     data.sort(((a, b) => (b['count']).compareTo(a['count'])));
+
+    List<dynamic> keywordList = await ApiService().getKeyword(user_id);
+    for (var i = 0; i < keywordList.length; i++) {
+      for (var j = 0; j < keywordList[i]['keywords'].length; j++) {
+        dataKeyword.add(keywordList[i]['keywords'][j]['keyword']);
+      }
+    }
   }
 
   Future<void> getUser(dynamic nickname) async {
@@ -149,7 +159,7 @@ class _HomePageState extends State<HomePage>
           isCollapsed,
           context,
           size,
-          data[i]["query"],
+          dataKeyword[i],
           widget.user_id!,
         ),
       );
@@ -401,7 +411,7 @@ class _HomePageState extends State<HomePage>
                     top: size.height * 0.01,
                   ),
                   child: FutureBuilder(
-                    future: getBubble(user_id),
+                    future: getBubbleAndKeyword(user_id),
                     builder: (BuildContext context, AsyncSnapshot snapshot) {
                       if (data.isNotEmpty) {
                         return Column(
