@@ -33,17 +33,17 @@ Widget slide(bool isCollapsed, BuildContext context, Size size, String query,
         ),
       );
       if (i == 4) {
-        // list.add(
-        //   Container(
-        //     // height: size.height * 0.03,
-        //     width: size.width * 0.1,
-        //     alignment: Alignment.center,
-        //     margin: EdgeInsets.symmetric(
-        //       horizontal: size.width * 0.02,
-        //     ),
-        //     child: Text("..."),
-        //   ),
-        // );
+        list.add(
+          Container(
+            // height: size.height * 0.03,
+            width: size.width * 0.1,
+            alignment: Alignment.center,
+            margin: EdgeInsets.symmetric(
+              horizontal: size.width * 0.02,
+            ),
+            child: Text("..."),
+          ),
+        );
         break;
       }
     }
