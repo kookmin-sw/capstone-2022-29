@@ -13,10 +13,15 @@ Widget slide(bool isCollapsed, BuildContext context, Size size, String query,
   Future<void> getNews(dynamic query) async {
     data.clear();
     List<dynamic> news = await ApiService().getNews(query);
-    // print("page: ${news.length}");
     for (var i = 0; i < news.length; i++) {
-      data.add({"journal": news[i]["journal"], "title": news[i]["title"]});
+      data.add({
+        "journal": news[i]["journal"],
+        "date": news[i]["date"],
+        "title": news[i]["title"]
+      });
     }
+    data.sort(((a, b) => (b['date']).compareTo(a['date'])));
+    print("* $data");
   }
 
   List<Widget> getCardNews(Size size) {
@@ -28,6 +33,7 @@ Widget slide(bool isCollapsed, BuildContext context, Size size, String query,
           data[i]['title'],
         ),
       );
+      if (i == 4) break;
     }
     return list;
   }
