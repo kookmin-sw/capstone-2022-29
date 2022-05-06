@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, use_key_in_widget_constructors
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, use_key_in_widget_constructors, non_constant_identifier_names, must_be_immutable, prefer_typing_uninitialized_variables
 import 'dart:math';
 
 import 'package:flutter/material.dart';
@@ -64,7 +64,6 @@ class _HomePageState extends State<HomePage>
       node.options?.onTap = () {
         setState(() {
           node.value += 1;
-          // childNode.remove(node);
         });
       };
       childNode.add(node);
@@ -99,7 +98,6 @@ class _HomePageState extends State<HomePage>
 
   Future<void> getUser(dynamic nickname) async {
     userInfo = await ApiService().getUserInfo(nickname);
-    // print(userInfo["nickname"]);
   }
 
   List<BubbleNode> getData(Size size) {
@@ -180,11 +178,6 @@ class _HomePageState extends State<HomePage>
   }
 
   Future<void> _logout() async {
-    // final result = await widget.kakaoSignIn!.unlink();
-    // if (result == KakaoLoginStatus.loggedOut) {
-    //   debugPrint('logout');
-    // }
-    // debugPrint('no logout');
     debugPrint('logout');
     Navigator.pushReplacement(
       context,
@@ -232,24 +225,17 @@ class _HomePageState extends State<HomePage>
               child: FutureBuilder(
                   future: getUser(widget.nickname),
                   builder: (BuildContext context, AsyncSnapshot snapshot) {
-                    // print(">> $userInfo");
-                    // print(userInfo["nickname"]);
                     if (userInfo != null) {
                       return Column(
-                        // mainAxisSize: MainAxisSize.min,
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Container(
+                              SizedBox(
                                 width: screenWidth * 0.25,
                                 height: screenWidth * 0.25,
-                                // decoration: BoxDecoration(
-                                //   color: Color(0xffffffff),
-                                //   borderRadius: BorderRadius.circular(30),
-                                // ),
                                 child: Image.network(userInfo["profile"]),
                               ),
                               SizedBox(height: screenHeight * 0.01),
@@ -433,10 +419,11 @@ class _HomePageState extends State<HomePage>
                               child: logo(size),
                               onTap: () {
                                 setState(() {
-                                  if (isCollapsed)
+                                  if (isCollapsed) {
                                     _controller.forward();
-                                  else
+                                  } else {
                                     _controller.reverse();
+                                  }
 
                                   isCollapsed = !isCollapsed;
                                 });

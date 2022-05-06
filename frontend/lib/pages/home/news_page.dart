@@ -1,7 +1,4 @@
 // ignore_for_file: prefer_const_constructors, prefer_is_empty,must_be_immutable, prefer_const_constructors
-
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 import 'package:frontend/api/api_service.dart';
 import 'package:frontend/components/app_bar.dart';
