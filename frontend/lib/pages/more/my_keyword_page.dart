@@ -73,7 +73,7 @@ class _MyKeywordPageState extends State<MyKeywordPage> {
     Size size = MediaQuery.of(context).size;
     return MaterialApp(
       home: Scaffold(
-        appBar: appBar(size, '나의 키워드', context, true,  (){}),
+        appBar: appBar(size, '나의 키워드', context, true, false, (){}),
         body: FutureBuilder(
           future: getKeyword(widget.user_id),
           builder: (BuildContext context, AsyncSnapshot snapshot) {

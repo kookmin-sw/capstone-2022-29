@@ -75,8 +75,8 @@ class _DetailNewsPageState extends State<DetailNewsPage> {
     }
 
     void onSharePressed(){
-      String title = data[0]["title"];
-      String summary = data[0]["summary"];
+      String title = data.isNotEmpty? data[0]["title"]:'';
+      String summary =data.isNotEmpty? data[0]["summary"]:'';
       Share.share('[$query]$title\n$summary',
                   subject: '뉴익 $widget.news_id');
     }
@@ -161,7 +161,7 @@ class _DetailNewsPageState extends State<DetailNewsPage> {
     }
     return Scaffold(
       extendBody: true,
-      appBar: appBar(size, query, context, true, onSharePressed),
+      appBar: appBar(size, query, context, true, true, onSharePressed),
       backgroundColor: Color(0xffF7F7F7),
       body: SafeArea(
         child: FutureBuilder(
