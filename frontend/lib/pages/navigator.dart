@@ -77,6 +77,7 @@ class _NavigatorPageState extends State<NavigatorPage> {
         DetailNewsPage(
           news_id: widget.news_id,
           user_id: widget.user_id,
+          query: widget.query,
           topicNum: widget.topicNum,
           topicStepNum: widget.topicStepNum,
         ),

@@ -7,6 +7,5 @@ class SearchProvider extends ChangeNotifier{
   onChange(value) {
     _searchQuery = value;
     notifyListeners();
-    // print(value);
   }
 }

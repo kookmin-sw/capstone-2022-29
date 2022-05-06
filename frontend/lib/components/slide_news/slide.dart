@@ -17,7 +17,8 @@ Widget slide(bool isCollapsed, BuildContext context, Size size, String query,
       data.add({
         "journal": news[i]["journal"],
         "date": news[i]["date"],
-        "title": news[i]["title"]
+        "title": news[i]["title"],
+        "url": news[i]["url"],
       });
     }
     data.sort(((a, b) => (b['date']).compareTo(a['date'])));
@@ -30,6 +31,7 @@ Widget slide(bool isCollapsed, BuildContext context, Size size, String query,
           size,
           data[i]['journal'],
           data[i]['title'],
+          data[i]['url'],
         ),
       );
       if (i == 4) {

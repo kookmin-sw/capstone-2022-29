@@ -116,8 +116,7 @@ class _SearchPageState extends State<SearchPage> {
                                           return NavigatorPage(
                                             index: 4,
                                             query: Provider.of<SearchProvider>(
-                                                    context)
-                                                .searchQuery,
+                                                    context).searchQuery,
                                             user_id: widget.user_id,
                                             topicNum:
                                                 _currentSliderValue.toInt(),

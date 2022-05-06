@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors_in_immutables, prefer_const_constructors, curly_braces_in_flow_control_structures, must_be_immutable
+// ignore_for_file: prefer_const_constructors_in_immutables, prefer_const_constructors, curly_braces_in_flow_control_structures, must_be_immutable, non_constant_identifier_names
 
 import 'package:flutter/material.dart';
 import 'package:frontend/api/api_service.dart';
@@ -7,17 +7,18 @@ import 'package:frontend/components/button.dart';
 import 'package:frontend/components/button2.dart';
 import 'package:frontend/models/bookmark_model.dart';
 import 'package:timelines/timelines.dart';
-import 'dart:convert';
 import 'package:provider/provider.dart';
 import 'package:frontend/pages/search/search_provider.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:share_plus/share_plus.dart';
 
 class DetailNewsPage extends StatefulWidget {
-  DetailNewsPage({Key? key, this.news_id, this.user_id, this.topicNum, this.topicStepNum}) : super(key: key);
+  DetailNewsPage({Key? key, this.news_id, this.user_id, this.topicNum, this.topicStepNum, this.query}) : super(key: key);
   String? news_id;
   String? user_id;
   int? topicNum;
   int? topicStepNum;
+  String? query;
 
   @override
   State<DetailNewsPage> createState() => _DetailNewsPageState();
@@ -43,7 +44,7 @@ class _DetailNewsPageState extends State<DetailNewsPage> {
     final int num = widget.topicNum ?? 0;
     final int topicStep = widget.topicStepNum ?? 0;
     Size size = MediaQuery.of(context).size;
-    String query = Provider.of<SearchProvider>(context).searchQuery;
+    String query = widget.query?? Provider.of<SearchProvider>(context).searchQuery;
 
     Future<void> postBookmark(String user_id) async {
       List<dynamic> isBookmark = await ApiService().getBookmark(user_id);
@@ -73,8 +74,15 @@ class _DetailNewsPageState extends State<DetailNewsPage> {
       }
     }
 
+    void onSharePressed(){
+      String title = data.isNotEmpty? data[0]["title"]:'';
+      String summary =data.isNotEmpty? data[0]["summary"]:'';
+      Share.share('[$query]$title\n$summary',
+                  subject: '뉴익 $widget.news_id');
+    }
+
     void onShowPressed() async { 
-      Uri url = Uri.parse('https://flutter.dev');
+      Uri url = Uri.parse(data[0]["url"]);
       if (!await launchUrl(url)) throw 'Could not launch $url';
     }
 
@@ -88,13 +96,12 @@ class _DetailNewsPageState extends State<DetailNewsPage> {
         barrierDismissible: true,
         builder: (context) {
           return AlertDialog(
-            
-            content: Container(
+            content: SizedBox(
               height: size.height * 0.15,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text('북마크가 정상적으로 등록되었습니다.'),
+                  Text(widget.topicNum != null?'북마크가 정상적으로 등록되었습니다.':'북마크가 이미 등록되어 있습니다.'),
                   button(size, "닫기",closeSimilar),
                 ],
               )
@@ -104,7 +111,7 @@ class _DetailNewsPageState extends State<DetailNewsPage> {
       );
     }
     void onSavePressed() async{
-      await postBookmark(widget.user_id!);
+      if (widget.topicNum != null) await postBookmark(widget.user_id!);
       onConfirmDialog();
     }
 
@@ -131,7 +138,6 @@ class _DetailNewsPageState extends State<DetailNewsPage> {
                               margin: EdgeInsets.only(left: size.width*0.05, right: size.width*0.05, top: size.height*0.02),
                               padding: EdgeInsets.only(left: size.width*0.05, right: size.width*0.05, top: size.height*0.02),
                               decoration: BoxDecoration(
-                                // color: Color.fromRGBO(231, 243, 255, 1),
                                 color: Colors.white,
                                 border: Border.all(color: Colors.black, width: 1.0, style:BorderStyle.solid),
                                 borderRadius: BorderRadius.circular(30), 
@@ -153,10 +159,9 @@ class _DetailNewsPageState extends State<DetailNewsPage> {
         }
       );
     }
-
     return Scaffold(
       extendBody: true,
-      appBar: appBar(size, query, context, true, false),
+      appBar: appBar(size, query, context, true, true, onSharePressed),
       backgroundColor: Color(0xffF7F7F7),
       body: SafeArea(
         child: FutureBuilder(
@@ -165,13 +170,12 @@ class _DetailNewsPageState extends State<DetailNewsPage> {
             if (data.isNotEmpty) {
             return Column(
               children: [
-                SizedBox(
+                widget.topicNum != null? SizedBox(
                   width: double.infinity,
                   height: size.height * 0.03,
-                  child: Timeline.tileBuilder(
+                  child:  Timeline.tileBuilder(
                     scrollDirection: Axis.horizontal,
                     builder: TimelineTileBuilder.connected(
-                    // fromStyle(
                       indicatorBuilder: (_, index) {
                         if (topicStep-1 == index) return DotIndicator(color: Color.fromRGBO(48, 105, 171, 1));
                         else return DotIndicator(color: Color.fromRGBO(198, 225, 255, 1));
@@ -191,7 +195,7 @@ class _DetailNewsPageState extends State<DetailNewsPage> {
                       itemCount: num,
                     ),
                   ),
-                ),
+                ):Container(),
                 Center(
                   child: Container(
                     margin: EdgeInsets.only(top: size.height*0.02),

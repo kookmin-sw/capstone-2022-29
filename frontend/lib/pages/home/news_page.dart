@@ -1,7 +1,4 @@
 // ignore_for_file: prefer_const_constructors, prefer_is_empty,must_be_immutable, prefer_const_constructors
-
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 import 'package:frontend/api/api_service.dart';
 import 'package:frontend/components/app_bar.dart';
@@ -59,12 +56,8 @@ class _NewsPageState extends State<NewsPage> {
         });
       }
     } else {
-      // print("* ${widget.news}");
-      // List<dynamic> newsList = [{'news_id': '626e6285c188d66ffcca22e3'},{'news_id':'626e6291c188d66ffcca22e7'}];
-      // print(widget.news!.length);
-      for (var i = 0; i < widget.news!.length; i++) {
-        List<dynamic> news =
-            await ApiService().getNewsID(widget.news![i]["news_id"]);
+      for (var i=0;i<widget.news!.length;i++){
+        List<dynamic> news = await ApiService().getNewsID(widget.news![i]["news_id"]);
         // print(news);
         data.add({
           'title': news[0]["title"],
@@ -122,10 +115,10 @@ class _NewsPageState extends State<NewsPage> {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: Color(0xffF7F7F7),
-      appBar: appBar(size, '${widget.query} 뉴스', context, true, false),
+      appBar: appBar(size, '${widget.query} 뉴스', context, true, false, (){}),
       body: SafeArea(
         child: FutureBuilder(
-          future: getNews(widget.topic),
+          future: getNews(widget.query),
           builder: (BuildContext context, AsyncSnapshot snapshot) {
             if (data.length != 0) {
               return SizedBox(
