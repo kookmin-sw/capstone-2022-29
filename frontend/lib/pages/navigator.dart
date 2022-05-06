@@ -1,4 +1,5 @@
 // ignore_for_file: prefer_const_constructors, unused_element, unused_local_variable, prefer_const_constructors_in_immutables, prefer_final_fields, prefer_const_literals_to_create_immutables, must_be_immutable
+import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:frontend/pages/bookmark/bookmark_page.dart';
@@ -49,8 +50,11 @@ class NavigatorPage extends StatefulWidget {
 }
 
 class _NavigatorPageState extends State<NavigatorPage> {
+  Random random = Random();
+
   List<Widget> _widgetOptions() => <Widget>[
         HomePage(
+            random: random,
             nickname: widget.nickname,
             user_id: widget.user_id,
             kakaoSignIn: widget.kakaoSignIn),

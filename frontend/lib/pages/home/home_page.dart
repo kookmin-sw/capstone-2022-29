@@ -14,11 +14,13 @@ import 'package:frontend/pages/login/login_page.dart';
 final Color backgroundColor = Color(0xFFf7f7f7);
 
 class HomePage extends StatefulWidget {
-  HomePage({Key? key, this.nickname, this.user_id, this.kakaoSignIn})
+  HomePage(
+      {Key? key, this.nickname, this.user_id, this.kakaoSignIn, this.random})
       : super(key: key);
   String? nickname;
   String? user_id;
   FlutterKakaoLogin? kakaoSignIn;
+  Random? random;
 
   @override
   _HomePageState createState() => _HomePageState();
@@ -52,13 +54,13 @@ class _HomePageState extends State<HomePage>
 
   _addNewNode() {
     setState(() {
-      Random random = Random();
       BubbleNode node = BubbleNode.leaf(
-        value: max(1, random.nextInt(10)),
+        value: max(1, widget.random!.nextInt(10)),
         options: BubbleOptions(
           color: () {
-            Random random = Random();
-            return Colors.primaries[random.nextInt(Colors.primaries.length)];
+            // Random random = Random();
+            return Colors
+                .primaries[widget.random!.nextInt(Colors.primaries.length)];
           }(),
         ),
       );
@@ -153,7 +155,7 @@ class _HomePageState extends State<HomePage>
   List<Widget> getSlide(Size size) {
     List<Widget> list = [];
     list.add(bubbleChart(size));
-    for (var i = 0; i < data.length; i++) {
+    for (var i = 0; i < dataKeyword.length; i++) {
       list.add(
         slide(
           isCollapsed,
