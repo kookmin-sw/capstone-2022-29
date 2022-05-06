@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, must_be_immutable
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, must_be_immutable, non_constant_identifier_names
 
 import 'package:flutter/material.dart';
 import 'package:frontend/pages/navigator.dart';
@@ -80,6 +80,7 @@ class _ColorListState extends State<ColorList> {
                 builder: (context) {
                   return NavigatorPage(
                     index: 5,
+                    query: widget.title,
                     user_id: widget.user_id,
                     news_id: widget.news_id,
                     // topicNum: 0,

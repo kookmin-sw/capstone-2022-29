@@ -2,9 +2,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:share_plus/share_plus.dart';
-
 AppBar appBar(
-    Size size, String? title, BuildContext context, bool isBack, bool isShow) {
+    Size size, String? title, BuildContext context, bool isBack, Function isShow) {
   return AppBar(
     backgroundColor: Colors.transparent,
     leading: isBack
@@ -34,16 +33,17 @@ AppBar appBar(
     centerTitle: true,
     elevation: 0.0,
     actions: [
-      isShow
+      isShow != (){}
           ? Container(
               margin: EdgeInsets.only(right: size.width * 0.05),
               child: IconButton(
                 icon: Icon(Icons.share_outlined),
                 color: Colors.black,
-                onPressed: () {
-                  Share.share('Hello Welcome to FlutterCampus',
-                      subject: 'Welcome Message');
-                },
+                onPressed: ()=>{isShow()},
+                // () {
+                  // Share.share('Hello Welcome to FlutterCampus',
+                  //     subject: 'Welcome Message');
+                // },
               ),
             )
           : Container(),
