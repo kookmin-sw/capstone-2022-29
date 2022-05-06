@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors_in_immutables, prefer_const_constructors, curly_braces_in_flow_control_structures, must_be_immutable
+// ignore_for_file: prefer_const_constructors_in_immutables, prefer_const_constructors, curly_braces_in_flow_control_structures, must_be_immutable, non_constant_identifier_names
 
 import 'package:flutter/material.dart';
 import 'package:frontend/api/api_service.dart';
@@ -7,7 +7,6 @@ import 'package:frontend/components/button.dart';
 import 'package:frontend/components/button2.dart';
 import 'package:frontend/models/bookmark_model.dart';
 import 'package:timelines/timelines.dart';
-import 'dart:convert';
 import 'package:provider/provider.dart';
 import 'package:frontend/pages/search/search_provider.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -88,13 +87,12 @@ class _DetailNewsPageState extends State<DetailNewsPage> {
         barrierDismissible: true,
         builder: (context) {
           return AlertDialog(
-            
-            content: Container(
+            content: SizedBox(
               height: size.height * 0.15,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text('북마크가 정상적으로 등록되었습니다.'),
+                  Text(widget.topicNum != null?'북마크가 정상적으로 등록되었습니다.':'북마크가 이미 등록되어 있습니다.'),
                   button(size, "닫기",closeSimilar),
                 ],
               )
@@ -104,7 +102,7 @@ class _DetailNewsPageState extends State<DetailNewsPage> {
       );
     }
     void onSavePressed() async{
-      await postBookmark(widget.user_id!);
+      if (widget.topicNum != null) await postBookmark(widget.user_id!);
       onConfirmDialog();
     }
 
@@ -165,13 +163,12 @@ class _DetailNewsPageState extends State<DetailNewsPage> {
             if (data.isNotEmpty) {
             return Column(
               children: [
-                SizedBox(
+                widget.topicNum != null? SizedBox(
                   width: double.infinity,
                   height: size.height * 0.03,
-                  child: Timeline.tileBuilder(
+                  child:  Timeline.tileBuilder(
                     scrollDirection: Axis.horizontal,
                     builder: TimelineTileBuilder.connected(
-                    // fromStyle(
                       indicatorBuilder: (_, index) {
                         if (topicStep-1 == index) return DotIndicator(color: Color.fromRGBO(48, 105, 171, 1));
                         else return DotIndicator(color: Color.fromRGBO(198, 225, 255, 1));
@@ -191,7 +188,7 @@ class _DetailNewsPageState extends State<DetailNewsPage> {
                       itemCount: num,
                     ),
                   ),
-                ),
+                ):Container(),
                 Center(
                   child: Container(
                     margin: EdgeInsets.only(top: size.height*0.02),

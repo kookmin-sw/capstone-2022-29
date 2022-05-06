@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, must_be_immutable
 
 import 'package:flutter/material.dart';
+import 'package:frontend/pages/navigator.dart';
 
 class ColorList extends StatefulWidget {
   ColorList(
@@ -51,10 +52,8 @@ class _ColorListState extends State<ColorList> {
                       onTap: () {
                         setState(() {
                           widget.status = !widget.status!;
-                          // print(widget.status);
                           if (widget.status == false) {
-                            widget.deleteBookmark!(
-                                widget.user_id, widget.news_id);
+                            widget.deleteBookmark!(widget.user_id, widget.news_id);
                           }
                         });
                       },
@@ -73,19 +72,37 @@ class _ColorListState extends State<ColorList> {
           padding:
               EdgeInsets.fromLTRB(size.width * 0.05, 0, size.width * 0.05, 0),
         ),
-        Container(
-          child: Text(widget.content,
-              maxLines: 2, overflow: TextOverflow.ellipsis),
-          width: size.width,
-          height: 60,
-          decoration: BoxDecoration(
-              color: Color.fromRGBO(247, 247, 247, 1),
-              borderRadius: BorderRadius.only(
-                bottomLeft: const Radius.circular(30),
-                bottomRight: const Radius.circular(30),
-              )),
-          padding: EdgeInsets.fromLTRB(
-              size.width * 0.05, size.height * 0.02, size.width * 0.05, 0),
+        InkWell(
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) {
+                  return NavigatorPage(
+                    index: 5,
+                    user_id: widget.user_id,
+                    news_id: widget.news_id,
+                    // topicNum: 0,
+                    // topicStepNum: 0,
+                  );
+                },
+              ),
+            );
+          },
+          child: Container(
+            child: Text(widget.content,
+                maxLines: 2, overflow: TextOverflow.ellipsis),
+            width: size.width,
+            height: 60,
+            decoration: BoxDecoration(
+                color: Color.fromRGBO(247, 247, 247, 1),
+                borderRadius: BorderRadius.only(
+                  bottomLeft: const Radius.circular(30),
+                  bottomRight: const Radius.circular(30),
+                )),
+            padding: EdgeInsets.fromLTRB(
+                size.width * 0.05, size.height * 0.02, size.width * 0.05, 0),
+          ),
         ),
       ]),
       margin: EdgeInsets.fromLTRB(size.width * 0.05, size.height * 0.02,

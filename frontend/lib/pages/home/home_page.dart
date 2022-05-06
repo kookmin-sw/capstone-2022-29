@@ -153,7 +153,7 @@ class _HomePageState extends State<HomePage>
   List<Widget> getSlide(Size size) {
     List<Widget> list = [];
     list.add(bubbleChart(size));
-    for (var i = 0; i < data.length; i++) {
+    for (var i = 0; i < dataKeyword.length; i++) {
       list.add(
         slide(
           isCollapsed,

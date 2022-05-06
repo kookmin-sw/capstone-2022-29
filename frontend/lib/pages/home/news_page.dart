@@ -53,8 +53,6 @@ class _NewsPageState extends State<NewsPage> {
     }
     else {
       print(widget.news);
-      // List<dynamic> newsList = [{'news_id': '626e6285c188d66ffcca22e3'},{'news_id':'626e6291c188d66ffcca22e7'}];
-      // print(widget.news!.length);
       for (var i=0;i<widget.news!.length;i++){
         List<dynamic> news = await ApiService().getNewsID(widget.news![i]["news_id"]);
         // print(news);
@@ -67,7 +65,6 @@ class _NewsPageState extends State<NewsPage> {
               context,
               MaterialPageRoute(
                 builder: (context) {
-
                   return NavigatorPage(
                     index: 5,
                     user_id: widget.user_id,
