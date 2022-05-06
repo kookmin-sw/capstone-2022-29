@@ -13,10 +13,14 @@ Widget slide(bool isCollapsed, BuildContext context, Size size, String query,
   Future<void> getNews(dynamic query) async {
     data.clear();
     List<dynamic> news = await ApiService().getNews(query);
-    // print("page: ${news.length}");
     for (var i = 0; i < news.length; i++) {
-      data.add({"journal": news[i]["journal"], "title": news[i]["title"]});
+      data.add({
+        "journal": news[i]["journal"],
+        "date": news[i]["date"],
+        "title": news[i]["title"]
+      });
     }
+    data.sort(((a, b) => (b['date']).compareTo(a['date'])));
   }
 
   List<Widget> getCardNews(Size size) {
@@ -28,6 +32,20 @@ Widget slide(bool isCollapsed, BuildContext context, Size size, String query,
           data[i]['title'],
         ),
       );
+      if (i == 4) {
+        // list.add(
+        //   Container(
+        //     // height: size.height * 0.03,
+        //     width: size.width * 0.1,
+        //     alignment: Alignment.center,
+        //     margin: EdgeInsets.symmetric(
+        //       horizontal: size.width * 0.02,
+        //     ),
+        //     child: Text("..."),
+        //   ),
+        // );
+        break;
+      }
     }
     return list;
   }
@@ -112,7 +130,7 @@ Widget slide(bool isCollapsed, BuildContext context, Size size, String query,
                             );
                           },
                           child: Text(
-                            "바로가기",
+                            "더보기",
                             style: TextStyle(
                               color: Color(0xff000000),
                               fontSize: size.width * 0.035,
