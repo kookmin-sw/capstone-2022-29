@@ -47,7 +47,7 @@ Widget slide(bool isCollapsed, BuildContext context, Size size, String query,
       child: FutureBuilder(
         future: getNews(query),
         builder: (BuildContext context, AsyncSnapshot snapshot) {
-          if (data.length != 0) {
+          if (data.isNotEmpty) {
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
