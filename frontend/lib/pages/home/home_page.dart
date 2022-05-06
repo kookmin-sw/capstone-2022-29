@@ -38,8 +38,6 @@ class _HomePageState extends State<HomePage>
   List<BubbleNode> childNode = [];
   var userInfo;
 
-  late final String? user_id = widget.user_id;
-
   @override
   void initState() {
     _controller = AnimationController(vsync: this, duration: duration);
@@ -58,7 +56,6 @@ class _HomePageState extends State<HomePage>
         value: max(1, widget.random!.nextInt(10)),
         options: BubbleOptions(
           color: () {
-            // Random random = Random();
             return Colors
                 .primaries[widget.random!.nextInt(Colors.primaries.length)];
           }(),
@@ -121,17 +118,30 @@ class _HomePageState extends State<HomePage>
                       .primaries[random.nextInt(Colors.primaries.length)]
                       .shade100;
                 }(),
-                child: Container(
-                  padding: EdgeInsets.all(size.height * 0.01),
-                  child: FittedBox(
-                    fit: BoxFit.scaleDown,
-                    child: Text(
-                      data[i]["query"],
-                      style: TextStyle(
-                        fontSize: size.height * 0.01 * data[i]["count"],
+                child: GestureDetector(
+                  child: Container(
+                    padding: EdgeInsets.all(size.height * 0.01),
+                    child: FittedBox(
+                      fit: BoxFit.scaleDown,
+                      child: Text(
+                        data[i]["query"],
+                        style: TextStyle(
+                          fontSize: size.height * 0.01 * data[i]["count"],
+                        ),
                       ),
                     ),
                   ),
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => NavigatorPage(
+                          index: 3,
+                          query: data[i]["query"],
+                          user_id: widget.user_id,
+                        ),
+                      ),
+                    );
+                  },
                 ),
               ),
             ),
@@ -413,7 +423,7 @@ class _HomePageState extends State<HomePage>
                     top: size.height * 0.01,
                   ),
                   child: FutureBuilder(
-                    future: getBubbleAndKeyword(user_id),
+                    future: getBubbleAndKeyword(widget.user_id),
                     builder: (BuildContext context, AsyncSnapshot snapshot) {
                       if (data.isNotEmpty) {
                         return Column(
@@ -440,7 +450,7 @@ class _HomePageState extends State<HomePage>
                                     builder: (context) {
                                       return NavigatorPage(
                                         index: 1,
-                                        user_id: user_id,
+                                        user_id: widget.user_id,
                                       );
                                     },
                                   ),

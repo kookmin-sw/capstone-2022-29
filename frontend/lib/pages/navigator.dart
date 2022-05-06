@@ -24,6 +24,7 @@ class NavigatorPage extends StatefulWidget {
     this.user_id,
     this.news_id,
     this.query,
+    this.topic,
     this.topicNum,
     this.title,
     this.content,
@@ -37,6 +38,7 @@ class NavigatorPage extends StatefulWidget {
   String? user_id;
   String? news_id;
   String? query;
+  String? topic;
   int? topicNum;
   String? title;
   String? content;
@@ -63,6 +65,7 @@ class _NavigatorPageState extends State<NavigatorPage> {
         NewsPage(
           news: widget.news ?? [],
           query: widget.query,
+          topic: widget.topic,
           user_id: widget.user_id,
           topicNum: widget.topicNum,
           topicStepNum: widget.topicStepNum,
