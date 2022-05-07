@@ -8,7 +8,6 @@ const postKeyword = async (req, res) => { // -> 사용자가 한번도 keyword�
         if(err){
             console.error(err);
             res.json({ message : 'fail' });
-            return;
         }
         res.json({ message : 'success' });
     });
@@ -18,12 +17,10 @@ const getKeyword = async (req, res) => { // -> 사용자의 keyword를 조회할
     const regex = new RegExp(req.query.user_id);
     await Keyword.find(
         {'user_id': {'$regex': regex}},
-        function(err, keyword){
-            if(err) return res.status(500).json({ error: err });
-            if(!keyword) return res.status(404).json({ error: '해당 사용자의 키워드가 존재하지 않습니다.' });
-            res.json(keyword);
-        }
-    ).clone().catch(function(err){console.log(err)});
+    ).then(keyword => {
+        if(!keyword) res.status(404).json({ error: '해당 사용자의 키워드가 존재하지 않습니다.' });
+        else res.json(keyword);
+    }).catch(err => res.status(500).json({ error: err }));
 };
 
 const updateKeyword = async (req, res) => { // -> 사용자가 keyword를 등록한 적이 있으면 update
@@ -32,15 +29,12 @@ const updateKeyword = async (req, res) => { // -> 사용자가 keyword를 등록
         await Keyword.findOneAndUpdate( // 사용자의 기존 keyword에 새로운 keyword 추가
             {'user_id': {'$regex': regexUID}}, 
             {$addToSet: {'keywords': {'keyword': req.body.keywords.keyword}}},
-            function(err){
-                if(err){
-                    console.error(err);
-                    res.json({ message : 'fail' });
-                    return;
-                }
-                res.json({ message : 'success' });
-            }
-        ).catch(function(err){console.log(err)});
+        )
+        .then(res.json({ message: 'success' }))
+        .catch(err => {
+            console.error(err);
+            res.json({ message : 'fail' });
+        });
     }
     else{
         const regexKeyword = new RegExp(req.query.keyword);
@@ -48,12 +42,12 @@ const updateKeyword = async (req, res) => { // -> 사용자가 keyword를 등록
             {'user_id': {$regex: regexUID}},
             {$pull: {'keywords': {'keyword': {$regex: regexKeyword}}}},
             {new: true},
-            function(err, keyword){
-                if(err) return res.status(500).json({ error: err });
-                if(!keyword) return res.status(404).json({ error: '해당 사용자의 키워드가 존재하지 않습니다.' });
-                res.json(keyword);
-            }
-        ).catch(function(err){console.log(err)});
+        )
+        .then(keyword => {
+            if(!keyword) res.status(404).json({ error: '해당 사용자의 키워드가 존재하지 않습니다.' });
+            else res.json(keyword);
+        })
+        .catch(err => res.status(500).json({ error: err }));
     }
 }
 

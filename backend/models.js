@@ -73,12 +73,25 @@ const KeywordSchema = new mongoose.Schema({
     }
 }, { collection: "keywords" });
 
+const NoticeSchema = new mongoose.Schema({
+    title: { type: String, required: true },
+    content: { type: String, required : true },
+}, { collection: "notices" });
+
+const QASchema = new mongoose.Schema({
+    title: {type: String, required: true},
+    content: {type: String, required: true},
+    receiver: {type: String, required: true},
+}, {collection: "QA"});
+
 const User = mongoose.model("User", UserSchema);
 const News = mongoose.model("News", NewsSchema);
 const Bubble = mongoose.model("Bubble", BubbleSchema);
 const Topic = mongoose.model("Topic", TopicSchema);
 const Bookmark = mongoose.model("Bookmark", BookmarkSchema);
 const Keyword = mongoose.model("Keyword", KeywordSchema);
+const Notice = mongoose.model("Notice", NoticeSchema);
+const QA = mongoose.model("QA", QASchema);
 
 module.exports = {
     User,
@@ -87,4 +100,6 @@ module.exports = {
     Topic,
     Bookmark,
     Keyword,
+    Notice,
+    QA,
 };

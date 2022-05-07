@@ -2,6 +2,8 @@
 
 // import 'dart:convert';
 
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:frontend/pages/login/login_page.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -31,12 +33,14 @@ class _SplashPageState extends State<SplashPage> {
     if (response.statusCode == 200) {
       print(response.body);
 
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (context) => LoginPage(),
-        ),
-      );
+      Timer(Duration(milliseconds: 1000), () {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => LoginPage(),
+          ),
+        );
+      });
     }
   }
 

@@ -7,6 +7,8 @@ const bubble = require("./controllers/bubble");
 const topic = require("./controllers/topic");
 const bookmark = require("./controllers/bookmark");
 const keyword = require("./controllers/keyword");
+const notice = require("./controllers/notice");
+const qa = require("./controllers/qa");
 
 // user
 router.post("/users", user.postUserInfo);
@@ -35,5 +37,13 @@ router.put("/bookmarks", bookmark.updateBookmark);
 router.post("/keywords", keyword.postKeyword);
 router.get("/keywords", keyword.getKeyword);
 router.put("/keywords", keyword.updateKeyword);
+
+// notice
+router.post("/notices", notice.postNotice);
+router.get("/notices", notice.getNotice);
+
+// qa
+router.post("/qa", qa.postQA);
+router.get("/qa", qa.getQA);
 
 module.exports = router;

@@ -8,49 +8,61 @@ import gensim.corpora as corpora
 from gensim.models.coherencemodel import CoherenceModel
 from pprint import pprint
 import re
+from LDA_score import get_score
+
+mecab = Mecab("C:\\mecab\\mecab-ko-dic") # mecab dictionary 경로. colab에서 할 때는 안 넣어줘도 됐었음
+mallet_path = "C:\\Mallet\\bin\\mallet"  # 이거 mallet2108어쩌구인가로도 바꿔보기
 
 
 # gensim 버전 3.8인지, mallet 설치
 
-file = 'DM\\TopicModeling\\han_corona_2.csv' # 경로 입력할 때 역슬래시 두개 넣기,,,
-mallet_path = "C:\\Mallet\\bin\\mallet"  # 이거 mallet2108어쩌구인가로도 바꿔보기
+#file = 'DM\\TopicModeling\\han_corona_2.csv' # 경로 입력할 때 역슬래시 두개 넣기,,,
+#mallet_path = "C:\\Mallet\\bin\\mallet"  # 이거 mallet2108어쩌구인가로도 바꿔보기
 
 # 1. Preprocessing Data
 # load data
-news_df = pd.read_csv(file)
-
-# get only the time, title data
-news_df = news_df[['date', 'title']]
-
-# chage data type
-news_df['date'] = pd.to_datetime(news_df['date'])
-news_df['title'] = news_df['title'].astype(str)
-
-
-#2. Delete Stopwords
-# 2.1 tokenize & get the pos
-# 뉴스 데이터의 특징: 띄어쓰기, 오탈자 문제 적음.
-# 2.1.1 mecab
-key_pos = ['SL', 'NNG', 'NNP', 'VV', 'VA', 'XR', 'SH'] # ['NNG', 'NNP', 'SL', 'SH']
-stop_words = ['포토', '인터뷰', 'Q&A', '사설']
-mecab = Mecab("C:\\mecab\\mecab-ko-dic") # mecab dictionary 경로. colab에서 할 때는 안 넣어줘도 됐었음
 
 def get_key_tokens(text):
-  text = re.sub(r'\[[^)]*\]', '', text) # [포토], [인터뷰], [11회 비정규 노동 수기 공모전], [단독] 이런거 없애기
-  tokens = mecab.pos(text)
-  token_list = []
-  for token, pos in filter(lambda x: (x[1] in key_pos), tokens):
-      if pos == 'VV' or pos == 'VA' or pos == 'XR':
-          if len(token) <= 1:
-              continue
-      token_list.append(token)
-  return token_list
+    key_pos = ['SL', 'NNG', 'NNP', 'VV', 'VA', 'XR', 'SH'] # ['NNG', 'NNP', 'SL', 'SH']
+    text = re.sub(r'\[[^)]*\]', '', text) # [포토], [인터뷰], [11회 비정규 노동 수기 공모전], [단독] 이런거 없애기
+    tokens = mecab.pos(text)
+    token_list = []
+    for token, pos in filter(lambda x: (x[1] in key_pos), tokens):
+        if pos == 'VV' or pos == 'VA' or pos == 'XR':
+            if len(token) <= 1:
+                continue
+        token_list.append(token)
+    return token_list
 
   # return ','.join([token for token, pos in filter(lambda x: (x[1] in key_pos), tokens)])
 
-title_list = []
-for i in tqdm(range(len(news_df['title']))):
-  title_list.append(get_key_tokens(news_df.loc[i,'title']))
+def preprocess(file):
+    news_df = pd.read_csv(file)
+
+    # get only the time, title data
+    news_df = news_df[['date', 'title']]
+
+    # chage data type
+    news_df['date'] = pd.to_datetime(news_df['date'])
+    news_df['title'] = news_df['title'].astype(str)
+
+    #2. Delete Stopwords
+    # 2.1 tokenize & get the pos
+    # 뉴스 데이터의 특징: 띄어쓰기, 오탈자 문제 적음.
+    # 2.1.1 mecab
+    
+    # stop_words = ['포토', '인터뷰', 'Q&A', '사설']
+    
+    
+    title_list = []
+    for i in tqdm(range(len(news_df['title']))):
+        title_list.append(get_key_tokens(news_df.loc[i,'title']))
+
+    id2word = corpora.Dictionary(title_list)
+    id2word.filter_extremes(no_below=5)
+    corpus = [id2word.doc2bow(content) for content in title_list]
+
+    return news_df, id2word, corpus, title_list
 
 # 2.2 delete stopwords => TODO
 
@@ -63,28 +75,35 @@ for i in tqdm(range(len(news_df['title']))):
 # for x in tokenized_title:
 #   title_list.append(x.split(','))
 
-id2word = corpora.Dictionary(title_list)
-id2word.filter_extremes(no_below=5)
-corpus = [id2word.doc2bow(content) for content in title_list]
+def topic_modeling(id2word, corpus, title_list):
+    
 
 
-# 4. Topic Modeling
-print(1111111111111111111111111111111111111111111111)
-# 얘 passes라는 인자로 epoch 조절 가능
-ldamallet = gensim.models.wrappers.LdaMallet(mallet_path, corpus=corpus, num_topics=60, id2word=id2word, iterations=1000) # gensim 3.8 버전에만 존재
-# 그 막 출력되는게 위에 코드 결과야 1000번 도는거 아마 1000번이 default인가봐
-print(222222222222222222222222222222222222222222)
-pprint(ldamallet.show_topics(num_topics=60, num_words=3))
-print(33333333333333333333333333333333333333)
+    # 4. Topic Modeling
 
-# 4.1 get coherence
-coherence_model_ldamallet = CoherenceModel(model=ldamallet, texts=title_list, dictionary=id2word, coherence='c_v')
-print(4444444444444444444444444444444444444444444)
-coherence_ldamallet = coherence_model_ldamallet.get_coherence()
-print(555555555555555555555555555555555555555555555) # -> 이건 실행 안됐음
+    # 얘 passes라는 인자로 epoch 조절 가능
+    # ver 1.
+    # lda_model = gensim.models.LdaModel(corpus=corpus, num_topics=60, id2word=id2word) # 아래랑 성능 비교하기(너무 오래걸려;)
+    # print(lda_model.print_topics(60, 3))
+    # coherence_model = CoherenceModel(model=lda_model, texts=title_list, dictionary=id2word, topn=10)
+    # coherence = coherence_model.get_coherence() # 얘가 문제
+    # print(coherence)
+
+    # ver 2.
+    
+    # # 그 막 출력되는게 위에 코드 결과야 1000번 도는거 아마 1000번이 default인가봐
+    ldamallet = gensim.models.wrappers.LdaMallet(mallet_path, corpus=corpus, num_topics=60, id2word=id2word, iterations=1000) # gensim 3.8 버전에만 존재
+    pprint(ldamallet.show_topics(num_topics=60, num_words=3))
+    # # 4.1 get coherence
+    coherence_model_ldamallet = CoherenceModel(model=ldamallet, texts=title_list, dictionary=id2word, coherence='c_v')
+    # print(4444444444444444444444444444444444444444444)
+    coherence_ldamallet = coherence_model_ldamallet.get_coherence()
+    print(555555555555555555555555555555555555555555555) # -> 이건 실행 안됐음
+
+    return ldamallet
 
 # 4.2 find optimal model, num_topics
-def compute_coherence_values(dictionary, corpus, texts, limit, start, step):
+def compute_coherence_values(dictionary, corpus, texts, start, limit, step):
 
     coherence_values = []
     model_list = []
@@ -101,33 +120,35 @@ def compute_coherence_values(dictionary, corpus, texts, limit, start, step):
 
     return model_list, coherence_values
 
-model_list, coherence_values = compute_coherence_values(dictionary=id2word, corpus=corpus, texts=title_list, start=40, limit=71, step=5)
+# model_list, coherence_values = compute_coherence_values(dictionary=id2word, corpus=corpus, texts=title_list, start=40, limit=71, step=5)
 
-limit=71
-start=40
-step=5
-x = range(start, limit, step)
-topic_num = 0
-count = 0
-max_coherence = 0
-model_list_num = 0
-for m, cv in zip(x, coherence_values):
-    print("Num Topics =", m, " has Coherence Value of", cv)
-    coherence = cv
-    if coherence >= max_coherence:
-        max_coherence = coherence
-        topic_num = m
-        model_list_num = count   
-    count = count+1
+def find_optimal_model(model_list, coherence_values, start, limit, step):
 
-optimal_model = model_list[model_list_num]
-model_topics = optimal_model.show_topics(formatted=False)
+    x = range(start, limit, step)
+    topic_num = 0
+    count = 0
+    max_coherence = 0
+    model_list_num = 0
+    for m, cv in zip(x, coherence_values):
+        print("Num Topics =", m, " has Coherence Value of", cv)
+        coherence = cv
+        if coherence >= max_coherence:
+            max_coherence = coherence
+            topic_num = m
+            model_list_num = count   
+        count = count+1
 
-print(optimal_model.print_topics(num_words=1))
+    print(model_list_num)
+    print(len(model_list))
+
+    optimal_model = model_list[model_list_num]
+    model_topics = optimal_model.show_topics(formatted=False)
+
+    print(optimal_model.print_topics(num_words=3))
 
 
 # 4.3 formmating output with DF
-def format_topics_sentences(ldamodel=ldamallet, corpus=corpus, texts=title_list):
+def format_topics_sentences(news_df, ldamodel, corpus, texts):
     # Init output
     sent_topics_df = pd.DataFrame()
 
@@ -150,47 +171,60 @@ def format_topics_sentences(ldamodel=ldamallet, corpus=corpus, texts=title_list)
     #contents = pd.Series(texts)
     #sent_topics_df = pd.concat([sent_topics_df, contents], axis=1)
     sent_topics_df = pd.concat([sent_topics_df, news_df['title'],news_df['date']], axis=1)
-    return(sent_topics_df)
-
-df_topic_sents_keywords = format_topics_sentences(ldamodel=ldamallet, corpus=corpus, texts=title_list)
+    return (sent_topics_df)
 
 
-# Format
-df_topic_news = df_topic_sents_keywords.reset_index()
-df_topic_news.columns = ['Document_No', 'Dominant_Topic', 'Topic_Perc_Contrib', 'Keywords', 'Title','Date']
+# # Format
+# df_topic_news = df_topic_sents_keywords.reset_index()
+# df_topic_news.columns = ['Document_No', 'Dominant_Topic', 'Topic_Perc_Contrib', 'Keywords', 'Title','Date']
 
-# 4.4 grouping top 5 
-sent_topics_sorteddf_mallet = pd.DataFrame()
+# # 4.4 grouping top 5 
+# sent_topics_sorteddf_mallet = pd.DataFrame()
 
-sent_topics_outdf_grpd = df_topic_sents_keywords.groupby('Dominant_Topic')
+# sent_topics_outdf_grpd = df_topic_sents_keywords.groupby('Dominant_Topic')
 
-for i, grp in sent_topics_outdf_grpd:
-    sent_topics_sorteddf_mallet = pd.concat([sent_topics_sorteddf_mallet, grp.sort_values(['Perc_Contribution'], ascending=[0]).head(1)], axis=0)
+# for i, grp in sent_topics_outdf_grpd:
+#     sent_topics_sorteddf_mallet = pd.concat([sent_topics_sorteddf_mallet, grp.sort_values(['Perc_Contribution'], ascending=[0]).head(1)], axis=0)
 
-# reset index
-sent_topics_sorteddf_mallet.reset_index(drop=True, inplace=True)
-topic_counts = df_topic_sents_keywords['Dominant_Topic'].value_counts()
-topic_counts.sort_index(inplace=True)
+# # reset index
+# sent_topics_sorteddf_mallet.reset_index(drop=True, inplace=True)
+# topic_counts = df_topic_sents_keywords['Dominant_Topic'].value_counts()
+# topic_counts.sort_index(inplace=True)
 
-topic_contribution = round(topic_counts/topic_counts.sum(), 4)
-
-
-# 5. Save as csv file
-lda_inform = pd.concat([sent_topics_sorteddf_mallet, topic_counts, topic_contribution], axis=1)
-lda_inform.columns=["Topic_Num", "Topic_Perc_Contrib", "Keywords", "Content", "Date", "Num_Documents", "Perc_Documents"]
-lda_inform = lda_inform[["Topic_Num","Keywords","Num_Documents","Perc_Documents"]]
+# topic_contribution = round(topic_counts/topic_counts.sum(), 4)
 
 
-lda_inform['Topic_Num'] =lda_inform['Topic_Num'] +1
-lda_inform.Topic_Num = lda_inform.Topic_Num.astype(str)
-lda_inform['Topic_Num'] =lda_inform['Topic_Num'].str.split('.').str[0]
-df_topic_news['Dominant_Topic'] =df_topic_news['Dominant_Topic'] +1
-df_topic_news.Dominant_Topic = df_topic_news.Dominant_Topic.astype(str)
-df_topic_news['Dominant_Topic'] =df_topic_news['Dominant_Topic'].str.split('.').str[0]
+# # 5. Save as csv file
+# lda_inform = pd.concat([sent_topics_sorteddf_mallet, topic_counts, topic_contribution], axis=1)
+# lda_inform.columns=["Topic_Num", "Topic_Perc_Contrib", "Keywords", "Content", "Date", "Num_Documents", "Perc_Documents"]
+# lda_inform = lda_inform[["Topic_Num","Keywords","Num_Documents","Perc_Documents"]]
 
-lda_inform.to_csv (".\\한겨레_title_nobelow20_60_2\\lda_inform_한겨례_nobelow200_60_1.csv", encoding='euc-kr', index = None)
 
-for i in range(1,60+1):
-    globals()['df_{}'.format(i)]=df_topic_news.loc[df_topic_news.Dominant_Topic==str(i)]
-    globals()['df_{}'.format(i)].sort_values('Topic_Perc_Contrib',ascending=False,inplace = True)
-    globals()['df_{}'.format(i)].to_csv (".\\한겨레_title_nobelow20_60_2\\topic("+str(i)+")_news.csv", encoding='euc-kr', index = None)
+# lda_inform['Topic_Num'] =lda_inform['Topic_Num'] +1
+# lda_inform.Topic_Num = lda_inform.Topic_Num.astype(str)
+# lda_inform['Topic_Num'] =lda_inform['Topic_Num'].str.split('.').str[0]
+# df_topic_news['Dominant_Topic'] =df_topic_news['Dominant_Topic'] +1
+# df_topic_news.Dominant_Topic = df_topic_news.Dominant_Topic.astype(str)
+# df_topic_news['Dominant_Topic'] =df_topic_news['Dominant_Topic'].str.split('.').str[0]
+
+# lda_inform.to_csv (".\\한겨레_title_nobelow20_60_2\\lda_inform_한겨례_nobelow200_60_1.csv", encoding='euc-kr', index = None)
+
+# for i in range(1,60+1):
+#     globals()['df_{}'.format(i)]=df_topic_news.loc[df_topic_news.Dominant_Topic==str(i)]
+#     globals()['df_{}'.format(i)].sort_values('Topic_Perc_Contrib',ascending=False,inplace = True)
+#     globals()['df_{}'.format(i)].to_csv (".\\한겨레_title_nobelow20_60_2\\topic("+str(i)+")_news.csv", encoding='euc-kr', index = None)
+
+if __name__ == '__main__':
+    file = 'DM\\TopicModeling\\han_corona_2.csv' # 경로 입력할 때 역슬래시 두개 넣기,,,
+    
+    news_df, id2word, corpus, title_list = preprocess(file)
+
+    ldamallet = topic_modeling(id2word, corpus, title_list)
+    start = 20
+    limit = 91
+    step = 10
+    get_score(corpus, id2word, title_list, start, limit, step)
+    model_list, coherence_values = compute_coherence_values(id2word, corpus, title_list, start, limit, step)
+    find_optimal_model(model_list, coherence_values, start, limit, step)
+
+    df_topic_sents_keywords = format_topics_sentences(news_df, ldamallet, corpus, title_list)

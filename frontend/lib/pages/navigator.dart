@@ -1,4 +1,5 @@
 // ignore_for_file: prefer_const_constructors, unused_element, unused_local_variable, prefer_const_constructors_in_immutables, prefer_final_fields, prefer_const_literals_to_create_immutables, must_be_immutable
+import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:frontend/pages/bookmark/bookmark_page.dart';
@@ -13,40 +14,78 @@ import 'package:frontend/pages/search/search_page.dart';
 import 'package:frontend/pages/search/timeline_page.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:line_icons/line_icons.dart';
+import 'package:flutter_kakao_login/flutter_kakao_login.dart';
 
 class NavigatorPage extends StatefulWidget {
-  NavigatorPage(
-      {Key? key,
-      required this.index,
-      this.nickname,
-      this.user_id,
-      this.query,
-      this.topicNum,
-      this.title,
-      this.content})
-      : super(key: key);
+  NavigatorPage({
+    Key? key,
+    required this.index,
+    this.nickname,
+    this.user_id,
+    this.news_id,
+    this.query,
+    this.topic,
+    this.topicNum,
+    this.title,
+    this.content,
+    this.isSearch,
+    this.news,
+    this.topicStepNum,
+    this.kakaoSignIn,
+  }) : super(key: key);
   int index = 0;
   String? nickname;
   String? user_id;
+  String? news_id;
   String? query;
-  double? topicNum;
+  String? topic;
+  int? topicNum;
   String? title;
   String? content;
+  bool? isSearch;
+  List<dynamic>? news;
+  int? topicStepNum;
+  FlutterKakaoLogin? kakaoSignIn;
 
   @override
   State<NavigatorPage> createState() => _NavigatorPageState();
 }
 
 class _NavigatorPageState extends State<NavigatorPage> {
+  Random random = Random();
+
   List<Widget> _widgetOptions() => <Widget>[
-        HomePage(nickname: widget.nickname, user_id: widget.user_id),
+        HomePage(
+            random: random,
+            nickname: widget.nickname,
+            user_id: widget.user_id,
+            kakaoSignIn: widget.kakaoSignIn),
         SearchPage(user_id: widget.user_id),
         BookmarkPage(user_id: widget.user_id),
-        NewsPage(query: widget.query, user_id: widget.user_id),
-        TimelinePage(query: widget.query, user_id: widget.user_id),
-        DetailNewsPage(title: widget.query),
+        NewsPage(
+          news: widget.news ?? [],
+          query: widget.query,
+          topic: widget.topic,
+          user_id: widget.user_id,
+          topicNum: widget.topicNum,
+          topicStepNum: widget.topicStepNum,
+        ),
+        TimelinePage(
+            query: widget.query,
+            user_id: widget.user_id,
+            topicNum: widget.topicNum),
+        DetailNewsPage(
+          news_id: widget.news_id,
+          user_id: widget.user_id,
+          query: widget.query,
+          topicNum: widget.topicNum,
+          topicStepNum: widget.topicStepNum,
+        ),
         NoticePage(user_id: widget.user_id),
-        NoticeDetailPage(title: widget.title, content: widget.content),
+        NoticeDetailPage(
+            title: widget.title,
+            content: widget.content,
+            user_id: widget.user_id),
         QnAPage(user_id: widget.user_id),
         MyKeywordPage(user_id: widget.user_id),
       ];
@@ -56,6 +95,10 @@ class _NavigatorPageState extends State<NavigatorPage> {
     Size size = MediaQuery.of(context).size;
     final List<Widget> widgetOptions = _widgetOptions();
     return Scaffold(
+      // backgroundColor:
+      // widget.index == 7 ? Color(0xFFe7f3ff) : Color(0xfff7f7f7),
+      extendBodyBehindAppBar: true,
+      extendBody: true,
       body: Center(
         child: widgetOptions.elementAt(widget.index),
       ),
@@ -67,7 +110,6 @@ class _NavigatorPageState extends State<NavigatorPage> {
         child: SafeArea(
           child: GNav(
             gap: 10,
-            backgroundColor: Color(0xffF7F7F7),
             iconSize: 24,
             padding: EdgeInsets.symmetric(
               horizontal: size.width * 0.06,

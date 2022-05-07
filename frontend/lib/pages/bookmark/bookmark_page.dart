@@ -51,10 +51,10 @@ class _BookmarkPageState extends State<BookmarkPage> {
     return WillPopScope(
       onWillPop: () => Future.value(false),
       child: Scaffold(
-        extendBody: true,
         backgroundColor: Color(0xffF7F7F7),
-        appBar: appBar(size, '북마크', context, false, false),
+        appBar: appBar(size, '북마크', context, false, false, (){}),
         body: Container(
+          height: size.height * 0.75,
           margin: EdgeInsets.all(size.width * 0.05),
           decoration: BoxDecoration(
             color: Colors.white,

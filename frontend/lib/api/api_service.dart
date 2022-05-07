@@ -2,12 +2,14 @@
 
 import 'dart:convert';
 
+import 'package:frontend/models/QA_model.dart';
 import 'package:frontend/models/user_model.dart';
 import 'package:frontend/models/news_model.dart';
 import 'package:frontend/models/bubble_model.dart';
 import 'package:frontend/models/topic_model.dart';
 import 'package:frontend/models/bookmark_model.dart';
 import 'package:frontend/models/keyword_model.dart';
+import 'package:frontend/models/notice_model.dart';
 
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
@@ -290,18 +292,17 @@ class ApiService {
     List<dynamic> topic = [];
     final queryParameters = {
       'query': query,
-      'topicNum': topicNum,
+      'num': topicNum,
     };
     final url = Uri.http(_apiURI, "topics", queryParameters);
     http.Response response = await http.get(url, headers: {
       "Content-type": "application/json",
     });
     if (response.statusCode == 200) {
-      print(response.body);
+      // print(response.body);
     }
     var decodedData = jsonDecode(response.body);
     for (dynamic t in decodedData) {
-      // return u;
       topic.add(t);
     }
     return topic;
@@ -456,4 +457,71 @@ class ApiService {
     }
     return response;
   }
+
+  // post notice
+  Future<http.Response> postNotice(Notice notice) async {
+    final url = Uri.http(_apiURI, "notices");
+    http.Response response = await http.post(
+      url,
+      headers: {
+        "Content-type": "application/json",
+      },
+      body: jsonEncode(notice.toJson()),
+    );
+    if (response.statusCode == 200) {
+      print(response.body);
+    }
+    return response;
+  }
+
+  // get notice
+  Future<dynamic> getNotice() async {
+    List<dynamic> notice = [];
+    final url = Uri.http(_apiURI, "notices");
+    http.Response response = await http.get(url, headers: {
+      "Content-type": "application/json",
+    });
+    if (response.statusCode == 200) {
+      print(response.body);
+    }
+    var decodedData = jsonDecode(response.body);
+    for (dynamic n in decodedData) {
+      notice.add(n);
+    }
+    return notice;
+  }
+
+  // post Q&A
+  Future<http.Response> postQA(QA qa) async {
+    final url = Uri.http(_apiURI, "qa");
+    http.Response response = await http.post(
+      url,
+      headers: {
+        "Content-type": "application/json",
+      },
+      body: jsonEncode(qa.toJson()),
+    );
+    if (response.statusCode == 200) {
+      print(response.body);
+    }
+    return response;
+  }
+
+  // get Q&A
+  Future<dynamic> getQA() async {
+    List<dynamic> qa = [];
+    final url = Uri.http(_apiURI, "qa");
+    http.Response response = await http.get(url, headers: {
+      "Content-type": "application/json",
+    });
+    if (response.statusCode == 200) {
+      print(response.body);
+    }
+    var decodedData = jsonDecode(response.body);
+    for (dynamic n in decodedData) {
+      qa.add(n);
+    }
+    return qa;
+  }
 }
+

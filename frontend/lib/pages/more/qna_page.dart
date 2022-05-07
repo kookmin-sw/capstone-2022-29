@@ -1,8 +1,12 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_constructors_in_immutables, avoid_print
+// ignore_for_file: prefer_const_constructors, prefer_const_constructors_in_immutables, avoid_print, must_be_immutable, non_constant_identifier_names
 
 import 'package:flutter/material.dart';
+import 'package:frontend/api/api_service.dart';
 import 'package:frontend/components/app_bar.dart';
+import 'package:frontend/components/button.dart';
 import 'package:frontend/components/button2.dart';
+import 'package:frontend/models/QA_model.dart';
+import 'dart:developer';
 
 class QnAPage extends StatefulWidget {
   QnAPage({Key? key, this.user_id}) : super(key: key);
@@ -17,14 +21,12 @@ class _QnAPageState extends State<QnAPage> {
   TextEditingController contentController = TextEditingController();
   TextEditingController emailController = TextEditingController();
 
-  void onClickPressed() {
-    print('title: ' + titleController.text);
-    print('content: ' + contentController.text);
-    print('email: ' + emailController.text);
-  }
+
+  
 
   void onCanclePressed() {
     print('cancle');
+    Navigator.pop(context);
   }
 
   @override
@@ -38,9 +40,42 @@ class _QnAPageState extends State<QnAPage> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+
+    void onConfirmDialog() {
+      showDialog(
+        context: context,
+        barrierDismissible: true,
+        builder: (context) {
+          return AlertDialog(
+            content: SizedBox(
+              height: size.height * 0.15,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text('Q&A가 정상적으로 등록되었으며,\n일주일 이내로 처리됩니다.'),
+                  button(size, "닫기",(){Navigator.pop(context);Navigator.pop(context);}),
+                ],
+              )
+            )
+          );
+        }
+      );
+    }
+
+    void onClickPressed() async{
+      await ApiService().postQA(
+        QA(
+          title: titleController.text, 
+          content: contentController.text, 
+          receiver: emailController.text,
+        )
+      ).then((value) => {onConfirmDialog()});
+    }
+
+
     return Scaffold(
         backgroundColor: Color.fromRGBO(247, 247, 247, 1),
-        appBar: appBar(size, 'Q&A', context, true, false),
+        appBar: appBar(size, 'Q&A', context, true, false, (){}),
         body: Column(
           children: <Widget>[
             Center(
