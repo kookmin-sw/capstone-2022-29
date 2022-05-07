@@ -23,17 +23,16 @@ class _QnAPageState extends State<QnAPage> {
     print('content: ' + contentController.text);
     print('email: ' + emailController.text);
 
-    // final Email email = Email(
-    //   body: contentController.text + '\n\n' + emailController.text,
-    //   subject: titleController.text,
-    //   recipients: ['ch2w2006@kookmin.ac.kr'],
-    //   cc: [],
-    //   bcc: [],
-    //   attachmentPaths: [],
-    //   isHTML: false,
-    // );
-
-    // await FlutterEmailSender.send(email);
+    final Email email = Email(
+      body: contentController.text + '\n\n' + emailController.text,
+      subject: titleController.text,
+      recipients: ['ch2w2006@kookmin.ac.kr'],
+      cc: [],
+      bcc: [],
+      attachmentPaths: [],
+      isHTML: false,
+    );
+    await FlutterEmailSender.send(email);
   }
 
   void onCanclePressed() {
