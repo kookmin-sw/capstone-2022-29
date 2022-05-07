@@ -2,6 +2,7 @@
 
 import 'dart:convert';
 
+import 'package:frontend/models/QA_model.dart';
 import 'package:frontend/models/user_model.dart';
 import 'package:frontend/models/news_model.dart';
 import 'package:frontend/models/bubble_model.dart';
@@ -489,4 +490,38 @@ class ApiService {
     }
     return notice;
   }
+
+  // post Q&A
+  Future<http.Response> postQA(QA qa) async {
+    final url = Uri.http(_apiURI, "qa");
+    http.Response response = await http.post(
+      url,
+      headers: {
+        "Content-type": "application/json",
+      },
+      body: jsonEncode(qa.toJson()),
+    );
+    if (response.statusCode == 200) {
+      print(response.body);
+    }
+    return response;
+  }
+
+  // get Q&A
+  Future<dynamic> getQA() async {
+    List<dynamic> qa = [];
+    final url = Uri.http(_apiURI, "qa");
+    http.Response response = await http.get(url, headers: {
+      "Content-type": "application/json",
+    });
+    if (response.statusCode == 200) {
+      print(response.body);
+    }
+    var decodedData = jsonDecode(response.body);
+    for (dynamic n in decodedData) {
+      qa.add(n);
+    }
+    return qa;
+  }
 }
+
