@@ -14,13 +14,14 @@ class QA {
   QA.fromJson(Map<String, dynamic> json) {
     title = json['title'];
     content = json['content'];
-    receiver = json['recevier'];
+    receiver = json['receiver'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['title'] = title;
     data['content'] = content;
+    data['receiver'] = receiver;    
     return data;
   }
 }
