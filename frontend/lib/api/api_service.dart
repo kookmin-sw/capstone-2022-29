@@ -45,7 +45,7 @@ class ApiService {
     final queryParameters = {
       'nickname': nickname,
     };
-    final url = Uri.http(_apiURI, "users", queryParameters);
+    final url = Uri.http(_apiURI.toString(), "users", queryParameters);
     http.Response response = await http.get(url, headers: {
       "Content-type": "application/json",
     });
@@ -95,10 +95,12 @@ class ApiService {
   }
 
   // get news with query
-  Future<dynamic> getNews(dynamic query) async {
+  Future<dynamic> getNews(dynamic query, dynamic page, dynamic perPage) async {
     List<dynamic> news = [];
     final queryParameters = {
       'query': query,
+      'page': page.toString(),
+      'perPage': perPage.toString(),
     };
     final url = Uri.http(_apiURI, "news", queryParameters);
     http.Response response = await http.get(url, headers: {
@@ -524,4 +526,3 @@ class ApiService {
     return qa;
   }
 }
-
