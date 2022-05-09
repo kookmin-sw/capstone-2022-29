@@ -108,7 +108,7 @@ class _NewsPageState extends State<NewsPage> {
           data.add({
             'title': news[i]['title'],
             'navigate': () async {
-              Uri url = Uri.parse('https://flutter.dev');
+              Uri url = Uri.parse(news[i]['url']);
               if (!await launchUrl(url)) throw 'Could not launch $url';
             }
           });
@@ -156,7 +156,7 @@ class _NewsPageState extends State<NewsPage> {
         data.add({
           'title': news[i]['title'],
           'navigate': () async {
-            Uri url = Uri.parse('https://flutter.dev');
+            Uri url = Uri.parse(news[i]['url']);
             if (!await launchUrl(url)) throw 'Could not launch $url';
           }
         });
