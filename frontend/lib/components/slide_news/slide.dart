@@ -12,7 +12,7 @@ Widget slide(bool isCollapsed, BuildContext context, Size size, String query,
 
   Future<void> getNews(dynamic query) async {
     data.clear();
-    List<dynamic> news = await ApiService().getNews(query);
+    List<dynamic> news = await ApiService().getNews(query, 1, 5);
     for (var i = 0; i < news.length; i++) {
       data.add({
         "journal": news[i]["journal"],

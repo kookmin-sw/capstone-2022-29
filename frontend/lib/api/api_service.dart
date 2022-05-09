@@ -35,7 +35,7 @@ class ApiService {
       body: jsonEncode(user.toJson()),
     );
     if (response.statusCode == 200) {
-      print(response.body);
+      // print(response.body);
     }
     return response;
   }
@@ -50,12 +50,11 @@ class ApiService {
       "Content-type": "application/json",
     });
     if (response.statusCode == 200) {
-      print(response.body);
+      // print(response.body);
     }
     var decodedData = jsonDecode(response.body);
     for (dynamic u in decodedData) {
       return u;
-      // user.add(User.fromJson(u));
     }
   }
 
@@ -73,7 +72,7 @@ class ApiService {
       body: jsonEncode(user.toJson()),
     );
     if (response.statusCode == 200) {
-      print(response.body);
+      // print(response.body);
     }
     return response;
   }
@@ -89,16 +88,18 @@ class ApiService {
       },
     );
     if (response.statusCode == 200) {
-      print(response.body);
+      // print(response.body);
     }
     return response;
   }
 
   // get news with query
-  Future<dynamic> getNews(dynamic query) async {
+  Future<dynamic> getNews(dynamic query, dynamic page, dynamic perPage) async {
     List<dynamic> news = [];
     final queryParameters = {
       'query': query,
+      'page': page.toString(),
+      'perPage': perPage.toString(),
     };
     final url = Uri.http(_apiURI, "news", queryParameters);
     http.Response response = await http.get(url, headers: {
@@ -145,7 +146,7 @@ class ApiService {
       body: jsonEncode(bubble.toJson()),
     );
     if (response.statusCode == 200) {
-      print(response.body);
+      // print(response.body);
     }
     return response;
   }
@@ -161,11 +162,10 @@ class ApiService {
       "Content-type": "application/json",
     });
     if (response.statusCode == 200) {
-      print(response.body);
+      // print(response.body);
     }
     var decodedData = jsonDecode(response.body);
     for (dynamic b in decodedData) {
-      // return b;
       bubble.add(b);
     }
     return bubble;
@@ -182,11 +182,10 @@ class ApiService {
       "Content-type": "application/json",
     });
     if (response.statusCode == 200) {
-      print(response.body);
+      // print(response.body);
     }
     var decodedData = jsonDecode(response.body);
     for (dynamic b in decodedData) {
-      // return b;
       bubble.add(b);
     }
     return bubble;
@@ -204,11 +203,10 @@ class ApiService {
       "Content-type": "application/json",
     });
     if (response.statusCode == 200) {
-      print(response.body);
+      // print(response.body);
     }
     var decodedData = jsonDecode(response.body);
     for (dynamic b in decodedData) {
-      // return b;
       bubble.add(b);
     }
     return bubble;
@@ -222,7 +220,7 @@ class ApiService {
       "Content-type": "application/json",
     });
     if (response.statusCode == 200) {
-      print(response.body);
+      // print(response.body);
     }
     var decodedData = jsonDecode(response.body);
     for (dynamic b in decodedData) {
@@ -245,7 +243,7 @@ class ApiService {
       body: jsonEncode(bubble.toJson()),
     );
     if (response.statusCode == 200) {
-      print(response.body);
+      // print(response.body);
     }
     return response;
   }
@@ -266,7 +264,7 @@ class ApiService {
       body: jsonEncode(bubble.toJson()),
     );
     if (response.statusCode == 200) {
-      print(response.body);
+      // print(response.body);
     }
     return response;
   }
@@ -282,7 +280,7 @@ class ApiService {
       body: jsonEncode(topic.toJson()),
     );
     if (response.statusCode == 200) {
-      print(response.body);
+      // print(response.body);
     }
     return response;
   }
@@ -319,7 +317,7 @@ class ApiService {
       body: jsonEncode(bookmark.toJson()),
     );
     if (response.statusCode == 200) {
-      print(response.body);
+      // print(response.body);
     }
     return response;
   }
@@ -335,7 +333,7 @@ class ApiService {
       "Content-type": "application/json",
     });
     if (response.statusCode == 200) {
-      print(response.body);
+      // print(response.body);
     }
     var decodedData = jsonDecode(response.body);
     for (dynamic b in decodedData) {
@@ -358,7 +356,7 @@ class ApiService {
       body: jsonEncode(bookmark.toJson()),
     );
     if (response.statusCode == 200) {
-      print(response.body);
+      // print(response.body);
     }
     return response;
   }
@@ -377,7 +375,7 @@ class ApiService {
       },
     );
     if (response.statusCode == 200) {
-      print(response.body);
+      // print(response.body);
     }
     return response;
   }
@@ -393,7 +391,7 @@ class ApiService {
       body: jsonEncode(keyword.toJson()),
     );
     if (response.statusCode == 200) {
-      print(response.body);
+      // print(response.body);
     }
     return response;
   }
@@ -409,7 +407,7 @@ class ApiService {
       "Content-type": "application/json",
     });
     if (response.statusCode == 200) {
-      print(response.body);
+      // print(response.body);
     }
     var decodedData = jsonDecode(response.body);
     for (dynamic k in decodedData) {
@@ -432,7 +430,7 @@ class ApiService {
       body: jsonEncode(keyword.toJson()),
     );
     if (response.statusCode == 200) {
-      print(response.body);
+      // print(response.body);
     }
     return response;
   }
@@ -453,7 +451,7 @@ class ApiService {
       body: jsonEncode(keyword.toJson()),
     );
     if (response.statusCode == 200) {
-      print(response.body);
+      // print(response.body);
     }
     return response;
   }
@@ -469,7 +467,7 @@ class ApiService {
       body: jsonEncode(notice.toJson()),
     );
     if (response.statusCode == 200) {
-      print(response.body);
+      // print(response.body);
     }
     return response;
   }
@@ -482,7 +480,7 @@ class ApiService {
       "Content-type": "application/json",
     });
     if (response.statusCode == 200) {
-      print(response.body);
+      // print(response.body);
     }
     var decodedData = jsonDecode(response.body);
     for (dynamic n in decodedData) {
@@ -502,7 +500,7 @@ class ApiService {
       body: jsonEncode(qa.toJson()),
     );
     if (response.statusCode == 200) {
-      print(response.body);
+      // print(response.body);
     }
     return response;
   }
@@ -515,7 +513,7 @@ class ApiService {
       "Content-type": "application/json",
     });
     if (response.statusCode == 200) {
-      print(response.body);
+      // print(response.body);
     }
     var decodedData = jsonDecode(response.body);
     for (dynamic n in decodedData) {
@@ -524,4 +522,3 @@ class ApiService {
     return qa;
   }
 }
-

@@ -106,6 +106,7 @@ class _NavigatorPageState extends State<NavigatorPage> {
         padding: EdgeInsets.only(
           left: size.width * 0.05,
           right: size.width * 0.05,
+          bottom: size.height * 0.01,
         ),
         child: SafeArea(
           child: GNav(
