@@ -3609,3 +3609,103 @@ Traceback (most recent call last):
   File "/opt/homebrew/lib/python3.9/site-packages/scrapy/crawler.py", line 103, in crawl
     start_requests = iter(self.spider.start_requests())
 TypeError: 'NoneType' object is not iterable
+2022-05-11 01:34:48 [twisted] CRITICAL: Unhandled error in Deferred:
+2022-05-11 01:34:48 [twisted] CRITICAL: 
+Traceback (most recent call last):
+  File "/opt/homebrew/lib/python3.9/site-packages/twisted/internet/defer.py", line 1660, in _inlineCallbacks
+    result = current_context.run(gen.send, result)
+  File "/opt/homebrew/lib/python3.9/site-packages/scrapy/crawler.py", line 103, in crawl
+    start_requests = iter(self.spider.start_requests())
+TypeError: 'NoneType' object is not iterable
+2022-05-11 01:35:28 [twisted] CRITICAL: Unhandled error in Deferred:
+2022-05-11 01:35:28 [twisted] CRITICAL: 
+Traceback (most recent call last):
+  File "/opt/homebrew/lib/python3.9/site-packages/twisted/internet/defer.py", line 1660, in _inlineCallbacks
+    result = current_context.run(gen.send, result)
+  File "/opt/homebrew/lib/python3.9/site-packages/scrapy/crawler.py", line 103, in crawl
+    start_requests = iter(self.spider.start_requests())
+TypeError: 'NoneType' object is not iterable
+2022-05-11 01:36:31 [twisted] CRITICAL: Unhandled error in Deferred:
+2022-05-11 01:36:31 [twisted] CRITICAL: 
+Traceback (most recent call last):
+  File "/opt/homebrew/lib/python3.9/site-packages/twisted/internet/defer.py", line 1660, in _inlineCallbacks
+    result = current_context.run(gen.send, result)
+  File "/opt/homebrew/lib/python3.9/site-packages/scrapy/crawler.py", line 103, in crawl
+    start_requests = iter(self.spider.start_requests())
+TypeError: 'NoneType' object is not iterable
+2022-05-11 01:41:40 [scrapy.core.scraper] ERROR: Spider error processing <GET https://www.donga.com/news/List?p=0&prod=news&ymd=&m=NP> (referer: None)
+Traceback (most recent call last):
+  File "/opt/homebrew/lib/python3.9/site-packages/scrapy/utils/defer.py", line 132, in iter_errback
+    yield next(it)
+  File "/opt/homebrew/lib/python3.9/site-packages/scrapy/utils/python.py", line 354, in __next__
+    return next(self.data)
+  File "/opt/homebrew/lib/python3.9/site-packages/scrapy/utils/python.py", line 354, in __next__
+    return next(self.data)
+  File "/opt/homebrew/lib/python3.9/site-packages/scrapy/core/spidermw.py", line 66, in _evaluate_iterable
+    for r in iterable:
+  File "/opt/homebrew/lib/python3.9/site-packages/scrapy/spidermiddlewares/offsite.py", line 29, in process_spider_output
+    for x in result:
+  File "/opt/homebrew/lib/python3.9/site-packages/scrapy/core/spidermw.py", line 66, in _evaluate_iterable
+    for r in iterable:
+  File "/opt/homebrew/lib/python3.9/site-packages/scrapy/spidermiddlewares/referer.py", line 342, in <genexpr>
+    return (_set_referer(r) for r in result or ())
+  File "/opt/homebrew/lib/python3.9/site-packages/scrapy/core/spidermw.py", line 66, in _evaluate_iterable
+    for r in iterable:
+  File "/opt/homebrew/lib/python3.9/site-packages/scrapy/spidermiddlewares/urllength.py", line 40, in <genexpr>
+    return (r for r in result or () if _filter(r))
+  File "/opt/homebrew/lib/python3.9/site-packages/scrapy/core/spidermw.py", line 66, in _evaluate_iterable
+    for r in iterable:
+  File "/opt/homebrew/lib/python3.9/site-packages/scrapy/spidermiddlewares/depth.py", line 58, in <genexpr>
+    return (r for r in result or () if _filter(r))
+  File "/opt/homebrew/lib/python3.9/site-packages/scrapy/core/spidermw.py", line 66, in _evaluate_iterable
+    for r in iterable:
+  File "/Users/choihyewon/VScode/capstone-2022-29/DM/Crawling/ScrapyNews/ScrapyNews/spiders/news.py", line 28, in parse
+    article = Article(url)
+  File "/opt/homebrew/lib/python3.9/site-packages/newspaper/article.py", line 63, in __init__
+    source_url = scheme + '://' + urls.get_domain(url)
+TypeError: can only concatenate str (not "NoneType") to str
+2022-05-11 01:51:57 [scrapy.core.engine] ERROR: Error while obtaining start requests
+Traceback (most recent call last):
+  File "/opt/homebrew/lib/python3.9/site-packages/scrapy/core/engine.py", line 150, in _next_request
+    request = next(self.slot.start_requests)
+  File "/Users/choihyewon/VScode/capstone-2022-29/DM/Crawling/ScrapyNews/ScrapyNews/spiders/news.py", line 16, in start_requests
+    yield scrapy.Reqest(url=url, callback=self.parse)
+AttributeError: module 'scrapy' has no attribute 'Reqest'
+2022-05-11 01:52:13 [scrapy.core.engine] ERROR: Error while obtaining start requests
+Traceback (most recent call last):
+  File "/opt/homebrew/lib/python3.9/site-packages/scrapy/core/engine.py", line 150, in _next_request
+    request = next(self.slot.start_requests)
+  File "/Users/choihyewon/VScode/capstone-2022-29/DM/Crawling/ScrapyNews/ScrapyNews/spiders/news.py", line 17, in start_requests
+    yield scrapy.Reqest(url=url, callback=self.parse)
+AttributeError: module 'scrapy' has no attribute 'Reqest'
+2022-05-11 02:04:55 [scrapy.core.scraper] ERROR: Spider error processing <GET https://www.donga.com/news/List?p=0&prod=news&ymd=&m=NP> (referer: None)
+Traceback (most recent call last):
+  File "/opt/homebrew/lib/python3.9/site-packages/scrapy/utils/defer.py", line 132, in iter_errback
+    yield next(it)
+  File "/opt/homebrew/lib/python3.9/site-packages/scrapy/utils/python.py", line 354, in __next__
+    return next(self.data)
+  File "/opt/homebrew/lib/python3.9/site-packages/scrapy/utils/python.py", line 354, in __next__
+    return next(self.data)
+  File "/opt/homebrew/lib/python3.9/site-packages/scrapy/core/spidermw.py", line 66, in _evaluate_iterable
+    for r in iterable:
+  File "/opt/homebrew/lib/python3.9/site-packages/scrapy/spidermiddlewares/offsite.py", line 29, in process_spider_output
+    for x in result:
+  File "/opt/homebrew/lib/python3.9/site-packages/scrapy/core/spidermw.py", line 66, in _evaluate_iterable
+    for r in iterable:
+  File "/opt/homebrew/lib/python3.9/site-packages/scrapy/spidermiddlewares/referer.py", line 342, in <genexpr>
+    return (_set_referer(r) for r in result or ())
+  File "/opt/homebrew/lib/python3.9/site-packages/scrapy/core/spidermw.py", line 66, in _evaluate_iterable
+    for r in iterable:
+  File "/opt/homebrew/lib/python3.9/site-packages/scrapy/spidermiddlewares/urllength.py", line 40, in <genexpr>
+    return (r for r in result or () if _filter(r))
+  File "/opt/homebrew/lib/python3.9/site-packages/scrapy/core/spidermw.py", line 66, in _evaluate_iterable
+    for r in iterable:
+  File "/opt/homebrew/lib/python3.9/site-packages/scrapy/spidermiddlewares/depth.py", line 58, in <genexpr>
+    return (r for r in result or () if _filter(r))
+  File "/opt/homebrew/lib/python3.9/site-packages/scrapy/core/spidermw.py", line 66, in _evaluate_iterable
+    for r in iterable:
+  File "/Users/choihyewon/VScode/capstone-2022-29/DM/Crawling/ScrapyNews/ScrapyNews/spiders/news.py", line 22, in parse
+    article = Article(url)
+  File "/opt/homebrew/lib/python3.9/site-packages/newspaper/article.py", line 63, in __init__
+    source_url = scheme + '://' + urls.get_domain(url)
+TypeError: can only concatenate str (not "NoneType") to str
