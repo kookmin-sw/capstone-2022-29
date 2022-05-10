@@ -88,8 +88,8 @@ class _SearchPageState extends State<SearchPage> {
                                 searchBar(size: size, color: true, value: ""),
                                 Slider(
                                   value: _currentSliderValue,
-                                  max: 3,
-                                  divisions: 3,
+                                  max: 2,
+                                  divisions: 2,
                                   onChanged: (double value) {
                                     setState(() {
                                       _currentSliderValue = value;
@@ -116,7 +116,8 @@ class _SearchPageState extends State<SearchPage> {
                                           return NavigatorPage(
                                             index: 4,
                                             query: Provider.of<SearchProvider>(
-                                                    context).searchQuery,
+                                                    context)
+                                                .searchQuery,
                                             user_id: widget.user_id,
                                             topicNum:
                                                 _currentSliderValue.toInt(),
