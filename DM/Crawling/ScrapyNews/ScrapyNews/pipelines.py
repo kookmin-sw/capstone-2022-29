@@ -17,6 +17,8 @@ from __future__ import unicode_literals
 from scrapy.exporters import JsonItemExporter, CsvItemExporter
 # from scrapy.conf import settings
 from scrapy.exceptions import DropItem
+import time
+
 # from scrapy import log 
  
 #JSON파일로 저장하는 클래스
@@ -37,8 +39,8 @@ class JsonPipeline(object):
 #CSV 파일로 저장하는 클래스
 class CsvPipeline(object):
     def __init__(self):
-        # self.file = open("newsUrlCrawl.csv", 'wb')
-        self.file = open("newsCrawl.csv", 'wb')
+        timestr = time.strftime("%Y.%m.%d-%H:%M:%S")
+        self.file = open("newsCrawl-{}.csv".format(timestr), 'wb')
         self.exporter = CsvItemExporter(self.file, encoding='utf-8')
         self.exporter.start_exporting()
  
