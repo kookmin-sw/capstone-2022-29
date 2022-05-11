@@ -20,15 +20,19 @@ NEWSPIDER_MODULE = 'ScrapyNews.spiders'
 ROBOTSTXT_OBEY = True
 
 LOG_FILE = 'spider.log'  # log 파일 위치
-LOG_LEVEL = 'ERROR'       # 기본은 DEBUG 임
+LOG_LEVEL = 'INFO'       # 기본은 DEBUG 임
 
 DOWNLOAD_DELAY = 0.25    # 250ms 기다림, 기본값은 안기다림
 CONCURRENT_REQUESTS = 1  # 기본값은 16
 
 HTTPCACHE_ENABLED = True  # 기본 값은 False
 
-# FEED_FORMAT = "csv"
-# FEED_URI = "donga_news.csv"
 
 # Url 크롤링시 CSVPipeline 설정
 ITEM_PIPELINES = {'ScrapyNews.pipelines.CsvPipeline': 300, }
+INSTALLED_APPS = (
+    'django_crontab'
+)
+CRONJOBS = [
+    ('*/15 * * * *', '/Users/choihyewon/VScode/capstone-2022-29/DM/Crawling/ScrapyNews/crawl.sh')
+]

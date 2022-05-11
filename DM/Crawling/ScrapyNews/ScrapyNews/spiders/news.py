@@ -1,14 +1,13 @@
-from datetime import datetime
 import scrapy
 from ScrapyNews.items import ScrapynewsItem
-import csv
 from newspaper import Article
+from datetime import datetime
 
 class NewsUrlSpider(scrapy.Spider):
     name = 'UrlCrawler'
 
     def start_requests(self):
-        return [scrapy.Request(url='https://www.donga.com/news/List?p={}&prod=news&ymd=&m=NP'.format(i), callback=self.parse) for i in range(0,200,20)]
+        return [scrapy.Request(url='https://www.donga.com/news/List?p={}&prod=news&ymd=&m=NP'.format(i), callback=self.parse) for i in range(0,40,20)]
 
 
     def parse(self, response):
@@ -28,5 +27,7 @@ class NewsUrlSpider(scrapy.Spider):
             item['title'] = title
             item['url'] = url
             item['content'] = article.text
+
+            print(title)
 
             yield item

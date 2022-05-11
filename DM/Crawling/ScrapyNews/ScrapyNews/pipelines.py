@@ -37,7 +37,8 @@ class JsonPipeline(object):
 #CSV 파일로 저장하는 클래스
 class CsvPipeline(object):
     def __init__(self):
-        self.file = open("newsUrlCrawl.csv", 'wb')
+        # self.file = open("newsUrlCrawl.csv", 'wb')
+        self.file = open("newsCrawl.csv", 'wb')
         self.exporter = CsvItemExporter(self.file, encoding='utf-8')
         self.exporter.start_exporting()
  
