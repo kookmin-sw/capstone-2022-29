@@ -14,7 +14,6 @@ import 'package:frontend/pages/search/search_page.dart';
 import 'package:frontend/pages/search/timeline_page.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:line_icons/line_icons.dart';
-import 'package:flutter_kakao_login/flutter_kakao_login.dart';
 
 class NavigatorPage extends StatefulWidget {
   NavigatorPage({
@@ -31,7 +30,7 @@ class NavigatorPage extends StatefulWidget {
     this.isSearch,
     this.news,
     this.topicStepNum,
-    this.kakaoSignIn,
+    this.method,
   }) : super(key: key);
   int index = 0;
   String? nickname;
@@ -45,7 +44,7 @@ class NavigatorPage extends StatefulWidget {
   bool? isSearch;
   List<dynamic>? news;
   int? topicStepNum;
-  FlutterKakaoLogin? kakaoSignIn;
+  String? method;
 
   @override
   State<NavigatorPage> createState() => _NavigatorPageState();
@@ -59,7 +58,7 @@ class _NavigatorPageState extends State<NavigatorPage> {
             random: random,
             nickname: widget.nickname,
             user_id: widget.user_id,
-            kakaoSignIn: widget.kakaoSignIn),
+            method: widget.method),
         SearchPage(
           user_id: widget.user_id,
           nickname: widget.nickname,

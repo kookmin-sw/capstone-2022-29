@@ -8,18 +8,17 @@ import 'package:frontend/components/slide_news/slide.dart';
 import 'package:frontend/pages/navigator.dart';
 import 'package:bubble_chart/bubble_chart.dart';
 import 'package:frontend/api/api_service.dart';
-import 'package:flutter_kakao_login/flutter_kakao_login.dart';
+import 'package:frontend/api/kakao_signin_api.dart';
 import 'package:frontend/pages/login/login_page.dart';
 
 final Color backgroundColor = Color(0xFFf7f7f7);
 
 class HomePage extends StatefulWidget {
-  HomePage(
-      {Key? key, this.nickname, this.user_id, this.kakaoSignIn, this.random})
+  HomePage({Key? key, this.nickname, this.user_id, this.method, this.random})
       : super(key: key);
   String? nickname;
   String? user_id;
-  FlutterKakaoLogin? kakaoSignIn;
+  String? method;
   Random? random;
 
   @override
@@ -70,45 +69,22 @@ class _HomePageState extends State<HomePage>
     });
   }
 
-  List<Map> data = [];
+  List<Map> dataBubble = [];
   List<String> dataKeyword = [];
 
-  // Future<void> getBubbleAndKeyword(dynamic user_id) async {
-  //   data.clear();
-  //   dataKeyword.clear();
-
-  //   List<dynamic> bubble = await ApiService().getBubbleUserId(user_id);
-  //   for (var i = 0; i < bubble.length; i++) {
-  //     for (var j = 0; j < bubble[i]['bubble'].length; j++) {
-  //       data.add({
-  //         'query': bubble[i]['bubble'][j]['query'],
-  //         'count': bubble[i]['bubble'][j]['count']
-  //       });
-  //     }
-  //   }
-  //   data.sort(((a, b) => (b['count']).compareTo(a['count'])));
-
-  //   List<dynamic> keywordList = await ApiService().getKeyword(user_id);
-  //   for (var i = 0; i < keywordList.length; i++) {
-  //     for (var j = 0; j < keywordList[i]['keywords'].length; j++) {
-  //       dataKeyword.add(keywordList[i]['keywords'][j]['keyword']);
-  //     }
-  //   }
-  // }
-
   Future<void> getBubble(dynamic user_id) async {
-    data.clear();
+    dataBubble.clear();
 
     List<dynamic> bubble = await ApiService().getBubbleUserId(user_id);
     for (var i = 0; i < bubble.length; i++) {
       for (var j = 0; j < bubble[i]['bubble'].length; j++) {
-        data.add({
+        dataBubble.add({
           'query': bubble[i]['bubble'][j]['query'],
           'count': bubble[i]['bubble'][j]['count']
         });
       }
     }
-    data.sort(((a, b) => (b['count']).compareTo(a['count'])));
+    dataBubble.sort(((a, b) => (b['count']).compareTo(a['count'])));
   }
 
   Future<void> getKeyword(dynamic user_id) async {
@@ -128,13 +104,13 @@ class _HomePageState extends State<HomePage>
 
   List<BubbleNode> getData(Size size) {
     List<BubbleNode> list = [];
-    for (var i = 0; i < data.length; i++) {
+    for (var i = 0; i < dataBubble.length; i++) {
       list.add(
         BubbleNode.node(
           padding: 10,
           children: [
             BubbleNode.leaf(
-              value: data[i]["count"],
+              value: dataBubble[i]["count"],
               options: BubbleOptions(
                 color: () {
                   Random random = Random();
@@ -148,9 +124,9 @@ class _HomePageState extends State<HomePage>
                     child: FittedBox(
                       fit: BoxFit.scaleDown,
                       child: Text(
-                        data[i]["query"],
+                        dataBubble[i]["query"],
                         style: TextStyle(
-                          fontSize: size.height * 0.01 * data[i]["count"],
+                          fontSize: size.height * 0.01 * dataBubble[i]["count"],
                         ),
                       ),
                     ),
@@ -160,7 +136,7 @@ class _HomePageState extends State<HomePage>
                       MaterialPageRoute(
                         builder: (context) => NavigatorPage(
                           index: 3,
-                          query: data[i]["query"],
+                          query: dataBubble[i]["query"],
                           user_id: widget.user_id,
                           nickname: widget.nickname,
                         ),
@@ -203,7 +179,8 @@ class _HomePageState extends State<HomePage>
   }
 
   Future<void> _logout() async {
-    debugPrint('logout');
+    debugPrint('kakao logout');
+    await KakaoSignInAPI.logout();
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(
@@ -485,7 +462,7 @@ class _HomePageState extends State<HomePage>
                                   future: getBubble(widget.user_id),
                                   builder: (BuildContext context,
                                       AsyncSnapshot snapshot) {
-                                    if (data.isNotEmpty) {
+                                    if (dataBubble.isNotEmpty) {
                                       return SizedBox(
                                         height: size.height * 0.3,
                                         child: bubbleChart(size),
@@ -528,37 +505,6 @@ class _HomePageState extends State<HomePage>
                               ],
                             )),
                       ),
-                      // FutureBuilder(
-                      //   future: getBubbleAndKeyword(widget.user_id),
-                      //   builder:
-                      //       (BuildContext context, AsyncSnapshot snapshot) {
-                      //     if (data.isNotEmpty) {
-                      //       return SizedBox(
-                      //         height: size.height * 0.66,
-                      //         child: SingleChildScrollView(
-                      //             scrollDirection: Axis.vertical,
-                      //             child: Column(
-                      //               crossAxisAlignment:
-                      //                   CrossAxisAlignment.start,
-                      //               children: getSlide(size),
-                      //             )),
-                      //       );
-                      //     } else {
-                      //       return SizedBox(
-                      //         height: size.height * 0.66,
-                      //         child: Center(
-                      //           // child: CircularProgressIndicator(),
-                      //           child: Text(
-                      //             "나만의 키워드를 만들고 뉴스를 검색해보세요!",
-                      //             style: TextStyle(
-                      //               color: Colors.grey,
-                      //             ),
-                      //           ),
-                      //         ),
-                      //       );
-                      //     }
-                      //   },
-                      // ),
                     ],
                   ),
                 ),

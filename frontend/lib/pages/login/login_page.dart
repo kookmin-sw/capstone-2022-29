@@ -3,10 +3,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_signin_button/flutter_signin_button.dart';
 import 'package:flutter_kakao_login/flutter_kakao_login.dart';
-import 'package:google_sign_in/google_sign_in.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:frontend/api/api_service.dart';
+import 'package:frontend/api/kakao_signin_api.dart';
 import 'package:frontend/models/user_model.dart';
 import 'package:frontend/pages/navigator.dart';
 
@@ -19,63 +18,37 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   String _nativeAppKey = dotenv.get('NATIVE_APP_KEY');
+  String method = '';
 
-  static final FlutterKakaoLogin kakaoSignIn = FlutterKakaoLogin();
-  bool _isLogined = false;
-  String _accessToken = '';
-  String _refreshToken = '';
-  String _accountInfo = '';
-  String _loginMessage = 'Not Logged In';
-
-  @override
-  void initState() {
-    super.initState();
-    loadKakao();
-  }
-
-  void loadKakao() async {
-    await kakaoSignIn.init(_nativeAppKey);
-  }
-
-  // Kakao Login
   Future<void> flutterKakaoLogin() async {
-    try {
-      final logInResult = await kakaoSignIn.logIn();
-      _processLoginResult(logInResult);
-
-      // get User Info
-      final result = await kakaoSignIn.getUserMe();
-      final KakaoAccountResult? account = result.account;
-      if (account != null) {
-        final KakaoAccountResult? account = result.account!;
-        // final userID = account?.userID;
-        // final userEmail = account?.userEmail;
-        final userNickname = account?.userNickname;
-        final userProfileImagePath = account?.userProfileImagePath;
-        debugPrint("userNickName: ${userNickname}");
-        debugPrint("userProfileImagePath: ${userProfileImagePath}");
-        debugPrint("token: ${_accessToken}");
-
-        var user = await ApiService().getUserInfo(userNickname);
+    await KakaoSignInAPI.init();
+    final _logInResult = await KakaoSignInAPI.login();
+    if (_logInResult.status == KakaoLoginStatus.loggedIn) {
+      final kakaoUser = await KakaoSignInAPI.getUserMe();
+      if (kakaoUser.account == null) {
+        debugPrint('Kakao Sign in Failed');
+      } else {
+        var user =
+            await ApiService().getUserInfo(kakaoUser.account!.userNickname);
         if (user == null) {
           await ApiService().postUserInfo(
             User(
-              accessToken: _accessToken,
-              nickname: userNickname!,
-              profile: userProfileImagePath!,
-              // email: userEmail!,
+              accessToken: kakaoUser.token!.accessToken!,
+              nickname: kakaoUser.account!.userNickname!,
+              profile: kakaoUser.account!.userProfileImagePath!,
             ),
           );
-          var result = await ApiService().getUserInfo(userNickname);
 
+          var result =
+              await ApiService().getUserInfo(kakaoUser.account!.userNickname);
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(
               builder: (context) => NavigatorPage(
                 index: 0,
-                nickname: userNickname,
+                nickname: kakaoUser.account!.userNickname,
                 user_id: result['_id'],
-                kakaoSignIn: kakaoSignIn,
+                method: method,
               ),
             ),
           );
@@ -85,149 +58,22 @@ class _LoginPageState extends State<LoginPage> {
             MaterialPageRoute(
               builder: (context) => NavigatorPage(
                 index: 0,
-                nickname: userNickname,
+                nickname: kakaoUser.account!.userNickname,
                 user_id: user['_id'],
-                kakaoSignIn: kakaoSignIn,
+                method: method,
               ),
             ),
           );
 
           await ApiService().updateUserInfo(
-            userNickname,
+            kakaoUser.account!.userNickname,
             User(
-              accessToken: _accessToken,
-              nickname: userNickname!,
-              profile: userProfileImagePath!,
+              accessToken: kakaoUser.token!.accessToken!,
+              nickname: kakaoUser.account!.userNickname!,
+              profile: kakaoUser.account!.userProfileImagePath!,
             ),
           );
         }
-      }
-    } on PlatformException catch (e) {
-      debugPrint("${e.code} ${e.message}");
-    }
-  }
-
-  void _updateAccessToken(String accessToken) {
-    setState(() {
-      _accessToken = accessToken;
-    });
-  }
-
-  void _updateRefreshToken(String refreshToken) {
-    setState(() {
-      _refreshToken = refreshToken;
-    });
-  }
-
-  void _updateAccountMessage(String message) {
-    setState(() {
-      _accountInfo = message;
-    });
-  }
-
-  void _updateStateLogin(bool isLogined, KakaoLoginResult result) async {
-    setState(() {
-      _isLogined = isLogined;
-    });
-    if (!isLogined) {
-      _updateAccessToken('');
-      _updateRefreshToken('');
-      _updateAccountMessage('');
-
-      debugPrint("Kakao login fail");
-    } else {
-      if (result.token != null && result.token!.accessToken != null) {
-        _updateAccessToken(result.token!.accessToken!);
-        _updateRefreshToken(result.token!.refreshToken!);
-      }
-
-      debugPrint("Kakao login success");
-      debugPrint("access_token: $_accessToken");
-      debugPrint("refresh_token: $_refreshToken");
-      debugPrint("accountInfo: $_accountInfo");
-    }
-  }
-
-  void _updateLoginMessage(String message) {
-    setState(() {
-      _loginMessage = message;
-    });
-  }
-
-  void _processLoginResult(KakaoLoginResult result) {
-    switch (result.status) {
-      case KakaoLoginStatus.loggedIn:
-        debugPrint('login');
-        _updateLoginMessage('Logged In by the user.');
-        _updateStateLogin(true, result);
-        break;
-      case KakaoLoginStatus.loggedOut:
-        debugPrint('logout');
-        _updateLoginMessage('Logged Out by the user.');
-        _updateStateLogin(false, result);
-        break;
-      case KakaoLoginStatus.unlinked:
-        debugPrint('unlink');
-        _updateLoginMessage('Unlinked by the user');
-        _updateStateLogin(false, result);
-        break;
-    }
-  }
-
-  Future<void> flutterGoogleLogin() async {
-    // final _googleSignIn = await GoogleSignIn();
-    // Future<GoogleSignInAccount?> login() => _googleSignIn.signIn();
-    final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
-
-    if (googleUser == null) {
-      debugPrint('Google Sign in Failed');
-    } else {
-      // print(googleUser);
-      var user = await ApiService().getUserInfo(googleUser.displayName);
-      if (user == null) {
-        await ApiService().postUserInfo(
-          User(
-            accessToken: googleUser.id,
-            nickname: googleUser.displayName!,
-            profile: googleUser.photoUrl == null
-                ? "https://user-images.githubusercontent.com/55418359/167933786-a3cd563a-52be-4e68-b5e7-b6a69eacc63a.png"
-                : googleUser.photoUrl!,
-          ),
-        );
-        var result = await ApiService().getUserInfo(googleUser.displayName);
-
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (context) => NavigatorPage(
-              index: 0,
-              nickname: googleUser.displayName,
-              user_id: result['_id'],
-            ),
-          ),
-        );
-      } else {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (context) => NavigatorPage(
-              index: 0,
-              nickname: googleUser.displayName,
-              user_id: user['_id'],
-            ),
-          ),
-        );
-
-        await ApiService().updateUserInfo(
-          googleUser.displayName,
-          User(
-            accessToken: googleUser.id,
-            nickname: googleUser.displayName!,
-            profile: googleUser.photoUrl == null
-                ? "https://user-images.githubusercontent.com/55418359/167933786-a3cd563a-52be-4e68-b5e7-b6a69eacc63a.png"
-                : googleUser.photoUrl!,
-          ),
-        );
       }
     }
   }
@@ -267,23 +113,9 @@ class _LoginPageState extends State<LoginPage> {
               height: size.height * 0.1,
             ),
             SignInButtonBuilder(
-              backgroundColor: Color(0xffffffff),
-              onPressed: () {
-                flutterGoogleLogin();
-              },
-              text: "구글 계정으로 로그인",
-              textColor: Color.fromARGB(255, 66, 66, 66),
-              image: Container(
-                height: size.height * 0.025,
-                child: Image.asset('lib/assets/images/google_logo.png'),
-              ),
-            ),
-            SizedBox(
-              height: size.height * 0.01,
-            ),
-            SignInButtonBuilder(
               backgroundColor: Color(0xffF2E52D),
               onPressed: () {
+                method = 'kakao';
                 flutterKakaoLogin();
               },
               text: "카카오 계정으로 로그인",
