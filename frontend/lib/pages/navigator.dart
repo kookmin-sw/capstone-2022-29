@@ -31,7 +31,7 @@ class NavigatorPage extends StatefulWidget {
     this.isSearch,
     this.news,
     this.topicStepNum,
-    this.kakaoSignIn,
+    this.method,
   }) : super(key: key);
   int index = 0;
   String? nickname;
@@ -45,7 +45,7 @@ class NavigatorPage extends StatefulWidget {
   bool? isSearch;
   List<dynamic>? news;
   int? topicStepNum;
-  FlutterKakaoLogin? kakaoSignIn;
+  String? method;
 
   @override
   State<NavigatorPage> createState() => _NavigatorPageState();
@@ -59,7 +59,7 @@ class _NavigatorPageState extends State<NavigatorPage> {
             random: random,
             nickname: widget.nickname,
             user_id: widget.user_id,
-            kakaoSignIn: widget.kakaoSignIn),
+            method: widget.method),
         SearchPage(
           user_id: widget.user_id,
           nickname: widget.nickname,
