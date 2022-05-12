@@ -73,9 +73,31 @@ class _HomePageState extends State<HomePage>
   List<Map> data = [];
   List<String> dataKeyword = [];
 
-  Future<void> getBubbleAndKeyword(dynamic user_id) async {
+  // Future<void> getBubbleAndKeyword(dynamic user_id) async {
+  //   data.clear();
+  //   dataKeyword.clear();
+
+  //   List<dynamic> bubble = await ApiService().getBubbleUserId(user_id);
+  //   for (var i = 0; i < bubble.length; i++) {
+  //     for (var j = 0; j < bubble[i]['bubble'].length; j++) {
+  //       data.add({
+  //         'query': bubble[i]['bubble'][j]['query'],
+  //         'count': bubble[i]['bubble'][j]['count']
+  //       });
+  //     }
+  //   }
+  //   data.sort(((a, b) => (b['count']).compareTo(a['count'])));
+
+  //   List<dynamic> keywordList = await ApiService().getKeyword(user_id);
+  //   for (var i = 0; i < keywordList.length; i++) {
+  //     for (var j = 0; j < keywordList[i]['keywords'].length; j++) {
+  //       dataKeyword.add(keywordList[i]['keywords'][j]['keyword']);
+  //     }
+  //   }
+  // }
+
+  Future<void> getBubble(dynamic user_id) async {
     data.clear();
-    dataKeyword.clear();
 
     List<dynamic> bubble = await ApiService().getBubbleUserId(user_id);
     for (var i = 0; i < bubble.length; i++) {
@@ -87,6 +109,10 @@ class _HomePageState extends State<HomePage>
       }
     }
     data.sort(((a, b) => (b['count']).compareTo(a['count'])));
+  }
+
+  Future<void> getKeyword(dynamic user_id) async {
+    dataKeyword.clear();
 
     List<dynamic> keywordList = await ApiService().getKeyword(user_id);
     for (var i = 0; i < keywordList.length; i++) {
@@ -136,6 +162,7 @@ class _HomePageState extends State<HomePage>
                           index: 3,
                           query: data[i]["query"],
                           user_id: widget.user_id,
+                          nickname: widget.nickname,
                         ),
                       ),
                     );
@@ -152,17 +179,14 @@ class _HomePageState extends State<HomePage>
   }
 
   Widget bubbleChart(Size size) {
-    return SizedBox(
-      height: size.height * 0.3,
-      child: BubbleChartLayout(
-        children: getData(size),
-      ),
+    return BubbleChartLayout(
+      children: getData(size),
     );
   }
 
   List<Widget> getSlide(Size size) {
     List<Widget> list = [];
-    list.add(bubbleChart(size));
+    // list.add(bubbleChart(size));
     for (var i = 0; i < dataKeyword.length; i++) {
       list.add(
         slide(
@@ -171,6 +195,7 @@ class _HomePageState extends State<HomePage>
           size,
           dataKeyword[i],
           widget.user_id!,
+          widget.nickname!,
         ),
       );
     }
@@ -274,6 +299,7 @@ class _HomePageState extends State<HomePage>
                                           return NavigatorPage(
                                             index: 6,
                                             user_id: widget.user_id,
+                                            nickname: widget.nickname,
                                           );
                                         },
                                       ),
@@ -311,6 +337,7 @@ class _HomePageState extends State<HomePage>
                                           return NavigatorPage(
                                             index: 8,
                                             user_id: widget.user_id,
+                                            nickname: widget.nickname,
                                           );
                                         },
                                       ),
@@ -348,6 +375,7 @@ class _HomePageState extends State<HomePage>
                                         return NavigatorPage(
                                           index: 9,
                                           user_id: widget.user_id,
+                                          nickname: widget.nickname,
                                         );
                                       },
                                     ),
@@ -374,7 +402,9 @@ class _HomePageState extends State<HomePage>
                         ],
                       );
                     } else {
-                      return Container();
+                      return Center(
+                        child: CircularProgressIndicator(),
+                      );
                     }
                   })),
         ),
@@ -408,64 +438,128 @@ class _HomePageState extends State<HomePage>
                     right: size.width * 0.05,
                     top: size.height * 0.01,
                   ),
-                  child: FutureBuilder(
-                    future: getBubbleAndKeyword(widget.user_id),
-                    builder: (BuildContext context, AsyncSnapshot snapshot) {
-                      if (data.isNotEmpty) {
-                        return Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            InkWell(
-                              child: logo(size),
-                              onTap: () {
-                                setState(() {
-                                  if (isCollapsed) {
-                                    _controller.forward();
-                                  } else {
-                                    _controller.reverse();
-                                  }
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      InkWell(
+                        child: logo(size),
+                        onTap: () {
+                          setState(() {
+                            if (isCollapsed) {
+                              _controller.forward();
+                            } else {
+                              _controller.reverse();
+                            }
 
-                                  isCollapsed = !isCollapsed;
-                                });
-                              },
-                            ),
-                            InkWell(
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) {
-                                      return NavigatorPage(
-                                        index: 1,
-                                        user_id: widget.user_id,
-                                      );
-                                    },
-                                  ),
+                            isCollapsed = !isCollapsed;
+                          });
+                        },
+                      ),
+                      InkWell(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) {
+                                return NavigatorPage(
+                                  index: 1,
+                                  user_id: widget.user_id,
+                                  nickname: widget.nickname,
                                 );
                               },
-                              child: AbsorbPointer(
-                                child: searchBar(
-                                    size: size, color: false, value: ""),
-                              ),
                             ),
-                            SizedBox(
-                              height: size.height * 0.67,
-                              child: SingleChildScrollView(
-                                  scrollDirection: Axis.vertical,
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: getSlide(size),
-                                  )),
-                            ),
-                          ],
-                        );
-                      } else {
-                        return Center(
-                          child: CircularProgressIndicator(),
-                        );
-                      }
-                    },
+                          );
+                        },
+                        child: AbsorbPointer(
+                          child: searchBar(size: size, color: false, value: ""),
+                        ),
+                      ),
+                      SizedBox(
+                        height: size.height * 0.66,
+                        child: SingleChildScrollView(
+                            scrollDirection: Axis.vertical,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                FutureBuilder(
+                                  future: getBubble(widget.user_id),
+                                  builder: (BuildContext context,
+                                      AsyncSnapshot snapshot) {
+                                    if (data.isNotEmpty) {
+                                      return SizedBox(
+                                        height: size.height * 0.3,
+                                        child: bubbleChart(size),
+                                      );
+                                    } else {
+                                      return SizedBox(
+                                        height: size.height * 0.3,
+                                        child: Center(
+                                          child: Text(
+                                            "궁금한 뉴스를 검색해 보세요!",
+                                            style: TextStyle(
+                                              color: Colors.grey,
+                                            ),
+                                          ),
+                                        ),
+                                      );
+                                    }
+                                  },
+                                ),
+                                FutureBuilder(
+                                  future: getKeyword(widget.user_id),
+                                  builder: (BuildContext context,
+                                      AsyncSnapshot snapshot) {
+                                    if (dataKeyword.isNotEmpty) {
+                                      return Column(
+                                        children: getSlide(size),
+                                      );
+                                    } else {
+                                      return Center(
+                                        child: Text(
+                                          "나만의 키워드를 만들어 보세요!",
+                                          style: TextStyle(
+                                            color: Colors.grey,
+                                          ),
+                                        ),
+                                      );
+                                    }
+                                  },
+                                ),
+                              ],
+                            )),
+                      ),
+                      // FutureBuilder(
+                      //   future: getBubbleAndKeyword(widget.user_id),
+                      //   builder:
+                      //       (BuildContext context, AsyncSnapshot snapshot) {
+                      //     if (data.isNotEmpty) {
+                      //       return SizedBox(
+                      //         height: size.height * 0.66,
+                      //         child: SingleChildScrollView(
+                      //             scrollDirection: Axis.vertical,
+                      //             child: Column(
+                      //               crossAxisAlignment:
+                      //                   CrossAxisAlignment.start,
+                      //               children: getSlide(size),
+                      //             )),
+                      //       );
+                      //     } else {
+                      //       return SizedBox(
+                      //         height: size.height * 0.66,
+                      //         child: Center(
+                      //           // child: CircularProgressIndicator(),
+                      //           child: Text(
+                      //             "나만의 키워드를 만들고 뉴스를 검색해보세요!",
+                      //             style: TextStyle(
+                      //               color: Colors.grey,
+                      //             ),
+                      //           ),
+                      //         ),
+                      //       );
+                      //     }
+                      //   },
+                      // ),
+                    ],
                   ),
                 ),
               ),

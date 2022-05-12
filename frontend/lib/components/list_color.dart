@@ -10,6 +10,7 @@ class ColorList extends StatefulWidget {
       required this.content,
       this.status,
       this.user_id,
+      this.nickname,
       this.news_id,
       this.deleteBookmark})
       : super(key: key);
@@ -17,6 +18,7 @@ class ColorList extends StatefulWidget {
   String content;
   bool? status;
   String? user_id;
+  String? nickname;
   String? news_id;
   final Function? deleteBookmark;
 
@@ -53,7 +55,8 @@ class _ColorListState extends State<ColorList> {
                         setState(() {
                           widget.status = !widget.status!;
                           if (widget.status == false) {
-                            widget.deleteBookmark!(widget.user_id, widget.news_id);
+                            widget.deleteBookmark!(
+                                widget.user_id, widget.news_id);
                           }
                         });
                       },
@@ -82,6 +85,7 @@ class _ColorListState extends State<ColorList> {
                     index: 5,
                     query: widget.title,
                     user_id: widget.user_id,
+                    nickname: widget.nickname,
                     news_id: widget.news_id,
                     // topicNum: 0,
                     // topicStepNum: 0,

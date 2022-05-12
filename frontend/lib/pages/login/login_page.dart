@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_signin_button/flutter_signin_button.dart';
 import 'package:flutter_kakao_login/flutter_kakao_login.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:frontend/api/api_service.dart';
@@ -73,7 +74,7 @@ class _LoginPageState extends State<LoginPage> {
               builder: (context) => NavigatorPage(
                 index: 0,
                 nickname: userNickname,
-                user_id: user['_id'],
+                user_id: result['_id'],
                 kakaoSignIn: kakaoSignIn,
               ),
             ),
@@ -173,6 +174,64 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
+  Future<void> flutterGoogleLogin() async {
+    // final _googleSignIn = await GoogleSignIn();
+    // Future<GoogleSignInAccount?> login() => _googleSignIn.signIn();
+    final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+
+    if (googleUser == null) {
+      debugPrint('Google Sign in Failed');
+    } else {
+      // print(googleUser);
+      var user = await ApiService().getUserInfo(googleUser.displayName);
+      if (user == null) {
+        await ApiService().postUserInfo(
+          User(
+            accessToken: googleUser.id,
+            nickname: googleUser.displayName!,
+            profile: googleUser.photoUrl == null
+                ? "https://user-images.githubusercontent.com/55418359/167933786-a3cd563a-52be-4e68-b5e7-b6a69eacc63a.png"
+                : googleUser.photoUrl!,
+          ),
+        );
+        var result = await ApiService().getUserInfo(googleUser.displayName);
+
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => NavigatorPage(
+              index: 0,
+              nickname: googleUser.displayName,
+              user_id: result['_id'],
+            ),
+          ),
+        );
+      } else {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => NavigatorPage(
+              index: 0,
+              nickname: googleUser.displayName,
+              user_id: user['_id'],
+            ),
+          ),
+        );
+
+        await ApiService().updateUserInfo(
+          googleUser.displayName,
+          User(
+            accessToken: googleUser.id,
+            nickname: googleUser.displayName!,
+            profile: googleUser.photoUrl == null
+                ? "https://user-images.githubusercontent.com/55418359/167933786-a3cd563a-52be-4e68-b5e7-b6a69eacc63a.png"
+                : googleUser.photoUrl!,
+          ),
+        );
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -192,14 +251,15 @@ class _LoginPageState extends State<LoginPage> {
           ),
         ),
         child: Column(
-          // mainAxisAlignment: MainAxisAlignment.center,
+          // mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             SizedBox(
-              height: size.height * 0.05,
+              height: size.height * 0.02,
             ),
             Center(
               child: Container(
+                height: size.height * 0.45,
                 child: Image.asset('lib/assets/images/logo.png'),
               ),
             ),
@@ -207,14 +267,30 @@ class _LoginPageState extends State<LoginPage> {
               height: size.height * 0.1,
             ),
             SignInButtonBuilder(
+              backgroundColor: Color(0xffffffff),
+              onPressed: () {
+                flutterGoogleLogin();
+              },
+              text: "구글 계정으로 로그인",
+              textColor: Color.fromARGB(255, 66, 66, 66),
+              image: Container(
+                height: size.height * 0.025,
+                child: Image.asset('lib/assets/images/google_logo.png'),
+              ),
+            ),
+            SizedBox(
+              height: size.height * 0.01,
+            ),
+            SignInButtonBuilder(
               backgroundColor: Color(0xffF2E52D),
               onPressed: () {
                 flutterKakaoLogin();
               },
-              text: "Sign in with Kakao",
+              text: "카카오 계정으로 로그인",
               textColor: Colors.black,
               image: Container(
-                height: size.height * 0.025,
+                height: size.height * 0.02,
+                padding: EdgeInsets.only(left: size.width * 0.005),
                 child: Image.asset('lib/assets/images/kakao_logo.png'),
               ),
             ),

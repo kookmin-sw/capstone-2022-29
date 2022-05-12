@@ -6,8 +6,9 @@ import 'package:frontend/components/list_color.dart';
 import 'package:frontend/api/api_service.dart';
 
 class BookmarkPage extends StatefulWidget {
-  BookmarkPage({Key? key, this.user_id}) : super(key: key);
+  BookmarkPage({Key? key, this.user_id, this.nickname}) : super(key: key);
   String? user_id;
+  String? nickname;
 
   @override
   State<BookmarkPage> createState() => _BookmarkPageState();
@@ -52,7 +53,7 @@ class _BookmarkPageState extends State<BookmarkPage> {
       onWillPop: () => Future.value(false),
       child: Scaffold(
         backgroundColor: Color(0xffF7F7F7),
-        appBar: appBar(size, '북마크', context, false, false, (){}),
+        appBar: appBar(size, '북마크', context, false, false, () {}),
         body: Container(
           height: size.height * 0.75,
           margin: EdgeInsets.all(size.width * 0.05),
@@ -72,6 +73,7 @@ class _BookmarkPageState extends State<BookmarkPage> {
                       content: data[index]['news_title'],
                       status: true,
                       user_id: widget.user_id,
+                      nickname: widget.nickname,
                       news_id: data[index]['news_id'],
                       deleteBookmark: deleteBookmark,
                     );
@@ -79,7 +81,12 @@ class _BookmarkPageState extends State<BookmarkPage> {
                 );
               } else {
                 return Center(
-                  child: CircularProgressIndicator(),
+                  child: Text(
+                    "원하는 뉴스를 북마크 해보세요!",
+                    style: TextStyle(
+                      color: Colors.grey,
+                    ),
+                  ),
                 );
               }
             },

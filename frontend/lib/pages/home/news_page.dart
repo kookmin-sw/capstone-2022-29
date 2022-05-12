@@ -10,17 +10,20 @@ import 'package:frontend/models/bubble_model.dart';
 class NewsPage extends StatefulWidget {
   NewsPage(
       {Key? key,
+      this.user_id,
+      this.nickname,
       this.news,
       this.query,
       this.topic,
-      this.user_id,
       this.topicNum,
       this.topicStepNum})
       : super(key: key);
+  String? user_id;
+  String? nickname;
   List<dynamic>? news;
   String? query;
   String? topic;
-  String? user_id;
+
   int? topicNum;
   int? topicStepNum;
 
@@ -135,6 +138,7 @@ class _NewsPageState extends State<NewsPage> {
                     return NavigatorPage(
                       index: 5,
                       user_id: widget.user_id,
+                      nickname: widget.nickname,
                       news_id: widget.news![i]["news_id"],
                       topicNum: widget.topicNum,
                       topicStepNum: widget.topicStepNum,

@@ -60,34 +60,54 @@ class _NavigatorPageState extends State<NavigatorPage> {
             nickname: widget.nickname,
             user_id: widget.user_id,
             kakaoSignIn: widget.kakaoSignIn),
-        SearchPage(user_id: widget.user_id),
-        BookmarkPage(user_id: widget.user_id),
+        SearchPage(
+          user_id: widget.user_id,
+          nickname: widget.nickname,
+        ),
+        BookmarkPage(
+          user_id: widget.user_id,
+          nickname: widget.nickname,
+        ),
         NewsPage(
+          user_id: widget.user_id,
+          nickname: widget.nickname,
           news: widget.news ?? [],
           query: widget.query,
           topic: widget.topic,
-          user_id: widget.user_id,
           topicNum: widget.topicNum,
           topicStepNum: widget.topicStepNum,
         ),
         TimelinePage(
-            query: widget.query,
             user_id: widget.user_id,
+            nickname: widget.nickname,
+            query: widget.query,
             topicNum: widget.topicNum),
         DetailNewsPage(
-          news_id: widget.news_id,
           user_id: widget.user_id,
+          nickname: widget.nickname,
+          news_id: widget.news_id,
           query: widget.query,
           topicNum: widget.topicNum,
           topicStepNum: widget.topicStepNum,
         ),
-        NoticePage(user_id: widget.user_id),
+        NoticePage(
+          user_id: widget.user_id,
+          nickname: widget.nickname,
+        ),
         NoticeDetailPage(
-            title: widget.title,
-            content: widget.content,
-            user_id: widget.user_id),
-        QnAPage(user_id: widget.user_id),
-        MyKeywordPage(user_id: widget.user_id),
+          title: widget.title,
+          content: widget.content,
+          user_id: widget.user_id,
+          nickname: widget.nickname,
+        ),
+        QnAPage(
+          user_id: widget.user_id,
+          nickname: widget.nickname,
+        ),
+        MyKeywordPage(
+          user_id: widget.user_id,
+          nickname: widget.nickname,
+        ),
       ];
 
   @override

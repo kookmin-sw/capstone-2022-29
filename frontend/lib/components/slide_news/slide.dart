@@ -6,7 +6,7 @@ import 'package:frontend/pages/navigator.dart';
 import 'package:frontend/api/api_service.dart';
 
 Widget slide(bool isCollapsed, BuildContext context, Size size, String query,
-    String user_id) {
+    String user_id, String nickname) {
   List<Map> data = [];
   List<Widget> list = [];
 
@@ -127,6 +127,7 @@ Widget slide(bool isCollapsed, BuildContext context, Size size, String query,
                                   index: 3,
                                   query: query,
                                   user_id: user_id,
+                                  nickname: nickname,
                                 ),
                               ),
                             );

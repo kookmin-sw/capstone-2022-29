@@ -51,18 +51,23 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (context){
+      create: (context) {
         return SearchProvider();
       },
       child: ValueListenableBuilder<Brightness>(
         valueListenable: _themeModeNotifier.appBrightness,
         builder: (context, value, child) {
           return MaterialApp(
+            builder: ((context, child) {
+              return MediaQuery(
+                data: MediaQuery.of(context).copyWith(textScaleFactor: 1),
+                child: child!,
+              );
+            }),
             title: '뉴익',
             theme: ThemeData(
               brightness: value,
             ),
-            // home: DetailNewsPage(title: '마스크 대란'),
             home: SplashPage(),
           );
         },
