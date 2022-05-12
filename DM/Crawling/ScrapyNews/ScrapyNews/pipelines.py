@@ -15,9 +15,9 @@
 
 from __future__ import unicode_literals
 from scrapy.exporters import JsonItemExporter, CsvItemExporter
-# from scrapy.conf import settings
 from scrapy.exceptions import DropItem
-import time
+from datetime import datetime, date, timedelta
+
 
 # from scrapy import log 
  
@@ -39,8 +39,9 @@ class JsonPipeline(object):
 #CSV 파일로 저장하는 클래스
 class CsvPipeline(object):
     def __init__(self):
-        timestr = time.strftime("%Y.%m.%d-%H:%M:%S")
-        self.file = open("newsCrawl-{}.csv".format(timestr), 'wb')
+        yesterday = datetime.today() - timedelta(1)
+        yesterday = yesterday.strftime("%Y-%m-%d")
+        self.file = open("newsCrawl-{}.csv".format('yesterday'), 'wb')
         self.exporter = CsvItemExporter(self.file, encoding='utf-8')
         self.exporter.start_exporting()
  
@@ -52,7 +53,6 @@ class CsvPipeline(object):
         self.exporter.export_item(item)
         return item
  
-
 #  #MongoDB에 저장하는 
 # class MongoDBPipeline(object):
  

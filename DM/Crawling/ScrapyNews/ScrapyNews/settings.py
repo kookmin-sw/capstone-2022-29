@@ -29,7 +29,7 @@ HTTPCACHE_ENABLED = True  # 기본 값은 False
 
 
 # Url 크롤링시 CSVPipeline 설정
-ITEM_PIPELINES = {'ScrapyNews.pipelines.CsvPipeline': 300, }
+ITEM_PIPELINES = {'ScrapyNews.pipelines.CsvPipeline': 300}
 INSTALLED_APPS = (
     'django_crontab'
 )
