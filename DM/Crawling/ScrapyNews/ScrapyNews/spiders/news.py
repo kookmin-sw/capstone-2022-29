@@ -1,5 +1,5 @@
 import scrapy
-from ScrapyNews.items import ScrapynewsItem
+from items import ScrapynewsItem
 from newspaper import Article
 from datetime import datetime, date, timedelta
 
