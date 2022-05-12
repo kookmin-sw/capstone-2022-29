@@ -1,5 +1,3 @@
 #!/bin/sh
-cd ScrapyNews/spiders
-# scrapy crawl UrlCrawler
-# run scrapy crawl UrlCrawler
-scrapy runspider news.py
+cd /home/ubuntu/capstone-2022-29/DM/Crawling/ScrapyNews/ScrapyNews/spiders
+scrapy crawl NewsCrawler
