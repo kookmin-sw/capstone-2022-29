@@ -36,3 +36,5 @@ INSTALLED_APPS = (
 CRONJOBS = [
     ('*/15 * * * *', '/Users/choihyewon/VScode/capstone-2022-29/DM/Crawling/ScrapyNews/crawl.sh')
 ]
+
+FEED_EXPORT_ENCODING = 'utf-8'

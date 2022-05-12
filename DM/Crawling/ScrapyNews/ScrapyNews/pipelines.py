@@ -41,7 +41,7 @@ class CsvPipeline(object):
     def __init__(self):
         yesterday = datetime.today() - timedelta(1)
         yesterday = yesterday.strftime("%Y-%m-%d")
-        self.file = open("newsCrawl-{}.csv".format('yesterday'), 'wb')
+        self.file = open("newsCrawl-{}.csv".format(yesterday), 'wb')
         self.exporter = CsvItemExporter(self.file, encoding='utf-8')
         self.exporter.start_exporting()
  
