@@ -9,8 +9,9 @@ import 'package:provider/provider.dart';
 import 'package:frontend/pages/search/search_provider.dart';
 
 class SearchPage extends StatefulWidget {
-  SearchPage({Key? key, this.user_id}) : super(key: key);
+  SearchPage({Key? key, this.user_id, this.nickname}) : super(key: key);
   String? user_id;
+  String? nickname;
 
   @override
   State<SearchPage> createState() => _SearchPageState();
@@ -119,6 +120,7 @@ class _SearchPageState extends State<SearchPage> {
                                                     context)
                                                 .searchQuery,
                                             user_id: widget.user_id,
+                                            nickname: widget.nickname,
                                             topicNum:
                                                 _currentSliderValue.toInt(),
                                           );

@@ -7,8 +7,9 @@ import 'package:frontend/pages/navigator.dart';
 import 'package:frontend/api/api_service.dart';
 
 class NoticePage extends StatefulWidget {
-  NoticePage({Key? key, this.user_id}) : super(key: key);
+  NoticePage({Key? key, this.user_id, this.nickname}) : super(key: key);
   String? user_id;
+  String? nickname;
 
   @override
   State<NoticePage> createState() => _NoticePageState();
@@ -29,7 +30,7 @@ class _NoticePageState extends State<NoticePage> {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: Color.fromRGBO(247, 247, 247, 1),
-      appBar: appBar(size, '공지사항', context, true, false, (){}),
+      appBar: appBar(size, '공지사항', context, true, false, () {}),
       body: Container(
         height: size.height * 0.75,
         margin: EdgeInsets.all(20),
@@ -55,6 +56,7 @@ class _NoticePageState extends State<NoticePage> {
                                 title: data[index]['title'],
                                 content: data[index]['content'],
                                 user_id: widget.user_id,
+                                nickname: widget.nickname,
                               );
                             },
                           ),

@@ -9,8 +9,9 @@ import 'package:frontend/models/QA_model.dart';
 import 'dart:developer';
 
 class QnAPage extends StatefulWidget {
-  QnAPage({Key? key, this.user_id}) : super(key: key);
+  QnAPage({Key? key, this.user_id, this.nickname}) : super(key: key);
   String? user_id;
+  String? nickname;
 
   @override
   State<QnAPage> createState() => _QnAPageState();
@@ -20,9 +21,6 @@ class _QnAPageState extends State<QnAPage> {
   TextEditingController titleController = TextEditingController();
   TextEditingController contentController = TextEditingController();
   TextEditingController emailController = TextEditingController();
-
-
-  
 
   void onCanclePressed() {
     print('cancle');
@@ -43,39 +41,38 @@ class _QnAPageState extends State<QnAPage> {
 
     void onConfirmDialog() {
       showDialog(
-        context: context,
-        barrierDismissible: true,
-        builder: (context) {
-          return AlertDialog(
-            content: SizedBox(
-              height: size.height * 0.15,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text('Q&A가 정상적으로 등록되었으며,\n일주일 이내로 처리됩니다.'),
-                  button(size, "닫기",(){Navigator.pop(context);Navigator.pop(context);}),
-                ],
-              )
-            )
-          );
-        }
-      );
+          context: context,
+          barrierDismissible: true,
+          builder: (context) {
+            return AlertDialog(
+                content: SizedBox(
+                    height: size.height * 0.15,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text('Q&A가 정상적으로 등록되었으며,\n일주일 이내로 처리됩니다.'),
+                        button(size, "닫기", () {
+                          Navigator.pop(context);
+                          Navigator.pop(context);
+                        }),
+                      ],
+                    )));
+          });
     }
 
-    void onClickPressed() async{
-      await ApiService().postQA(
-        QA(
-          title: titleController.text, 
-          content: contentController.text, 
-          receiver: emailController.text,
-        )
-      ).then((value) => {onConfirmDialog()});
+    void onClickPressed() async {
+      await ApiService()
+          .postQA(QA(
+            title: titleController.text,
+            content: contentController.text,
+            receiver: emailController.text,
+          ))
+          .then((value) => {onConfirmDialog()});
     }
-
 
     return Scaffold(
         backgroundColor: Color.fromRGBO(247, 247, 247, 1),
-        appBar: appBar(size, 'Q&A', context, true, false, (){}),
+        appBar: appBar(size, 'Q&A', context, true, false, () {}),
         body: Column(
           children: <Widget>[
             Center(

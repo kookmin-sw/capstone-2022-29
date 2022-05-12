@@ -4,11 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:frontend/components/app_bar.dart';
 
 class NoticeDetailPage extends StatefulWidget {
-  NoticeDetailPage({Key? key, this.title, this.content, this.user_id})
+  NoticeDetailPage(
+      {Key? key, this.title, this.content, this.user_id, this.nickname})
       : super(key: key);
   String? title;
   String? content;
   String? user_id;
+  String? nickname;
 
   @override
   State<NoticeDetailPage> createState() => _NoticeDetailPageState();
@@ -20,7 +22,7 @@ class _NoticeDetailPageState extends State<NoticeDetailPage> {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
         backgroundColor: Color.fromRGBO(231, 243, 255, 1),
-        appBar: appBar(size, '', context, true, false, (){}),
+        appBar: appBar(size, '', context, true, false, () {}),
         body: Container(
           child: Column(children: [
             Container(
