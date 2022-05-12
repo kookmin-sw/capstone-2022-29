@@ -29,10 +29,12 @@ HTTPCACHE_ENABLED = True  # 기본 값은 False
 
 
 # Url 크롤링시 CSVPipeline 설정
-ITEM_PIPELINES = {'ScrapyNews.pipelines.CsvPipeline': 300, }
+ITEM_PIPELINES = {'ScrapyNews.pipelines.CsvPipeline': 300}
 INSTALLED_APPS = (
     'django_crontab'
 )
 CRONJOBS = [
     ('*/15 * * * *', '/Users/choihyewon/VScode/capstone-2022-29/DM/Crawling/ScrapyNews/crawl.sh')
 ]
+
+FEED_EXPORT_ENCODING = 'utf-8'
