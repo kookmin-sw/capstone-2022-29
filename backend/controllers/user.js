@@ -14,9 +14,9 @@ const postUserInfo = async (req, res) => {
 };
 
 const getUserInfo = async (req, res) => {
-    // const regex = new RegExp(req.query.nickname);
+    const regex = new RegExp(req.query.nickname);
     await User.find(
-        {'nickname':{$eq:req.query.nickname}},
+        {'nickname':{'$regex':regex}},
     ).then(user => {
         if(!user) res.status(404).json({ error: '해당 회원이 존재하지 않습니다.' });
         else res.json(user);
