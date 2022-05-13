@@ -2,7 +2,13 @@
 /DM/TopicModeling/han_corona_2.csv
 /DM/TopicModeling/LDA_title.ipynb
 /DM/TopicModeling/임시저장.py
+/DM/TopicModeling/임시저장2.py
+/DM/TopicModeling/임시저장3.py
+/DM/TopicModeling/__pycache__/
+/DM/TopicModeling/LDA_title_mongo.py
+/DM/TopicModeling/test.md
 .DS_Store
 index.md
 *.png
+*.csv
 /.vscode/
