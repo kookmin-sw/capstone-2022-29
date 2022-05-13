@@ -48,7 +48,7 @@ router.post("/qa", qa.postQA);
 router.get("/qa", qa.getQA);
 
 // request
-router.post("/requests", request.postQA);
-router.get("/requests", request.getQA);
+router.post("/requests", request.postRequest);
+router.get("/requests", request.getRequest);
 
 module.exports = router;

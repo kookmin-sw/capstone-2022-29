@@ -17,8 +17,8 @@ const postNews = async (req, res) => {
 const getNews = async (req, res) => {
     const regexQuery = new RegExp(req.query.query);
     if(req.query.news_id == undefined) {
-        const page = Number(req.query.page || 1);
-        const perPage = Number(req.query.perPage || 10);
+        const page = Number(req.query.page);
+        const perPage = Number(req.query.perPage);
         await News.find(
             {'$or': [ {'title': {'$regex':regexQuery}},{'content': {'$regex':regexQuery}} ]}, 
         )
