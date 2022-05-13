@@ -260,7 +260,7 @@ class _DetailNewsPageState extends State<DetailNewsPage> {
                         ),
                         buttonTwo(
                             size, "저장하기", "원문보기", onSavePressed, onShowPressed),
-                        button(size, "유사한 기사 보기", onSimailarPressed),
+                        // button(size, "유사한 기사 보기", onSimailarPressed),
                       ],
                     );
                   } else {
