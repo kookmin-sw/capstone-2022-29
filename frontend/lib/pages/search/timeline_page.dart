@@ -28,7 +28,7 @@ class _TimelinePageState extends State<TimelinePage> {
   double _currentSliderValue = 0;
   List data = [];
   String errorMessage = "아직 해당 검색어에 대한 자료가 \n 준비되어 있지 않습니다ㅜㅅㅜ";
-  bool isTopic = false;
+  bool isTopic = true;
   String query = '';
 
   Future<void> getTopicTimeLine() async {
@@ -46,7 +46,6 @@ class _TimelinePageState extends State<TimelinePage> {
       }
     } else {
       isTopic = false;
-      print(query);
       await ApiService().postRequest(Request(title: query));
     }
   }
@@ -137,7 +136,7 @@ class _TimelinePageState extends State<TimelinePage> {
               future: getTopicTimeLine(),
               builder: (BuildContext context, AsyncSnapshot snapshot) {
                 if (isTopic) {
-                  if (data.length != 0) {
+                  if (data.isNotEmpty) {
                     return Container(
                       margin: EdgeInsets.all(size.width * 0.05),
                       decoration: BoxDecoration(

@@ -34,8 +34,6 @@ class DetailNewsPage extends StatefulWidget {
 }
 
 class _DetailNewsPageState extends State<DetailNewsPage> {
-  final similarNews =
-      '[{"title":"유사한 뉴스 기사 1", "url":"www.naver.com"},{"title":"유사한 뉴스 기사 2", "url":"www.naver.com"},{"title":"유사한 뉴스 기사 3", "url":"www.naver.com"},{"title":"유사한 뉴스 기사 4", "url":"www.naver.com"},{"title":"유사한 뉴스 기사 5", "url":"www.naver.com"},{"title":"유사한 뉴스 기사 6", "url":"www.naver.com"}]';
   List<dynamic> data = [];
 
   Future<void> getNews() async {
