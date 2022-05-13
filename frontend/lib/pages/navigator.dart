@@ -14,7 +14,6 @@ import 'package:frontend/pages/search/search_page.dart';
 import 'package:frontend/pages/search/timeline_page.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:line_icons/line_icons.dart';
-import 'package:flutter_kakao_login/flutter_kakao_login.dart';
 
 class NavigatorPage extends StatefulWidget {
   NavigatorPage({

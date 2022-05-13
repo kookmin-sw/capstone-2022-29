@@ -3,11 +3,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_signin_button/flutter_signin_button.dart';
 import 'package:flutter_kakao_login/flutter_kakao_login.dart';
-// import 'package:google_sign_in/google_sign_in.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:frontend/api/api_service.dart';
-import 'package:frontend/api/google_signin_api.dart';
 import 'package:frontend/api/kakao_signin_api.dart';
 import 'package:frontend/models/user_model.dart';
 import 'package:frontend/pages/navigator.dart';
@@ -23,7 +20,8 @@ class _LoginPageState extends State<LoginPage> {
   String _nativeAppKey = dotenv.get('NATIVE_APP_KEY');
   String method = '';
 
-  Future<void> flutterKakaoLogin() async {
+  Future<void> flutterKakaoLogin() async 
+    await KakaoSignInAPI.init();
     final _logInResult = await KakaoSignInAPI.login();
     if (_logInResult.status == KakaoLoginStatus.loggedIn) {
       final kakaoUser = await KakaoSignInAPI.getUserMe();
@@ -80,64 +78,6 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
-  Future<void> flutterGoogleLogin() async {
-    var googleUser = await GoogleSignInAPI.login();
-
-    if (googleUser == null) {
-      debugPrint('Google Sign in Failed');
-    } else {
-      // print(googleUser);
-      var user = await ApiService().getUserInfo(googleUser.displayName);
-      if (user == null) {
-        await ApiService().postUserInfo(
-          User(
-            accessToken: googleUser.id,
-            nickname: googleUser.displayName!,
-            profile: googleUser.photoUrl == null
-                ? "https://user-images.githubusercontent.com/55418359/167933786-a3cd563a-52be-4e68-b5e7-b6a69eacc63a.png"
-                : googleUser.photoUrl!,
-          ),
-        );
-        var result = await ApiService().getUserInfo(googleUser.displayName);
-
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (context) => NavigatorPage(
-              index: 0,
-              nickname: googleUser.displayName,
-              user_id: result['_id'],
-              method: method,
-            ),
-          ),
-        );
-      } else {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (context) => NavigatorPage(
-              index: 0,
-              nickname: googleUser.displayName,
-              user_id: user['_id'],
-              method: method,
-            ),
-          ),
-        );
-
-        await ApiService().updateUserInfo(
-          googleUser.displayName,
-          User(
-            accessToken: googleUser.id,
-            nickname: googleUser.displayName!,
-            profile: googleUser.photoUrl == null
-                ? "https://user-images.githubusercontent.com/55418359/167933786-a3cd563a-52be-4e68-b5e7-b6a69eacc63a.png"
-                : googleUser.photoUrl!,
-          ),
-        );
-      }
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -171,22 +111,6 @@ class _LoginPageState extends State<LoginPage> {
             ),
             SizedBox(
               height: size.height * 0.1,
-            ),
-            SignInButtonBuilder(
-              backgroundColor: Color(0xffffffff),
-              onPressed: () {
-                method = 'google';
-                flutterGoogleLogin();
-              },
-              text: "구글 계정으로 로그인",
-              textColor: Color.fromARGB(255, 66, 66, 66),
-              image: Container(
-                height: size.height * 0.025,
-                child: Image.asset('lib/assets/images/google_logo.png'),
-              ),
-            ),
-            SizedBox(
-              height: size.height * 0.01,
             ),
             SignInButtonBuilder(
               backgroundColor: Color(0xffF2E52D),

@@ -8,7 +8,6 @@ import 'package:frontend/components/slide_news/slide.dart';
 import 'package:frontend/pages/navigator.dart';
 import 'package:bubble_chart/bubble_chart.dart';
 import 'package:frontend/api/api_service.dart';
-import 'package:frontend/api/google_signin_api.dart';
 import 'package:frontend/api/kakao_signin_api.dart';
 import 'package:frontend/pages/login/login_page.dart';
 
@@ -180,13 +179,8 @@ class _HomePageState extends State<HomePage>
   }
 
   Future<void> _logout() async {
-    if (widget.method == 'google') {
-      debugPrint('google logout');
-      await GoogleSignInAPI.logout();
-    } else if (widget.method == 'kakao') {
-      debugPrint('kakao logout');
-      await KakaoSignInAPI.logout();
-    }
+    debugPrint('kakao logout');
+    await KakaoSignInAPI.logout();
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(
