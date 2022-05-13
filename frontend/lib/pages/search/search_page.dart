@@ -22,42 +22,47 @@ class _SearchPageState extends State<SearchPage> {
   List<Map> tmp = [];
   Set ranking = {};
   late SearchProvider _searchProvider;
+  bool isRanking = true;
 
   Future<dynamic> getRanking() async {
     data.clear();
     tmp.clear();
     ranking.clear();
     List<dynamic> bubble = await ApiService().getAllBubble();
-    // print(bubble);
-    for (var i = 0; i < bubble.length; i++) {
-      for (var j = 0; j < bubble[i]['bubble'].length; j++) {
-        tmp.add({
-          'query': bubble[i]['bubble'][j]['query'],
-          'count': bubble[i]['bubble'][j]['count']
-        });
+    if (bubble.isNotEmpty) {
+      isRanking = true;
+      for (var i = 0; i < bubble.length; i++) {
+        for (var j = 0; j < bubble[i]['bubble'].length; j++) {
+          tmp.add({
+            'query': bubble[i]['bubble'][j]['query'],
+            'count': bubble[i]['bubble'][j]['count']
+          });
+        }
       }
-    }
-    tmp.sort(((a, b) => (b['count']).compareTo(a['count'])));
+      tmp.sort(((a, b) => (b['count']).compareTo(a['count'])));
 
-    for (var i = 0; i < tmp.length; i++) {
-      ranking.add(tmp[i]['query']);
-    }
+      for (var i = 0; i < tmp.length; i++) {
+        ranking.add(tmp[i]['query']);
+      }
 
-    try {
-      data.add({"rank": "1st", "keyword": ranking.elementAt(0)});
-    } on IndexError {}
-    try {
-      data.add({"rank": "2nd", "keyword": ranking.elementAt(1)});
-    } on IndexError {}
-    try {
-      data.add({"rank": "3rd", "keyword": ranking.elementAt(2)});
-    } on IndexError {}
-    try {
-      data.add({"rank": "4th", "keyword": ranking.elementAt(3)});
-    } on IndexError {}
-    try {
-      data.add({"rank": "5th", "keyword": ranking.elementAt(4)});
-    } on IndexError {}
+      try {
+        data.add({"rank": "1st", "keyword": ranking.elementAt(0)});
+      } on IndexError {}
+      try {
+        data.add({"rank": "2nd", "keyword": ranking.elementAt(1)});
+      } on IndexError {}
+      try {
+        data.add({"rank": "3rd", "keyword": ranking.elementAt(2)});
+      } on IndexError {}
+      try {
+        data.add({"rank": "4th", "keyword": ranking.elementAt(3)});
+      } on IndexError {}
+      try {
+        data.add({"rank": "5th", "keyword": ranking.elementAt(4)});
+      } on IndexError {}
+    } else {
+      isRanking = false;
+    }
   }
 
   @override
@@ -153,65 +158,71 @@ class _SearchPageState extends State<SearchPage> {
               child: FutureBuilder(
                 future: getRanking(),
                 builder: (BuildContext context, AsyncSnapshot snapshot) {
-                  if (data.isNotEmpty) {
-                    return Column(
-                      children: [
-                        Container(
-                          alignment: Alignment.centerLeft,
-                          margin: EdgeInsets.only(left: size.width * 0.07),
-                          child: Text(
-                            "검색 순위",
-                            style: TextStyle(
-                              fontSize: 25,
+                  if (isRanking) {
+                    if (data.isNotEmpty) {
+                      return Column(
+                        children: [
+                          Container(
+                            alignment: Alignment.centerLeft,
+                            margin: EdgeInsets.only(left: size.width * 0.07),
+                            child: Text(
+                              "검색 순위",
+                              style: TextStyle(
+                                fontSize: 25,
+                              ),
                             ),
                           ),
-                        ),
-                        SizedBox(
-                          height: size.height * 0.5,
-                          child: ListView.builder(
-                            scrollDirection: Axis.vertical,
-                            shrinkWrap: true,
-                            itemCount: data == [] ? 0 : data.length,
-                            itemBuilder: (BuildContext context, int index) {
-                              return Container(
-                                  margin: EdgeInsets.only(
-                                      left: size.width * 0.05,
-                                      right: size.width * 0.05,
-                                      top: size.height * 0.02),
-                                  padding: EdgeInsets.only(
-                                      left: size.width * 0.05,
-                                      right: size.width * 0.05),
-                                  decoration: BoxDecoration(
-                                    color: Color.fromRGBO(231, 243, 255, 1),
-                                    borderRadius: BorderRadius.circular(30),
-                                  ),
-                                  width: size.width * 0.5,
-                                  height: size.height * 0.08,
-                                  child: Row(
-                                    children: [
-                                      SizedBox(
-                                        child: Text(data[index]["rank"],
+                          SizedBox(
+                            height: size.height * 0.5,
+                            child: ListView.builder(
+                              scrollDirection: Axis.vertical,
+                              shrinkWrap: true,
+                              itemCount: data == [] ? 0 : data.length,
+                              itemBuilder: (BuildContext context, int index) {
+                                return Container(
+                                    margin: EdgeInsets.only(
+                                        left: size.width * 0.05,
+                                        right: size.width * 0.05,
+                                        top: size.height * 0.02),
+                                    padding: EdgeInsets.only(
+                                        left: size.width * 0.05,
+                                        right: size.width * 0.05),
+                                    decoration: BoxDecoration(
+                                      color: Color.fromRGBO(231, 243, 255, 1),
+                                      borderRadius: BorderRadius.circular(30),
+                                    ),
+                                    width: size.width * 0.5,
+                                    height: size.height * 0.08,
+                                    child: Row(
+                                      children: [
+                                        SizedBox(
+                                          child: Text(data[index]["rank"],
+                                              style: TextStyle(
+                                                color: Color.fromRGBO(
+                                                    93, 109, 190, 1),
+                                                fontSize: 20,
+                                              )),
+                                          width: size.width * 0.13,
+                                        ),
+                                        Text(data[index]["keyword"],
                                             style: TextStyle(
-                                              color: Color.fromRGBO(
-                                                  93, 109, 190, 1),
                                               fontSize: 20,
                                             )),
-                                        width: size.width * 0.13,
-                                      ),
-                                      Text(data[index]["keyword"],
-                                          style: TextStyle(
-                                            fontSize: 20,
-                                          )),
-                                    ],
-                                  ));
-                            },
+                                      ],
+                                    ));
+                              },
+                            ),
                           ),
-                        ),
-                      ],
-                    );
+                        ],
+                      );
+                    } else {
+                      return Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    }
                   } else {
                     return Center(
-                      child: CircularProgressIndicator(),
+                      child: Text('랭킹을 표시할 데이터가 없습니다.'),
                     );
                   }
                 },

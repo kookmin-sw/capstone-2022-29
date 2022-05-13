@@ -2,7 +2,6 @@
 
 import 'dart:convert';
 
-import 'package:frontend/models/QA_model.dart';
 import 'package:frontend/models/user_model.dart';
 import 'package:frontend/models/news_model.dart';
 import 'package:frontend/models/bubble_model.dart';
@@ -10,6 +9,8 @@ import 'package:frontend/models/topic_model.dart';
 import 'package:frontend/models/bookmark_model.dart';
 import 'package:frontend/models/keyword_model.dart';
 import 'package:frontend/models/notice_model.dart';
+import 'package:frontend/models/QA_model.dart';
+import 'package:frontend/models/request_model.dart';
 
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
@@ -520,5 +521,38 @@ class ApiService {
       qa.add(n);
     }
     return qa;
+  }
+
+  // post Request
+  Future<http.Response> postRequest(Request request) async {
+    final url = Uri.http(_apiURI, "requests");
+    http.Response response = await http.post(
+      url,
+      headers: {
+        "Content-type": "application/json",
+      },
+      body: jsonEncode(request.toJson()),
+    );
+    if (response.statusCode == 200) {
+      // print(response.body);
+    }
+    return response;
+  }
+
+  // get Request
+  Future<dynamic> getRequest() async {
+    List<dynamic> request = [];
+    final url = Uri.http(_apiURI, "requests");
+    http.Response response = await http.get(url, headers: {
+      "Content-type": "application/json",
+    });
+    if (response.statusCode == 200) {
+      // print(response.body);
+    }
+    var decodedData = jsonDecode(response.body);
+    for (dynamic r in decodedData) {
+      request.add(r);
+    }
+    return request;
   }
 }

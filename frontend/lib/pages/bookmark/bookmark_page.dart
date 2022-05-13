@@ -16,21 +16,27 @@ class BookmarkPage extends StatefulWidget {
 
 class _BookmarkPageState extends State<BookmarkPage> {
   List<Map> data = [];
+  bool isBookmark = true;
 
   Future<void> getBookmark(dynamic user_id) async {
     data.clear();
     List<dynamic> bookmark = await ApiService().getBookmark(user_id);
-    for (var i = 0; i < bookmark.length; i++) {
-      for (var j = 0; j < bookmark[i]['bookmark'].length; j++) {
-        data.add({
-          'news_id': bookmark[i]['bookmark'][j]['news_id'],
-          'news_title': bookmark[i]['bookmark'][j]['news_id'],
-          'query': bookmark[i]['bookmark'][j]['query']
-        });
+    if (bookmark.isNotEmpty) {
+      isBookmark = true;
+      for (var i = 0; i < bookmark.length; i++) {
+        for (var j = 0; j < bookmark[i]['bookmark'].length; j++) {
+          data.add({
+            'news_id': bookmark[i]['bookmark'][j]['news_id'],
+            'news_title': bookmark[i]['bookmark'][j]['news_id'],
+            'query': bookmark[i]['bookmark'][j]['query']
+          });
+        }
       }
-    }
-    for (var i = 0; i < data.length; i++) {
-      await getNewsTitle(data[i]['news_title'], i);
+      for (var i = 0; i < data.length; i++) {
+        await getNewsTitle(data[i]['news_title'], i);
+      }
+    } else {
+      isBookmark = false;
     }
   }
 
@@ -64,21 +70,27 @@ class _BookmarkPageState extends State<BookmarkPage> {
           child: FutureBuilder(
             future: getBookmark(widget.user_id),
             builder: (BuildContext context, AsyncSnapshot snapshot) {
-              if (data.isNotEmpty) {
-                return ListView.builder(
-                  itemCount: data.length,
-                  itemBuilder: (context, index) {
-                    return ColorList(
-                      title: data[index]['query'],
-                      content: data[index]['news_title'],
-                      status: true,
-                      user_id: widget.user_id,
-                      nickname: widget.nickname,
-                      news_id: data[index]['news_id'],
-                      deleteBookmark: deleteBookmark,
-                    );
-                  },
-                );
+              if (isBookmark) {
+                if (data.isNotEmpty) {
+                  return ListView.builder(
+                    itemCount: data.length,
+                    itemBuilder: (context, index) {
+                      return ColorList(
+                        title: data[index]['query'],
+                        content: data[index]['news_title'],
+                        status: true,
+                        user_id: widget.user_id,
+                        nickname: widget.nickname,
+                        news_id: data[index]['news_id'],
+                        deleteBookmark: deleteBookmark,
+                      );
+                    },
+                  );
+                } else {
+                  return Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
               } else {
                 return Center(
                   child: Text(

@@ -36,6 +36,8 @@ class _HomePageState extends State<HomePage>
   late final Animation<Offset> _slideAnimation;
   List<BubbleNode> childNode = [];
   var userInfo;
+  bool isBubble = true;
+  bool isKeyword = true;
 
   @override
   void initState() {
@@ -76,25 +78,35 @@ class _HomePageState extends State<HomePage>
     dataBubble.clear();
 
     List<dynamic> bubble = await ApiService().getBubbleUserId(user_id);
-    for (var i = 0; i < bubble.length; i++) {
-      for (var j = 0; j < bubble[i]['bubble'].length; j++) {
-        dataBubble.add({
-          'query': bubble[i]['bubble'][j]['query'],
-          'count': bubble[i]['bubble'][j]['count']
-        });
+    if (bubble.isNotEmpty) {
+      isBubble = true;
+      for (var i = 0; i < bubble.length; i++) {
+        for (var j = 0; j < bubble[i]['bubble'].length; j++) {
+          dataBubble.add({
+            'query': bubble[i]['bubble'][j]['query'],
+            'count': bubble[i]['bubble'][j]['count']
+          });
+        }
       }
+      dataBubble.sort(((a, b) => (b['count']).compareTo(a['count'])));
+    } else {
+      isBubble = false;
     }
-    dataBubble.sort(((a, b) => (b['count']).compareTo(a['count'])));
   }
 
   Future<void> getKeyword(dynamic user_id) async {
     dataKeyword.clear();
 
     List<dynamic> keywordList = await ApiService().getKeyword(user_id);
-    for (var i = 0; i < keywordList.length; i++) {
-      for (var j = 0; j < keywordList[i]['keywords'].length; j++) {
-        dataKeyword.add(keywordList[i]['keywords'][j]['keyword']);
+    if (keywordList.isNotEmpty) {
+      isKeyword = true;
+      for (var i = 0; i < keywordList.length; i++) {
+        for (var j = 0; j < keywordList[i]['keywords'].length; j++) {
+          dataKeyword.add(keywordList[i]['keywords'][j]['keyword']);
+        }
       }
+    } else {
+      isKeyword = false;
     }
   }
 
@@ -454,14 +466,15 @@ class _HomePageState extends State<HomePage>
                       SizedBox(
                         height: size.height * 0.66,
                         child: SingleChildScrollView(
-                            scrollDirection: Axis.vertical,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                FutureBuilder(
-                                  future: getBubble(widget.user_id),
-                                  builder: (BuildContext context,
-                                      AsyncSnapshot snapshot) {
+                          scrollDirection: Axis.vertical,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              FutureBuilder(
+                                future: getBubble(widget.user_id),
+                                builder: (BuildContext context,
+                                    AsyncSnapshot snapshot) {
+                                  if (isBubble) {
                                     if (dataBubble.isNotEmpty) {
                                       return SizedBox(
                                         height: size.height * 0.3,
@@ -480,30 +493,42 @@ class _HomePageState extends State<HomePage>
                                         ),
                                       );
                                     }
-                                  },
-                                ),
-                                FutureBuilder(
-                                  future: getKeyword(widget.user_id),
-                                  builder: (BuildContext context,
-                                      AsyncSnapshot snapshot) {
+                                  } else {
+                                    return Center(
+                                      child: CircularProgressIndicator(),
+                                    );
+                                  }
+                                },
+                              ),
+                              FutureBuilder(
+                                future: getKeyword(widget.user_id),
+                                builder: (BuildContext context,
+                                    AsyncSnapshot snapshot) {
+                                  if (isKeyword) {
                                     if (dataKeyword.isNotEmpty) {
                                       return Column(
                                         children: getSlide(size),
                                       );
                                     } else {
                                       return Center(
-                                        child: Text(
-                                          "나만의 키워드를 만들어 보세요!",
-                                          style: TextStyle(
-                                            color: Colors.grey,
-                                          ),
-                                        ),
+                                        child: CircularProgressIndicator(),
                                       );
                                     }
-                                  },
-                                ),
-                              ],
-                            )),
+                                  } else {
+                                    return Center(
+                                      child: Text(
+                                        "나만의 키워드를 만들어 보세요!",
+                                        style: TextStyle(
+                                          color: Colors.grey,
+                                        ),
+                                      ),
+                                    );
+                                  }
+                                },
+                              ),
+                            ],
+                          ),
+                        ),
                       ),
                     ],
                   ),
