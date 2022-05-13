@@ -20,7 +20,7 @@ class _LoginPageState extends State<LoginPage> {
   String _nativeAppKey = dotenv.get('NATIVE_APP_KEY');
   String method = '';
 
-  Future<void> flutterKakaoLogin() async 
+  Future<void> flutterKakaoLogin() async {
     await KakaoSignInAPI.init();
     final _logInResult = await KakaoSignInAPI.login();
     if (_logInResult.status == KakaoLoginStatus.loggedIn) {
