@@ -10,10 +10,8 @@ from pprint import pprint
 import re
 from LDA_score import get_score
 import os
-from pymongo import MongoClient
-
-client = MongoClient(host='127.0.0.1', port=27017, username='BaekYeonsun', password='hello12345')
-db = client.database
+import requests
+import json
 
 mecab = Mecab("C:\\mecab\\mecab-ko-dic") # mecab dictionary 경로. colab에서 할 때는 안 넣어줘도 됐었음
 mallet_path = "C:\\Mallet\\bin\\mallet"  # 이거 mallet2108어쩌구인가로도 바꿔보기
@@ -125,6 +123,7 @@ def topics_to_mongo(news_df, ldamodel, corpus, texts, num_keywords, num_topics):
 
 
 if __name__ == '__main__':
+    res = requests.get('http://ec2-13-125-237-252.ap-northeast-2.compute.amazonaws.com:5000/news?query=커피')
     file = 'DM\\TopicModeling\\han_corona_2.csv' # 경로 입력할 때 역슬래시 두개 넣기,,,
     
     news_df, id2word, corpus, title_list = preprocess(file, 5) # 인자값 = no_below 값
