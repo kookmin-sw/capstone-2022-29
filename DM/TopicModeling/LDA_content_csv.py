@@ -140,7 +140,7 @@ if __name__ == '__main__':
     #ldamallet, coherence_mallet = topic_modeling(id2word, corpus, content_list)
     start = 40 # 이 범위는 뉴스 개수에 따라 다르게 하기
     limit = 101
-    step = 10
+    step = 5
     topic_priority = get_score(corpus, id2word, content_list, start, limit, step)
     for tn in topic_priority:
         ldamallet = topic_modeling(id2word, corpus, content_list, tn) #이렇게하려면 sort해서 주면 안 됨
