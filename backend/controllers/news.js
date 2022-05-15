@@ -17,9 +17,15 @@ const postNews = async (req, res) => {
 const getNews = async (req, res) => {
     const regexQuery = new RegExp(req.query.query);
     if(req.query.news_id == undefined) {
+        const page = Number(req.query.page);
+        const perPage = Number(req.query.perPage);
         await News.find(
             {'$or': [ {'title': {'$regex':regexQuery}},{'content': {'$regex':regexQuery}} ]}, 
-        ).then(news => {
+        )
+        // .sort({ 'date': -1 })
+        .skip(perPage * (page - 1))
+        .limit(perPage)
+        .then(news => {
             if(!news) res.status(404).json({ error: '해당 뉴스가 존재하지 않습니다.' });
             else res.json(news);
         }).catch(err => res.status(500).json({ error: err }));

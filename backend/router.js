@@ -9,6 +9,7 @@ const bookmark = require("./controllers/bookmark");
 const keyword = require("./controllers/keyword");
 const notice = require("./controllers/notice");
 const qa = require("./controllers/qa");
+const request = require("./controllers/request");
 
 // user
 router.post("/users", user.postUserInfo);
@@ -45,5 +46,9 @@ router.get("/notices", notice.getNotice);
 // qa
 router.post("/qa", qa.postQA);
 router.get("/qa", qa.getQA);
+
+// request
+router.post("/requests", request.postRequest);
+router.get("/requests", request.getRequest);
 
 module.exports = router;

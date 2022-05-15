@@ -8,18 +8,17 @@ import 'package:frontend/components/slide_news/slide.dart';
 import 'package:frontend/pages/navigator.dart';
 import 'package:bubble_chart/bubble_chart.dart';
 import 'package:frontend/api/api_service.dart';
-import 'package:flutter_kakao_login/flutter_kakao_login.dart';
+import 'package:frontend/api/kakao_signin_api.dart';
 import 'package:frontend/pages/login/login_page.dart';
 
 final Color backgroundColor = Color(0xFFf7f7f7);
 
 class HomePage extends StatefulWidget {
-  HomePage(
-      {Key? key, this.nickname, this.user_id, this.kakaoSignIn, this.random})
+  HomePage({Key? key, this.nickname, this.user_id, this.method, this.random})
       : super(key: key);
   String? nickname;
   String? user_id;
-  FlutterKakaoLogin? kakaoSignIn;
+  String? method;
   Random? random;
 
   @override
@@ -37,6 +36,8 @@ class _HomePageState extends State<HomePage>
   late final Animation<Offset> _slideAnimation;
   List<BubbleNode> childNode = [];
   var userInfo;
+  bool isBubble = true;
+  bool isKeyword = true;
 
   @override
   void initState() {
@@ -70,29 +71,42 @@ class _HomePageState extends State<HomePage>
     });
   }
 
-  List<Map> data = [];
+  List<Map> dataBubble = [];
   List<String> dataKeyword = [];
 
-  Future<void> getBubbleAndKeyword(dynamic user_id) async {
-    data.clear();
-    dataKeyword.clear();
+  Future<void> getBubble(dynamic user_id) async {
+    dataBubble.clear();
 
     List<dynamic> bubble = await ApiService().getBubbleUserId(user_id);
-    for (var i = 0; i < bubble.length; i++) {
-      for (var j = 0; j < bubble[i]['bubble'].length; j++) {
-        data.add({
-          'query': bubble[i]['bubble'][j]['query'],
-          'count': bubble[i]['bubble'][j]['count']
-        });
+    if (bubble.isNotEmpty) {
+      isBubble = true;
+      for (var i = 0; i < bubble.length; i++) {
+        for (var j = 0; j < bubble[i]['bubble'].length; j++) {
+          dataBubble.add({
+            'query': bubble[i]['bubble'][j]['query'],
+            'count': bubble[i]['bubble'][j]['count']
+          });
+        }
       }
+      dataBubble.sort(((a, b) => (b['count']).compareTo(a['count'])));
+    } else {
+      isBubble = false;
     }
-    data.sort(((a, b) => (b['count']).compareTo(a['count'])));
+  }
+
+  Future<void> getKeyword(dynamic user_id) async {
+    dataKeyword.clear();
 
     List<dynamic> keywordList = await ApiService().getKeyword(user_id);
-    for (var i = 0; i < keywordList.length; i++) {
-      for (var j = 0; j < keywordList[i]['keywords'].length; j++) {
-        dataKeyword.add(keywordList[i]['keywords'][j]['keyword']);
+    if (keywordList.isNotEmpty) {
+      isKeyword = true;
+      for (var i = 0; i < keywordList.length; i++) {
+        for (var j = 0; j < keywordList[i]['keywords'].length; j++) {
+          dataKeyword.add(keywordList[i]['keywords'][j]['keyword']);
+        }
       }
+    } else {
+      isKeyword = false;
     }
   }
 
@@ -102,13 +116,13 @@ class _HomePageState extends State<HomePage>
 
   List<BubbleNode> getData(Size size) {
     List<BubbleNode> list = [];
-    for (var i = 0; i < data.length; i++) {
+    for (var i = 0; i < dataBubble.length; i++) {
       list.add(
         BubbleNode.node(
           padding: 10,
           children: [
             BubbleNode.leaf(
-              value: data[i]["count"],
+              value: dataBubble[i]["count"],
               options: BubbleOptions(
                 color: () {
                   Random random = Random();
@@ -122,9 +136,9 @@ class _HomePageState extends State<HomePage>
                     child: FittedBox(
                       fit: BoxFit.scaleDown,
                       child: Text(
-                        data[i]["query"],
+                        dataBubble[i]["query"],
                         style: TextStyle(
-                          fontSize: size.height * 0.01 * data[i]["count"],
+                          fontSize: size.height * 0.01 * dataBubble[i]["count"],
                         ),
                       ),
                     ),
@@ -134,8 +148,9 @@ class _HomePageState extends State<HomePage>
                       MaterialPageRoute(
                         builder: (context) => NavigatorPage(
                           index: 3,
-                          query: data[i]["query"],
+                          query: dataBubble[i]["query"],
                           user_id: widget.user_id,
+                          nickname: widget.nickname,
                         ),
                       ),
                     );
@@ -152,17 +167,14 @@ class _HomePageState extends State<HomePage>
   }
 
   Widget bubbleChart(Size size) {
-    return SizedBox(
-      height: size.height * 0.3,
-      child: BubbleChartLayout(
-        children: getData(size),
-      ),
+    return BubbleChartLayout(
+      children: getData(size),
     );
   }
 
   List<Widget> getSlide(Size size) {
     List<Widget> list = [];
-    list.add(bubbleChart(size));
+    // list.add(bubbleChart(size));
     for (var i = 0; i < dataKeyword.length; i++) {
       list.add(
         slide(
@@ -171,6 +183,7 @@ class _HomePageState extends State<HomePage>
           size,
           dataKeyword[i],
           widget.user_id!,
+          widget.nickname!,
         ),
       );
     }
@@ -178,7 +191,8 @@ class _HomePageState extends State<HomePage>
   }
 
   Future<void> _logout() async {
-    debugPrint('logout');
+    debugPrint('kakao logout');
+    await KakaoSignInAPI.logout();
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(
@@ -274,6 +288,7 @@ class _HomePageState extends State<HomePage>
                                           return NavigatorPage(
                                             index: 6,
                                             user_id: widget.user_id,
+                                            nickname: widget.nickname,
                                           );
                                         },
                                       ),
@@ -311,6 +326,7 @@ class _HomePageState extends State<HomePage>
                                           return NavigatorPage(
                                             index: 8,
                                             user_id: widget.user_id,
+                                            nickname: widget.nickname,
                                           );
                                         },
                                       ),
@@ -348,6 +364,7 @@ class _HomePageState extends State<HomePage>
                                         return NavigatorPage(
                                           index: 9,
                                           user_id: widget.user_id,
+                                          nickname: widget.nickname,
                                         );
                                       },
                                     ),
@@ -374,7 +391,9 @@ class _HomePageState extends State<HomePage>
                         ],
                       );
                     } else {
-                      return Container();
+                      return Center(
+                        child: CircularProgressIndicator(),
+                      );
                     }
                   })),
         ),
@@ -408,64 +427,110 @@ class _HomePageState extends State<HomePage>
                     right: size.width * 0.05,
                     top: size.height * 0.01,
                   ),
-                  child: FutureBuilder(
-                    future: getBubbleAndKeyword(widget.user_id),
-                    builder: (BuildContext context, AsyncSnapshot snapshot) {
-                      if (data.isNotEmpty) {
-                        return Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            InkWell(
-                              child: logo(size),
-                              onTap: () {
-                                setState(() {
-                                  if (isCollapsed) {
-                                    _controller.forward();
-                                  } else {
-                                    _controller.reverse();
-                                  }
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      InkWell(
+                        child: logo(size),
+                        onTap: () {
+                          setState(() {
+                            if (isCollapsed) {
+                              _controller.forward();
+                            } else {
+                              _controller.reverse();
+                            }
 
-                                  isCollapsed = !isCollapsed;
-                                });
-                              },
-                            ),
-                            InkWell(
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) {
-                                      return NavigatorPage(
-                                        index: 1,
-                                        user_id: widget.user_id,
-                                      );
-                                    },
-                                  ),
+                            isCollapsed = !isCollapsed;
+                          });
+                        },
+                      ),
+                      InkWell(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) {
+                                return NavigatorPage(
+                                  index: 1,
+                                  user_id: widget.user_id,
+                                  nickname: widget.nickname,
                                 );
                               },
-                              child: AbsorbPointer(
-                                child: searchBar(
-                                    size: size, color: false, value: ""),
+                            ),
+                          );
+                        },
+                        child: AbsorbPointer(
+                          child: searchBar(size: size, color: false, value: ""),
+                        ),
+                      ),
+                      SizedBox(
+                        height: size.height * 0.66,
+                        child: SingleChildScrollView(
+                          scrollDirection: Axis.vertical,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              FutureBuilder(
+                                future: getBubble(widget.user_id),
+                                builder: (BuildContext context,
+                                    AsyncSnapshot snapshot) {
+                                  if (isBubble) {
+                                    if (dataBubble.isNotEmpty) {
+                                      return SizedBox(
+                                        height: size.height * 0.3,
+                                        child: bubbleChart(size),
+                                      );
+                                    } else {
+                                      return SizedBox(
+                                        height: size.height * 0.3,
+                                        child: Center(
+                                          child: Text(
+                                            "궁금한 뉴스를 검색해 보세요!",
+                                            style: TextStyle(
+                                              color: Colors.grey,
+                                            ),
+                                          ),
+                                        ),
+                                      );
+                                    }
+                                  } else {
+                                    return Center(
+                                      child: CircularProgressIndicator(),
+                                    );
+                                  }
+                                },
                               ),
-                            ),
-                            SizedBox(
-                              height: size.height * 0.67,
-                              child: SingleChildScrollView(
-                                  scrollDirection: Axis.vertical,
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: getSlide(size),
-                                  )),
-                            ),
-                          ],
-                        );
-                      } else {
-                        return Center(
-                          child: CircularProgressIndicator(),
-                        );
-                      }
-                    },
+                              FutureBuilder(
+                                future: getKeyword(widget.user_id),
+                                builder: (BuildContext context,
+                                    AsyncSnapshot snapshot) {
+                                  if (isKeyword) {
+                                    if (dataKeyword.isNotEmpty) {
+                                      return Column(
+                                        children: getSlide(size),
+                                      );
+                                    } else {
+                                      return Center(
+                                        child: CircularProgressIndicator(),
+                                      );
+                                    }
+                                  } else {
+                                    return Center(
+                                      child: Text(
+                                        "나만의 키워드를 만들어 보세요!",
+                                        style: TextStyle(
+                                          color: Colors.grey,
+                                        ),
+                                      ),
+                                    );
+                                  }
+                                },
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ),

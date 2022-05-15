@@ -19,8 +19,9 @@ const getTopic = async (req, res) => {
         {
             'query': {'$regex': regexQuery},
             'topicNum': {'$elemMatch': {'num': req.query.num}}
-        },
-    ).then(topic => {
+        }
+    )
+    .then(topic => {
         if(!topic) res.status(404).json({ error: '해당 쿼리의 토픽이 존재하지 않습니다.' });
         else res.json(topic);
     }).catch(err => res.status(500).json({ error: err }));

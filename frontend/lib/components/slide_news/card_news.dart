@@ -11,8 +11,8 @@ Widget cardNews(Size size, String journal, String title, String url) {
         horizontal: size.width * 0.02,
       ),
       child: InkWell(
-        onTap:() async {
-           Uri url = Uri.parse(newsUrl);
+        onTap: () async {
+          Uri url = Uri.parse(newsUrl);
           if (!await launchUrl(url)) throw 'Could not launch $url';
         },
         child: Column(
@@ -41,7 +41,10 @@ Widget cardNews(Size size, String journal, String title, String url) {
             Container(
               height: size.height * 0.12,
               width: size.width * 0.3,
-              padding: EdgeInsets.all(size.width * 0.03),
+              alignment: Alignment.center,
+              padding: EdgeInsets.symmetric(
+                horizontal: size.width * 0.02,
+              ),
               decoration: BoxDecoration(
                 color: Color(0xffF7F7F7),
                 borderRadius: BorderRadius.only(
@@ -52,6 +55,8 @@ Widget cardNews(Size size, String journal, String title, String url) {
               child: Center(
                 child: Text(
                   "$title",
+                  maxLines: 3,
+                  overflow: TextOverflow.ellipsis,
                   style: TextStyle(
                     fontSize: size.width * 0.035,
                   ),
