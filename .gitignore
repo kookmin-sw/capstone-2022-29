@@ -7,8 +7,10 @@
 /DM/TopicModeling/__pycache__/
 /DM/TopicModeling/LDA_title_mongo.py
 /DM/TopicModeling/test.md
+/DM/TopicModeling/test2.py
 .DS_Store
 index.md
-*.png
 *.csv
 /.vscode/
+/result/
+/image/

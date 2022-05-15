@@ -7,8 +7,9 @@ import 'package:frontend/pages/navigator.dart';
 import 'package:frontend/api/api_service.dart';
 
 class NoticePage extends StatefulWidget {
-  NoticePage({Key? key, this.user_id}) : super(key: key);
+  NoticePage({Key? key, this.user_id, this.nickname}) : super(key: key);
   String? user_id;
+  String? nickname;
 
   @override
   State<NoticePage> createState() => _NoticePageState();
@@ -16,11 +17,18 @@ class NoticePage extends StatefulWidget {
 
 class _NoticePageState extends State<NoticePage> {
   List<Map> data = [];
+  bool isNotice = true;
 
   Future<void> getNotice() async {
     List<dynamic> notice = await ApiService().getNotice();
-    for (var i = 0; i < notice.length; i++) {
-      data.add({"title": notice[i]['title'], "content": notice[i]['content']});
+    if (notice.isNotEmpty) {
+      for (var i = 0; i < notice.length; i++) {
+        isNotice = true;
+        data.add(
+            {"title": notice[i]['title'], "content": notice[i]['content']});
+      }
+    } else {
+      isNotice = false;
     }
   }
 
@@ -29,7 +37,7 @@ class _NoticePageState extends State<NoticePage> {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: Color.fromRGBO(247, 247, 247, 1),
-      appBar: appBar(size, '공지사항', context, true, false, (){}),
+      appBar: appBar(size, '공지사항', context, true, false, () {}),
       body: Container(
         height: size.height * 0.75,
         margin: EdgeInsets.all(20),
@@ -40,32 +48,39 @@ class _NoticePageState extends State<NoticePage> {
         child: FutureBuilder(
           future: getNotice(),
           builder: (BuildContext context, AsyncSnapshot snapshot) {
-            if (data.isNotEmpty) {
-              return ListView.builder(
-                itemCount: data.length,
-                itemBuilder: (context, index) {
-                  return InkWell(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) {
-                              return NavigatorPage(
-                                index: 7,
-                                title: data[index]['title'],
-                                content: data[index]['content'],
-                                user_id: widget.user_id,
-                              );
-                            },
-                          ),
-                        );
-                      },
-                      child: ColorList(
-                        title: data[index]['title'],
-                        content: data[index]['content'],
-                      ));
-                },
-              );
+            if (isNotice) {
+              if (data.isNotEmpty) {
+                return ListView.builder(
+                  itemCount: data.length,
+                  itemBuilder: (context, index) {
+                    return InkWell(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) {
+                                return NavigatorPage(
+                                  index: 7,
+                                  title: data[index]['title'],
+                                  content: data[index]['content'],
+                                  user_id: widget.user_id,
+                                  nickname: widget.nickname,
+                                );
+                              },
+                            ),
+                          );
+                        },
+                        child: ColorList(
+                          title: data[index]['title'],
+                          content: data[index]['content'],
+                        ));
+                  },
+                );
+              } else {
+                return Center(
+                  child: Text('공지사항이 없습니다ㅜㅅㅜ'),
+                );
+              }
             } else {
               return Center(
                 child: CircularProgressIndicator(),

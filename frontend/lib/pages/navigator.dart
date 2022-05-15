@@ -14,7 +14,6 @@ import 'package:frontend/pages/search/search_page.dart';
 import 'package:frontend/pages/search/timeline_page.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:line_icons/line_icons.dart';
-import 'package:flutter_kakao_login/flutter_kakao_login.dart';
 
 class NavigatorPage extends StatefulWidget {
   NavigatorPage({
@@ -31,7 +30,7 @@ class NavigatorPage extends StatefulWidget {
     this.isSearch,
     this.news,
     this.topicStepNum,
-    this.kakaoSignIn,
+    this.method,
   }) : super(key: key);
   int index = 0;
   String? nickname;
@@ -45,7 +44,7 @@ class NavigatorPage extends StatefulWidget {
   bool? isSearch;
   List<dynamic>? news;
   int? topicStepNum;
-  FlutterKakaoLogin? kakaoSignIn;
+  String? method;
 
   @override
   State<NavigatorPage> createState() => _NavigatorPageState();
@@ -59,35 +58,55 @@ class _NavigatorPageState extends State<NavigatorPage> {
             random: random,
             nickname: widget.nickname,
             user_id: widget.user_id,
-            kakaoSignIn: widget.kakaoSignIn),
-        SearchPage(user_id: widget.user_id),
-        BookmarkPage(user_id: widget.user_id),
+            method: widget.method),
+        SearchPage(
+          user_id: widget.user_id,
+          nickname: widget.nickname,
+        ),
+        BookmarkPage(
+          user_id: widget.user_id,
+          nickname: widget.nickname,
+        ),
         NewsPage(
+          user_id: widget.user_id,
+          nickname: widget.nickname,
           news: widget.news ?? [],
           query: widget.query,
           topic: widget.topic,
-          user_id: widget.user_id,
           topicNum: widget.topicNum,
           topicStepNum: widget.topicStepNum,
         ),
         TimelinePage(
-            query: widget.query,
             user_id: widget.user_id,
+            nickname: widget.nickname,
+            query: widget.query,
             topicNum: widget.topicNum),
         DetailNewsPage(
-          news_id: widget.news_id,
           user_id: widget.user_id,
+          nickname: widget.nickname,
+          news_id: widget.news_id,
           query: widget.query,
           topicNum: widget.topicNum,
           topicStepNum: widget.topicStepNum,
         ),
-        NoticePage(user_id: widget.user_id),
+        NoticePage(
+          user_id: widget.user_id,
+          nickname: widget.nickname,
+        ),
         NoticeDetailPage(
-            title: widget.title,
-            content: widget.content,
-            user_id: widget.user_id),
-        QnAPage(user_id: widget.user_id),
-        MyKeywordPage(user_id: widget.user_id),
+          title: widget.title,
+          content: widget.content,
+          user_id: widget.user_id,
+          nickname: widget.nickname,
+        ),
+        QnAPage(
+          user_id: widget.user_id,
+          nickname: widget.nickname,
+        ),
+        MyKeywordPage(
+          user_id: widget.user_id,
+          nickname: widget.nickname,
+        ),
       ];
 
   @override
@@ -106,6 +125,7 @@ class _NavigatorPageState extends State<NavigatorPage> {
         padding: EdgeInsets.only(
           left: size.width * 0.05,
           right: size.width * 0.05,
+          bottom: size.height * 0.01,
         ),
         child: SafeArea(
           child: GNav(

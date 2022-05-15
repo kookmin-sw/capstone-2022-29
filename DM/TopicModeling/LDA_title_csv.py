@@ -33,6 +33,7 @@ def get_key_tokens(text):
 
 def preprocess(file, nobelow):
     news_df = pd.read_csv(file)
+    news_df_len = len(news_df.index)
 
     # get only the time, title data
     news_df = news_df[['date', 'title']]

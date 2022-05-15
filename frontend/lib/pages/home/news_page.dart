@@ -10,17 +10,20 @@ import 'package:frontend/models/bubble_model.dart';
 class NewsPage extends StatefulWidget {
   NewsPage(
       {Key? key,
+      this.user_id,
+      this.nickname,
       this.news,
       this.query,
       this.topic,
-      this.user_id,
       this.topicNum,
       this.topicStepNum})
       : super(key: key);
+  String? user_id;
+  String? nickname;
   List<dynamic>? news;
   String? query;
   String? topic;
-  String? user_id;
+
   int? topicNum;
   int? topicStepNum;
 
@@ -29,61 +32,17 @@ class NewsPage extends StatefulWidget {
 }
 
 class _NewsPageState extends State<NewsPage> {
+  final perPage = 10;
+  bool isMoreRequesting = false;
+  int nextPage = 1;
+  double _dragDistance = 0;
+
   List<Map> data = [];
-  List<Widget> list = [];
 
-  List<Widget> getNewsList(Size size) {
-    for (var i = 0; i < data.length; i++) {
-      list.add(
-        newsTitle(size, data[i]['title'], data[i]['navigate']),
-      );
-    }
-    return list;
-  }
-
-  Future<void> getNews(dynamic query) async {
-    data.clear();
-    if (widget.news?.length == 0) {
-      List<dynamic> news = await ApiService().getNews(query);
-      // print("page: ${news.length}");
-      for (var i = 0; i < news.length; i++) {
-        data.add({
-          'title': news[i]['title'],
-          'navigate': () async {
-            Uri url = Uri.parse('https://flutter.dev');
-            if (!await launchUrl(url)) throw 'Could not launch $url';
-          }
-        });
-      }
-    } else {
-      for (var i=0;i<widget.news!.length;i++){
-        List<dynamic> news = await ApiService().getNewsID(widget.news![i]["news_id"]);
-        // print(news);
-        data.add({
-          'title': news[0]["title"],
-          'url': news[0]["url"],
-          'summary': news[0]["summary"],
-          'navigate': () async {
-            await addBubble(widget.user_id, widget.news![i]["news_id"],
-                widget.query, query);
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) {
-                  return NavigatorPage(
-                    index: 5,
-                    user_id: widget.user_id,
-                    news_id: widget.news![i]["news_id"],
-                    topicNum: widget.topicNum,
-                    topicStepNum: widget.topicStepNum,
-                  );
-                },
-              ),
-            );
-          },
-        });
-      }
-    }
+  @override
+  void initState() {
+    super.initState();
+    requestNew(widget.query);
   }
 
   Future<void> addBubble(
@@ -110,30 +69,151 @@ class _NewsPageState extends State<NewsPage> {
     }
   }
 
+  //스크롤 이벤트 처리
+  scrollNotification(notification) {
+    // 스크롤 최대 범위
+    var containerExtent = notification.metrics.viewportDimension;
+
+    if (notification is ScrollStartNotification) {
+      _dragDistance = 0;
+    } else if (notification is OverscrollNotification) {
+      _dragDistance -= notification.overscroll;
+    } else if (notification is ScrollUpdateNotification) {
+      _dragDistance -= notification.scrollDelta!;
+    } else if (notification is ScrollEndNotification) {
+      var percent = _dragDistance / (containerExtent);
+      if (percent <= -0.4) {
+        if (notification.metrics.maxScrollExtent ==
+            notification.metrics.pixels) {
+          setState(() {
+            isMoreRequesting = true;
+          });
+
+          requestMore(widget.query).then((value) {
+            setState(() {
+              isMoreRequesting = false;
+            });
+          });
+        }
+      }
+    }
+  }
+
+  Future<void> requestNew(dynamic query) async {
+    nextPage = 1;
+    data.clear();
+
+    if (widget.news?.length == 0) {
+      List<dynamic> news = await ApiService().getNews(query, nextPage, perPage);
+
+      setState(() {
+        for (var i = 0; i < news.length; i++) {
+          data.add({
+            'title': news[i]['title'],
+            'navigate': () async {
+              Uri url = Uri.parse(news[i]['url']);
+              if (!await launchUrl(url)) throw 'Could not launch $url';
+            }
+          });
+        }
+        nextPage += 1;
+      });
+    } else {
+      for (var i = 0; i < widget.news!.length; i++) {
+        List<dynamic> news =
+            await ApiService().getNewsID(widget.news![i]["news_id"]);
+
+        setState(() {
+          data.add({
+            'title': news[0]["title"],
+            'url': news[0]["url"],
+            'summary': news[0]["summary"],
+            'navigate': () async {
+              await addBubble(widget.user_id, widget.news![i]["news_id"],
+                  widget.query, query);
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) {
+                    return NavigatorPage(
+                      index: 5,
+                      user_id: widget.user_id,
+                      nickname: widget.nickname,
+                      news_id: widget.news![i]["news_id"],
+                      topicNum: widget.topicNum,
+                      topicStepNum: widget.topicStepNum,
+                    );
+                  },
+                ),
+              );
+            },
+          });
+        });
+      }
+    }
+  }
+
+  Future<void> requestMore(dynamic query) async {
+    List<dynamic> news = await ApiService().getNews(query, nextPage, perPage);
+    setState(() {
+      for (var i = 0; i < news.length; i++) {
+        data.add({
+          'title': news[i]['title'],
+          'navigate': () async {
+            Uri url = Uri.parse(news[i]['url']);
+            if (!await launchUrl(url)) throw 'Could not launch $url';
+          }
+        });
+      }
+      nextPage += 1;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: Color(0xffF7F7F7),
-      appBar: appBar(size, '${widget.query} 뉴스', context, true, false, (){}),
+      appBar: appBar(size, '${widget.query} 뉴스', context, true, false, () {}),
       body: SafeArea(
-        child: FutureBuilder(
-          future: getNews(widget.query),
-          builder: (BuildContext context, AsyncSnapshot snapshot) {
-            if (data.length != 0) {
-              return SizedBox(
-                height: size.height * 0.77,
-                child: ListView(
-                  shrinkWrap: true,
-                  children: getNewsList(size),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Expanded(
+              child: SizedBox(
+                height: size.height * 0.7,
+                child: NotificationListener<ScrollNotification>(
+                  onNotification: (ScrollNotification notification) {
+                    scrollNotification(notification);
+                    return false;
+                  },
+                  child: RefreshIndicator(
+                    onRefresh: () => requestNew(widget.query),
+                    child: ListView.builder(
+                      physics: AlwaysScrollableScrollPhysics(),
+                      itemCount: data.length + 1,
+                      itemBuilder: (context, index) {
+                        if (index < data.length) {
+                          return newsTitle(size, data[index]['title'],
+                              data[index]['navigate']);
+                        } else {
+                          return isMoreRequesting
+                              ? Container(
+                                  margin: EdgeInsets.symmetric(
+                                      vertical: size.height * 0.01),
+                                  child: Center(
+                                    child: CircularProgressIndicator(),
+                                  ),
+                                )
+                              : Container();
+                        }
+                      },
+                    ),
+                  ),
                 ),
-              );
-            } else {
-              return Center(
-                child: CircularProgressIndicator(),
-              );
-            }
-          },
+              ),
+            ),
+          ],
         ),
       ),
     );
