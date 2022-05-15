@@ -13,6 +13,7 @@ import os
 import requests
 import json
 from pandas import json_normalize
+
 mallet_path = "/home/ubuntu/capstone-2022-29/tmp/mallet-2.0.8/bin/mallet"  # 이거 mallet2108어쩌구인가로도 바꿔보기
 mecab = Mecab()
 
@@ -34,8 +35,10 @@ def get_key_tokens(text):
 
 def preprocess(news_data, nobelow):
     news_df = json_normalize(json.loads(news_data.text))
+
     news_df_len = len(news_df.index)
-    print(news_df)
+
+
     # get only the time, title data
     news_df = news_df[['_id', 'date', 'title']]
 
@@ -99,8 +102,10 @@ def topics_to_mongo(news_df, ldamodel, corpus, texts, num_keywords, query, num_t
             if j == 0:  # => dominant topic
                 wp = ldamodel.show_topic(topic_num, topn=num_keywords) #여기변경~~~~~~~~~~
                 topic_keywords = ", ".join([word for word, prop in wp])
-                topics_info_df = pd.concat([topics_info_df, pd.Series([int(topic_num), round(prop_topic,4), topic_keywords])], axis=1)
-                #topics_info_df = topics_info_df.append(pd.Series([int(topic_num), round(prop_topic,4), topic_keywords]), ignore_index=True)
+
+                #topics_info_df = pd.concat([topics_info_df, pd.Series([int(topic_num), round(prop_topic,4), topic_keywords])], axis=1)
+                topics_info_df = topics_info_df.append(pd.Series([int(topic_num), round(prop_topic,4), topic_keywords]), ignore_index=True)
+
             else:
                 break
     topics_info_df.columns = ['Dominant_Topic', 'Perc_Contribution', 'Topic_Keywords']
@@ -140,5 +145,4 @@ if __name__ == '__main__':
     #model_list, coherence_values = compute_coherence_values(id2word, corpus, title_list, start, limit, step)
     # find_optimal_model(model_list, coherence_values, start, limit, step)
 
-    
     #print(topic_keywords_df)
