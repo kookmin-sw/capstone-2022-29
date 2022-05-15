@@ -119,7 +119,7 @@ def topics_to_mongo(news_df, ldamodel, corpus, texts, num_keywords, query, num_t
     topics_info_df.Dominant_Topic = topics_info_df.Dominant_Topic.astype(str)
     topics_info_df['Dominant_Topic'] =topics_info_df['Dominant_Topic'].str.split('.').str[0]
 
-    os.mkdir("/result/"+query+"_title_" + str(num_topics))
+    os.mkdir("./result/"+query+"_title_" + str(num_topics) + '/')
     for i in range(1,num_topics+1):
         globals()['df_{}'.format(i)]=topics_info_df.loc[topics_info_df.Dominant_Topic==str(i)]
         globals()['df_{}'.format(i)].sort_values('Topic_Perc_Contrib',ascending=False,inplace = True)
