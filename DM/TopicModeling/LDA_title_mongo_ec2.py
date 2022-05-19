@@ -39,6 +39,7 @@ def preprocess(news_data, nobelow):
 
     news_df_len = len(news_df.index)
 
+
     # get only the time, title data
     news_df = news_df[['_id', 'date', 'title']]
 
@@ -102,8 +103,10 @@ def topics_to_mongo(news_df, ldamodel, corpus, texts, num_keywords, query, num_t
             if j == 0:  # => dominant topic
                 wp = ldamodel.show_topic(topic_num, topn=num_keywords) #여기변경~~~~~~~~~~
                 topic_keywords = ", ".join([word for word, prop in wp])
+
                 #topics_info_df = pd.concat([topics_info_df, pd.Series([int(topic_num), round(prop_topic,4), topic_keywords])], axis=1)
                 topics_info_df = topics_info_df.append(pd.Series([int(topic_num), round(prop_topic,4), topic_keywords]), ignore_index=True)
+
             else:
                 break
     topics_info_df.columns = ['Dominant_Topic', 'Perc_Contribution', 'Topic_Keywords']
@@ -117,7 +120,7 @@ def topics_to_mongo(news_df, ldamodel, corpus, texts, num_keywords, query, num_t
     topics_info_df.Dominant_Topic = topics_info_df.Dominant_Topic.astype(str)
     topics_info_df['Dominant_Topic'] =topics_info_df['Dominant_Topic'].str.split('.').str[0]
 
-    os.mkdir("/result/"+query+"_title_" + str(num_topics))
+    os.mkdir("./result/"+query+"_title_" + str(num_topics) + '/')
     for i in range(1,num_topics+1):
         globals()['df_{}'.format(i)]=topics_info_df.loc[topics_info_df.Dominant_Topic==str(i)]
         globals()['df_{}'.format(i)].sort_values('Topic_Perc_Contrib',ascending=False,inplace = True)
@@ -143,5 +146,4 @@ if __name__ == '__main__':
     #model_list, coherence_values = compute_coherence_values(id2word, corpus, title_list, start, limit, step)
     # find_optimal_model(model_list, coherence_values, start, limit, step)
 
-    
     #print(topic_keywords_df)
