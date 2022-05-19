@@ -157,7 +157,14 @@ def topics_to_timeline(news_df, ldamodel, corpus, num_keywords, num_topics, perc
 
     topics_info_df['Dominant_Topic'] =topics_info_df['Dominant_Topic'] +1
     topics_info_df.Dominant_Topic = topics_info_df.Dominant_Topic.astype(str)
-    topics_info_df['Dominant_Topic'] =topics_info_df['Dominant_Topic'].str.split('.').str[0]
+    topics_info_df['Dominant_Topic'] = topics_info_df['Dominant_Topic'].str.split('.').str[0]
+    topic_per_list = []
+    for i in range(1, num_topics+1):
+        df = topics_info_df.loc[topics_info_df.Dominant_Topic==str(i)]
+        topic_per_list.append(df.loc[:10, 'Topic_Perc_Contrib'].mean())
+        print(topic_per_list)
+            
+
 
     timeline_df = pd.DataFrame(columns = ['ID', 'Keywords', 'Date', 'Title'])
     for i in range(1,num_topics+1):
