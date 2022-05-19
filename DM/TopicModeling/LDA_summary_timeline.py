@@ -120,13 +120,13 @@ def timelining(per_contrib, num_news_threshold, news_df, timeline_df):
                 # print('Keywords', topic_news["Keywords"].iloc[0])
                 # print('Date', key)
                 # print('Title',title_list)
-                date = date.split(' ')[0]
                 timeline_df = timeline_df.append({'Keywords': topic_news["Keywords"].iloc[0], 'Date': date, 'Title':title_list}, ignore_index=True)
 
     return timeline_df
 # npx nodemon server.js
 
-
+def split_date(x):
+    return x.split(' ')[0]
 
 # 4.3 formmating output with DF
 def topics_to_timeline(news_df, ldamodel, corpus, num_keywords, num_topics, perc_threshold):
@@ -169,6 +169,7 @@ def topics_to_timeline(news_df, ldamodel, corpus, num_keywords, num_topics, perc
 
     timeline_df = timeline_df.sort_values(by='Date', ascending=False)
     timeline_df.Date = timeline_df.Date.astype(str)
+    timeline_df.Date.apply(split_date)
 
     return timeline_df
         
