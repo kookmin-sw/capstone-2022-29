@@ -167,7 +167,7 @@ def topics_to_timeline(news_df, ldamodel, corpus, num_keywords, num_topics, perc
     #timeline_df = timeline_df.sort_values(by='Date', ascending=False)
     timeline_df = timeline_df.sort_values(by='Date', ascending=False)
     timeline_df.Date = timeline_df.Date.astype(str)
-    timeline_df.Date.apply(split_date)
+    timeline_df.Date = timeline_df.Date.apply(split_date)
     return timeline_df
         
 
