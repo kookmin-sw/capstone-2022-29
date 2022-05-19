@@ -42,7 +42,7 @@ def preprocess(news_data, nobelow):
 
 
     # get only the time, title data
-    news_df = news_df[['_id', 'date', 'title']]
+    news_df = news_df[['_id', 'date', 'title', 'content']]
 
     # chage data type
     news_df['date'] = pd.to_datetime(news_df['date'])
@@ -51,16 +51,16 @@ def preprocess(news_data, nobelow):
     #2. Delete Stopwords
     # 2.1 tokenize & get the pos
     # 뉴스 데이터의 특징: 띄어쓰기, 오탈자 문제 적음.
-    title_list = []
-    for i in tqdm(range(len(news_df['title']))):
-        title_list.append(get_key_tokens(news_df.loc[i,'title']))
+    content_list = []
+    for i in tqdm(range(len(news_df['content']))):
+        content_list.append(get_key_tokens(news_df.loc[i,'content']))
 
     # 3. Make Corpus
-    id2word = corpora.Dictionary(title_list)
+    id2word = corpora.Dictionary(content_list)
     id2word.filter_extremes(no_below=nobelow) 
-    corpus = [id2word.doc2bow(content) for content in title_list]
+    corpus = [id2word.doc2bow(content) for content in content_list]
 
-    return news_df, id2word, corpus, title_list
+    return news_df, id2word, corpus, content_list
 
 # 2.2 delete stopwords => TODO
 
@@ -69,13 +69,13 @@ def preprocess(news_data, nobelow):
 
 
 # 4. Topic Modeling
-def topic_modeling(id2word, corpus, title_list, num_topics):
+def topic_modeling(id2word, corpus, content_list, num_topics):
 
     # 얘 passes라는 인자로 epoch 조절 가능
     # ver 1.
     # lda_model = gensim.models.LdaModel(corpus=corpus, num_topics=60, id2word=id2word) # 아래랑 성능 비교하기(너무 오래걸려;)
     # print(lda_model.print_topics(60, 3))
-    # coherence_model = CoherenceModel(model=lda_model, texts=title_list, dictionary=id2word, topn=10)
+    # coherence_model = CoherenceModel(model=lda_model, texts=content_list, dictionary=id2word, topn=10)
     # coherence = coherence_model.get_coherence() # 얘가 문제
     # print(coherence)
 
@@ -84,7 +84,7 @@ def topic_modeling(id2word, corpus, title_list, num_topics):
     ldamallet = gensim.models.wrappers.LdaMallet(mallet_path, corpus=corpus, num_topics=num_topics, id2word=id2word, iterations=1000) # gensim 3.8 버전에만 존재
     pprint(ldamallet.show_topics(num_topics=num_topics, num_words=3))
     # # 4.1 get coherence
-    #coherence_model_ldamallet = CoherenceModel(model=ldamallet, texts=title_list, dictionary=id2word, coherence='c_v')
+    #coherence_model_ldamallet = CoherenceModel(model=ldamallet, texts=content_list, dictionary=id2word, coherence='c_v')
     #coherence_ldamallet = coherence_model_ldamallet.get_coherence()
 
     return ldamallet
@@ -120,6 +120,7 @@ def timelining(per_contrib, num_news_threshold, news_df, timeline_df):
                 # print('Keywords', topic_news["Keywords"].iloc[0])
                 # print('Date', key)
                 # print('Title',title_list)
+                date = date.split(' ')[0]
                 timeline_df = timeline_df.append({'ID': id_list, 'Keywords': topic_news["Keywords"].iloc[0], 'Date': date, 'Title':title_list}, ignore_index=True)
 
     return timeline_df
@@ -175,7 +176,7 @@ def topics_to_timeline(news_df, ldamodel, corpus, num_keywords, num_topics, perc
 
 
 if __name__ == '__main__':
-    query = '커피'
+    query = '태풍'
     news_data = requests.get(req + query)
     client = MongoClient("mongodb+srv://BaekYeonsun:hello12345@cluster.3dypr.mongodb.net/database?retryWrites=true&w=majority")
 
