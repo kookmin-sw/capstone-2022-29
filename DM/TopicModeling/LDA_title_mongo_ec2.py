@@ -13,6 +13,7 @@ import os
 import requests
 import json
 from pandas import json_normalize
+from api import *
 
 mallet_path = "/home/ubuntu/capstone-2022-29/tmp/mallet-2.0.8/bin/mallet"  # 이거 mallet2108어쩌구인가로도 바꿔보기
 mecab = Mecab()
@@ -129,7 +130,7 @@ def topics_to_mongo(news_df, ldamodel, corpus, texts, num_keywords, query, num_t
 
 if __name__ == '__main__':
     query = '19'
-    news_data = requests.get('http://ec2-3-34-47-218.ap-northeast-2.compute.amazonaws.com:5000/news?query='+query)
+    news_data = requests.get(req + query)
      
     news_df, id2word, corpus, title_list = preprocess(news_data, 5) # 인자값 = no_below 값
 
