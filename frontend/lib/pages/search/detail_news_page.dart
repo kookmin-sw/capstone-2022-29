@@ -52,7 +52,7 @@ class _DetailNewsPageState extends State<DetailNewsPage> {
     final int topicStep = widget.topicStepNum ?? 0;
     Size size = MediaQuery.of(context).size;
     String query =
-        widget.query ?? Provider.of<SearchProvider>(context).searchQuery;
+        widget.query ?? Provider.of<SearchProvider>(context, listen: false).searchQuery;
 
     Future<void> postBookmark(String user_id) async {
       List<dynamic> isBookmark = await ApiService().getBookmark(user_id);
