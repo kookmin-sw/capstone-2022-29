@@ -10,6 +10,7 @@ from pprint import pprint
 import re
 from LDA_score import get_score
 import os
+from api import *
 
 mecab = Mecab("C:\\mecab\\mecab-ko-dic") # mecab dictionary 경로. colab에서 할 때는 안 넣어줘도 됐었음
 mallet_path = "C:\\Mallet\\bin\\mallet"  # 이거 mallet2108어쩌구인가로도 바꿔보기

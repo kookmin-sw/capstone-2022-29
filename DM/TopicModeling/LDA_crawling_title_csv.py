@@ -13,6 +13,7 @@ from LDA_score import get_score
 import os
 import requests
 import json
+from api import *
 
 mecab = Mecab("C:\\mecab\\mecab-ko-dic") # mecab dictionary 경로. colab에서 할 때는 안 넣어줘도 됐었음
 mallet_path = "C:\\Mallet\\bin\\mallet"  # 이거 mallet2108어쩌구인가로도 바꿔보기
@@ -142,7 +143,7 @@ if __name__ == '__main__':
     searchwords_df = pd.read_csv(searchwords_file)
     
     query = searchwords_df['words'][0]
-    news_data = requests.get('http://ec2-13-125-237-252.ap-northeast-2.compute.amazonaws.com:5000/news?query='+query)
+    news_data = requests.get(req + query)
     # print(json_normalize(json.loads(news_data.text)))
 
     news_df, id2word, corpus, title_list = preprocess(news_data, 5) # 인자값 = no_below 값
