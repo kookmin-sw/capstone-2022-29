@@ -78,4 +78,3 @@ if __name__ == '__main__':
   result = topic_collection.insert_one(post)
 
 
-"/home/ubuntu/capstone-2022-29/DM/TopicModeling/result/19_title_35", "/home/ubuntu/capstone-2022-29/DM/TopicModeling/result/19_title_45", "/home/ubuntu/capstone-2022-29/DM/TopicModeling/result/19_title_65"

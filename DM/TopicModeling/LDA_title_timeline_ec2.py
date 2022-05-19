@@ -91,6 +91,7 @@ def topic_modeling(id2word, corpus, title_list, num_topics):
 
 def timelining(per_contrib, num_news_threshold, news_df, timeline_df):
     # print(news_df["Topic_Perc_Contrib"])
+    print(news_df["Topic_Perc_Contrib"])
     topic_news = news_df[news_df["Topic_Perc_Contrib"] >= per_contrib]
     # topic_news = topic_news.sort_values(by='Date', ascending=False)
 
@@ -119,6 +120,7 @@ def timelining(per_contrib, num_news_threshold, news_df, timeline_df):
                 # print('Keywords', topic_news["Keywords"].iloc[0])
                 # print('Date', key)
                 # print('Title',title_list)
+                date = date.split(' ')[0]
                 timeline_df = timeline_df.append({'ID': id_list, 'Keywords': topic_news["Keywords"].iloc[0], 'Date': date, 'Title':title_list}, ignore_index=True)
 
     return timeline_df

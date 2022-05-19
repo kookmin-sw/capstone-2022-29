@@ -117,6 +117,7 @@ def timelining(per_contrib, num_news_threshold, news_df, timeline_df):
                 # print('Keywords', topic_news["Keywords"].iloc[0])
                 # print('Date', key)
                 # print('Title',title_list)
+                date = date.split(' ')[0]
                 timeline_df = timeline_df.append({'Keywords': topic_news["Keywords"].iloc[0], 'Date': date, 'Title':title_list}, ignore_index=True)
 
     return timeline_df
