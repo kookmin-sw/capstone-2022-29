@@ -6,9 +6,10 @@ import 'package:flutter_kakao_login/flutter_kakao_login.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:frontend/api/api_service.dart';
-import 'package:frontend/components/button.dart';
 import 'package:frontend/models/user_model.dart';
 import 'package:frontend/pages/navigator.dart';
+import 'package:frontend/pages/login/custom_join_page.dart';
+import 'package:frontend/pages/login/custom_login_page.dart';
 
 class LoginPage extends StatefulWidget {
   LoginPage({Key? key}) : super(key: key);
@@ -64,6 +65,8 @@ class _LoginPageState extends State<LoginPage> {
               accessToken: _accessToken,
               nickname: userNickname!,
               profile: userProfileImagePath!,
+              id: '',
+              password: '',
               // email: userEmail!,
             ),
           );
@@ -99,6 +102,8 @@ class _LoginPageState extends State<LoginPage> {
               accessToken: _accessToken,
               nickname: userNickname!,
               profile: userProfileImagePath!,
+              id: '',
+              password: '',
             ),
           );
         }
@@ -207,40 +212,49 @@ class _LoginPageState extends State<LoginPage> {
               ),
             ),
             SizedBox(
-              height: size.height * 0.1,
+              height: size.height * 0.08,
             ),
-            button(size, '로그인', () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) {
-                    return NavigatorPage(
-                      index: 10,
-                      // query: widget.title,
-                      // user_id: widget.user_id,
-                      // nickname: widget.nickname,
-                      // news_id: widget.news_id,
-                    );
-                  },
+            Container(
+              width: size.width * 0.57,
+              child: OutlinedButton(
+                child: Text('회원가입'),
+                style: OutlinedButton.styleFrom(
+                  primary: Colors.black,
+                  backgroundColor: Color(0xffC6E4FF),
+                  shadowColor: Colors.grey,
+                  elevation: 2,
+                  side: BorderSide.none,
                 ),
-              );
-            }),
-            button(size, '회원가입', () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) {
-                    return NavigatorPage(
-                      index: 11,
-                      // query: widget.title,
-                      // user_id: widget.user_id,
-                      // nickname: widget.nickname,
-                      // news_id: widget.news_id,
-                    );
-                  },
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => CustomJoinPage()),
+                  );
+                },
+              ),
+            ),
+            Container(
+              width: size.width * 0.57,
+              child: OutlinedButton(
+                child: Text('로그인'),
+                style: OutlinedButton.styleFrom(
+                  primary: Colors.black,
+                  backgroundColor: Color(0xffC6E4FF),
+                  shadowColor: Colors.grey,
+                  elevation: 2,
+                  side: BorderSide.none,
                 ),
-              );
-            }),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => CustomLoginPage()),
+                  );
+                },
+              ),
+            ),
+            SizedBox(
+              height: size.height * 0.02,
+            ),
             SignInButtonBuilder(
               backgroundColor: Color(0xffF2E52D),
               onPressed: () {

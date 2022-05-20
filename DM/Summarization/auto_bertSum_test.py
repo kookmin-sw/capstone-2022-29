@@ -1,3 +1,4 @@
+from asyncio.windows_events import NULL
 import requests
 import json
 from tqdm import tqdm
@@ -21,7 +22,7 @@ news_df = pd.read_csv("/home/ubuntu/capstone-2022-29/DM/Crawling/ScrapyNews/Scra
 new_list = []
 
 for i in tqdm(range(len(news_df))):
-    idx = news_df.loc[i]['_id'] ### 언니가 받아오는 건 _id 없을 듯 -> 확인하고 바꿔주기
+    # idx = news_df.loc[i]['_id'] ### 언니가 받아오는 건 _id 없을 듯 -> 확인하고 바꿔주기
     test_txt = news_df.loc[i]['content']
     date = news_df.loc[i]['date']
     journal = news_df.loc[i]['journal']
@@ -66,7 +67,7 @@ for i in tqdm(range(len(news_df))):
         # Df에서 바로 변경하고 싶었지만, 변경되지 않아서 새로 만듦
         new_list.append(
             {
-                "_id" : idx,
+                # "_id" : idx,
                 "content" : txt,
                 "date" : date,
                 "journal" : journal,
@@ -78,7 +79,7 @@ for i in tqdm(range(len(news_df))):
     else: # 한겨레일 때
         new_list.append(
             {
-                "_id" : idx,
+                # "_id" : idx,
                 "content" : test_txt,
                 "date" : date,
                 "journal" : journal,
@@ -88,13 +89,13 @@ for i in tqdm(range(len(news_df))):
             }
         )
 
-col_name = ["_id", "content", "date", "journal", "summary", "title", "url"]
+col_name = ["content", "date", "journal", "summary", "title", "url"]
 news_df_test = pd.DataFrame(new_list, columns=col_name)
 
 ##############################################################################
 
 ### 리스트 생성
-idxs = news_df_test['_id'].tolist()
+# idxs = news_df_test['_id'].tolist()
 texts = news_df_test['content'].tolist()
 dates = news_df_test['date'].tolist()
 journals = news_df_test['journal'].tolist()
@@ -102,7 +103,7 @@ summaries = news_df_test['summary'].tolist()
 titles = news_df_test['title'].tolist()
 urls = news_df_test['url'].tolist()
 
-idx_text = list(zip(idxs, texts, dates, journals, summaries, titles, urls))
+idx_text = list(zip(texts, dates, journals, summaries, titles, urls))
 
 for i in tqdm(range(len(idx_text))):
     idx_text[i] = list(idx_text[i])
@@ -116,13 +117,13 @@ collection = client.database.news
 ##############################################################################
 
 def inference(texts):
-    idx = texts[0]
-    text = texts[1]
-    date = texts[2]
-    journal = texts[3]
-    summary = texts[4]
-    title = texts[5]
-    url = texts[6]
+    # idx = texts[0]
+    text = texts[0]
+    date = texts[1]
+    journal = texts[2]
+    summary = texts[3]
+    title = texts[4]
+    url = texts[5]
     
     if (summary == "NaN"):
         if (text != ""):
@@ -130,19 +131,18 @@ def inference(texts):
                        'User-Agent' : "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36",
                        'Connection':'close'
                       }
-            address = "http://127.0.0.1:5000/predict" # 주소 확인해보기
+            address = "http://127.0.0.1:8000/predict" # 주소 확인해보기
             data = {'text' : text }
 
             try:
                 resp = requests.get(address, data=json.dumps(data), headers=headers)
                 news_dict = {
-                    "_id" : idx,
-                    "content" : text,
-                    "date" : date,
                     "journal" : journal,
-                    "summary" : str(resp.content, encoding='utf-8'),
+                    "date" : date,
                     "title" : title,
-                    "url" : url
+                    "url" : url,
+                    "content" : text,
+                    "summary" : str(resp.content, encoding='utf-8')
                 }
                 collection.insert_one(news_dict)
                 resp.close()
@@ -160,13 +160,12 @@ def inference(texts):
 
         else:
             news_dict = {
-                "_id" : idx,
-                "content" : text,
-                "date" : date,
                 "journal" : journal,
-                "summary" : str(resp.content, encoding='utf-8'),
+                "date" : date,
                 "title" : title,
-                "url" : url
+                "url" : url,
+                "content" : text,
+                "summary" : summary
             }
             collection.insert_one(news_dict)
     

@@ -89,6 +89,7 @@ class _HomePageState extends State<HomePage>
       }
       dataBubble.sort(((a, b) => (b['count']).compareTo(a['count'])));
     } else {
+      print("*");
       isBubble = false;
     }
   }
@@ -190,7 +191,7 @@ class _HomePageState extends State<HomePage>
   }
 
   Future<void> _logout() async {
-    debugPrint('kakao logout');
+    debugPrint('${widget.method} logout');
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(
@@ -248,7 +249,10 @@ class _HomePageState extends State<HomePage>
                               SizedBox(
                                 width: screenWidth * 0.25,
                                 height: screenWidth * 0.25,
-                                child: Image.network(userInfo["profile"]),
+                                child: Image.network(userInfo["profile"] !=
+                                        "profile"
+                                    ? userInfo["profile"]
+                                    : "https://user-images.githubusercontent.com/55418359/169589510-d4e500d4-49c4-48c9-83ab-ef38c7502284.png"),
                               ),
                               SizedBox(height: screenHeight * 0.01),
                               Text(userInfo["nickname"]),
@@ -269,7 +273,8 @@ class _HomePageState extends State<HomePage>
                                             Text("공지사항",
                                                 style: TextStyle(
                                                     color: Colors.black,
-                                                    fontSize: screenHeight * 0.02)),
+                                                    fontSize:
+                                                        screenHeight * 0.02)),
                                           ],
                                         ),
                                         Icon(Icons.arrow_forward_ios,
@@ -307,7 +312,8 @@ class _HomePageState extends State<HomePage>
                                             Text("Q&A",
                                                 style: TextStyle(
                                                     color: Colors.black,
-                                                    fontSize: screenHeight * 0.02)),
+                                                    fontSize:
+                                                        screenHeight * 0.02)),
                                           ],
                                         ),
                                         Icon(Icons.arrow_forward_ios,
@@ -345,7 +351,8 @@ class _HomePageState extends State<HomePage>
                                           Text("나의 키워드",
                                               style: TextStyle(
                                                   color: Colors.black,
-                                                  fontSize: screenHeight * 0.02)),
+                                                  fontSize:
+                                                      screenHeight * 0.02)),
                                         ],
                                       ),
                                       Icon(Icons.arrow_forward_ios,
@@ -379,7 +386,8 @@ class _HomePageState extends State<HomePage>
                                   SizedBox(width: screenWidth * 0.02),
                                   Text("로그아웃",
                                       style: TextStyle(
-                                          color: Colors.black, fontSize: screenHeight * 0.02)),
+                                          color: Colors.black,
+                                          fontSize: screenHeight * 0.02)),
                                 ],
                               ),
                               onTap: () {
@@ -479,21 +487,21 @@ class _HomePageState extends State<HomePage>
                                         child: bubbleChart(size),
                                       );
                                     } else {
-                                      return SizedBox(
-                                        height: size.height * 0.3,
-                                        child: Center(
-                                          child: Text(
-                                            "궁금한 뉴스를 검색해 보세요!",
-                                            style: TextStyle(
-                                              color: Colors.grey,
-                                            ),
-                                          ),
-                                        ),
+                                      return Center(
+                                        child: CircularProgressIndicator(),
                                       );
                                     }
                                   } else {
-                                    return Center(
-                                      child: CircularProgressIndicator(),
+                                    return SizedBox(
+                                      height: size.height * 0.3,
+                                      child: Center(
+                                        child: Text(
+                                          "궁금한 뉴스를 검색해 보세요!",
+                                          style: TextStyle(
+                                            color: Colors.grey,
+                                          ),
+                                        ),
+                                      ),
                                     );
                                   }
                                 },

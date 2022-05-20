@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, request
+]from flask import Flask, jsonify, request
 import torch
 import numpy as np
 from models import data_loader, model_builder
@@ -10,13 +10,13 @@ from tensorboardX import SummaryWriter
 from models.reporter import ReportMgr
 from models.stats import Statistics
 import easydict
-# from multiprocessing.dummy import Pool as ThreadPool
 from tqdm import tqdm
 import re
 import pandas as pd
-
-
-app = Flask(__name__)
+from more_itertools import locate
+from bson.objectid import ObjectId
+from pymongo import MongoClient
+import time
 
 
 ################################################################
@@ -362,7 +362,7 @@ args = easydict.EasyDict({
     
     "accum_count":1,
     "world_size":1,
-    "visible_gpus":'0', # cpu
+    "visible_gpus":'-1', # cpu
     "gpu_ranks":'0',
     "log_file":'../logs/train_trans_1.txt',
     "test_from":'../models/bert_trans_1/model_step_65000.pt'
@@ -433,62 +433,163 @@ def txt2input(text):
 
 
 
-def data_process(texts):
-    if (texts != ""):
-        if (isinstance(texts, str)):
-            text_list = texts.split('\n')
-            re_text = ''
+def data_preprocess(news_df):
+    new_list = []
 
-            for text in (text_list):
-                if len(text) > 50:
-                    text = re.sub(r"([\w\.-]+)@([\w\.-]+)(\.[\w\.]+)", "", text) # 이메일 검사
+    for i in tqdm(range(len(news_df))):
+        idx = news_df.loc[i]['_id']
+        test_txt = news_df.loc[i]['content']
+        date = news_df.loc[i]['date']
+        journal = news_df.loc[i]['journal']
+        summary = news_df.loc[i]['summary']
+        title = news_df.loc[i]['title']
+        url = news_df.loc[i]['url']
 
-                    if " 기자" in text: # 기자 검사
-                        repoter_check = text.split(" ")
-                        while "기자" in repoter_check:
-                            index = repoter_check.index("기자")
-                            del repoter_check[index]
-                            del repoter_check[index-1]
-                        text = ' '.join(r for r in repoter_check)
+        if journal == '동아일보':
+            # 문장 끝 부호 인덱스 구하기
+            pos_1 = list(locate(test_txt, (lambda x: x == ".")))
+            pos_2 = list(locate(test_txt, (lambda x: x == "?")))
+            pos_3 = list(locate(test_txt, (lambda x: x == "!")))
 
-                    re_text += (text + '\n')
+            pos = (pos_1 + pos_2 + pos_3)
+            pos.sort()
 
-            texts = re_text
-        
-    else:
-        texts = ''
+            # 문장별 리스트로 쪼개기
+            txts = []
+            for i in range(len(pos)):
+                if i == 0:
+                    txts.append(test_txt[:(pos[i]+1)])
+                elif i == (len(pos)-1):
+                    txts.append(test_txt[(pos[i-1]+1):(pos[i]+1)])
+                    txts.append(test_txt[(pos[i]+1):])
+                else:
+                    txts.append(test_txt[(pos[i-1]+1):(pos[i]+1)])
+
+            # \n 추가
+            # 쪼개서 추가하는 이유.. 확인하고 바로 \n 추가하면 인덱스가 달라져서..
+            txt = ""
+            for i in range(1, len(txts)):
+                if len(txts[i]) == 0:
+                    continue
+                elif txts[i][0] != " ":
+                    txts[i - 1] += "\n\n"
+
+            # 문장 하나로 합치기
+            for i in range(len(txts)):
+                txt += txts[i]
+
+            # Df에서 바로 변경하고 싶었지만, 변경되지 않아서 새로 만듦
+            new_list.append(
+                {
+                    "_id" : idx,
+                    "content" : txt,
+                    "date" : date,
+                    "journal" : journal,
+                    "summary" : summary,
+                    "title" : title,
+                    "url" : url
+                }
+            )
+        else: # 한겨레일 때
+            new_list.append(
+                {
+                    "_id" : idx,
+                    "content" : test_txt,
+                    "date" : date,
+                    "journal" : journal,
+                    "summary" : summary,
+                    "title" : title,
+                    "url" : url
+                }
+            )
+
+    col_name = ["_id", "content", "date", "journal", "summary", "title", "url"]
+    news_df_test = pd.DataFrame(new_list, columns=col_name)
+
+    ### 리스트 생성
+    idxs = news_df_test['_id'].tolist()
+    texts = news_df_test['content'].tolist()
+    summaries = news_df_test['summary'].tolist()
+    idx_text = list(zip(idxs, texts, summaries))
     
-    return texts
+    return idx_text
+
+
+def data_process(idx_text):
+    for i in tqdm(range(len(idx_text))):
+        idx_text[i] = list(idx_text[i])
+        if (idx_text[i][1] != ""):
+            if (isinstance(idx_text[i][1], str)):
+                text_list = idx_text[i][1].split('\n')
+                re_text = ''
+
+                for text in (text_list):
+                    if len(text) > 50:
+                        text = re.sub(r"([\w\.-]+)@([\w\.-]+)(\.[\w\.]+)", "", text) # 이메일 검사
+
+                        if " 기자" in text: # 기자 검사
+                            repoter_check = text.split(" ")
+                            while "기자" in repoter_check:
+                                index = repoter_check.index("기자")
+                                del repoter_check[index]
+                                del repoter_check[index-1]
+                            text = ' '.join(r for r in repoter_check)
+
+                        re_text += (text + '\n')
+
+                idx_text[i][1] = re_text
+
+        else:
+            idx_text[i][1] = ''
+            
+    return idx_text
 
 
 ################################################################
 
 
-
-@app.route('/predict', methods=['GET'])
-def predict():
-    data = request.json
-#     text = request.args['text']
-    text = data_process(data['text'])
-    if text == "" or pd.isna(text):
-        summary = ""
+def inference(texts):
+    time.sleep(1)
+    idx = texts[0]
+    text = texts[1]
+    summary = texts[2]
     
-    else:
-        if len(text.split('\n')) <= 3:
-            summary = text
+    if(summary == 'NaN' or ("Error" in summary)): # 요약이 nan 값인 경우
+        if text == "" or pd.isna(text):
+            collection.update_one({'_id': ObjectId(idx)}, {'$set': {'summary':''}})
         else:
-            input_data = txt2input(text)
-            sum_list = test(args, input_data)
-            result = [list(filter(None, text.split('\n')))[i] for i in sum_list[0][0][:2]]
-            try:
-                summary = (result[0] + " " + result[1])
-            except:
-                summary = (result[0])
-    
-    return summary
-#     return jsonify({'summary' : summary})
+            if len(text.split('\n')) <= 3: # 원문 기사가 짧은 경우. txt2input에서 none 타입이 됨
+                collection.update_one({'_id': ObjectId(idx)}, {'$set': {'summary': text}})
+            else:
+                input_data = txt2input(text)
+                sum_list = test(args, input_data)
+                result = [list(filter(None, text.split('\n')))[i] for i in sum_list[0][0][:2]]
+                try:
+                    summary = (result[0] + " " + result[1])
+                    collection.update_one({'_id': ObjectId(idx)}, {'$set': {'summary': summary}})
+                except:
+                    summary = (result[0])
+                    collection.update_one({'_id': ObjectId(idx)}, {'$set': {'summary': summary}})
+        return ''
+
+
+################################################################
 
 
 if __name__=='__main__':
-    # app.run(debug=True)
-    app.run(host='0.0.0.0', port=8000)
+    client = MongoClient("mongodb+srv://BaekYeonsun:hello12345@cluster.3dypr.mongodb.net/database?retryWrites=true&w=majority")
+    collection = client.database.news
+    
+    cursor = collection.find({'date': '2022-05-11', 'summary' : np.nan})
+    news_list = list(cursor)
+    
+    col_name = ["_id", "content", "date", "journal", "summary", "title", "url"]
+    news_df = pd.DataFrame(new_list, columns=col_name)
+    
+    idx_text = data_preprocess(news_df)
+    idx_text = data_process(idx_text)
+    
+    for i in tqdm(range(len(idx_text))):
+        inference(idx_text[i])
+    
+    print("finish")
