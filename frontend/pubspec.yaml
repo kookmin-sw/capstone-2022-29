@@ -38,6 +38,7 @@ dependencies:
   provider: ^6.0.2
   url_launcher: ^6.1.0
   flutter_email_sender: ^5.1.0
+  mongo_dart: ^0.7.4+1
 
 dev_dependencies:
   flutter_test:

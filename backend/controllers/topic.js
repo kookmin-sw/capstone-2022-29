@@ -17,7 +17,7 @@ const getTopic = async (req, res) => {
     const regexQuery = new RegExp(req.query.query); // 검색어
     await Topic.find(
         {
-            'query': {'$regex': regexQuery},
+            'query': {'$regex': regexQuery, '$options': 'i'},
             'topicNum': {'$elemMatch': {'num': req.query.num}}
         }
     )

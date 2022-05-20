@@ -37,6 +37,7 @@ class _DetailNewsPageState extends State<DetailNewsPage> {
   List<dynamic> data = [];
 
   Future<void> getNews() async {
+    data.clear();
     data = await ApiService().getNewsID(widget.news_id);
   }
 
@@ -52,28 +53,33 @@ class _DetailNewsPageState extends State<DetailNewsPage> {
     final int topicStep = widget.topicStepNum ?? 0;
     Size size = MediaQuery.of(context).size;
     String query =
-        widget.query ?? Provider.of<SearchProvider>(context).searchQuery;
+        widget.query ?? Provider.of<SearchProvider>(context, listen: false).searchQuery;
 
     Future<void> postBookmark(String user_id) async {
       List<dynamic> isBookmark = await ApiService().getBookmark(user_id);
       if (isBookmark.isEmpty) {
-        await ApiService().postBookmark(Bookmark(
+        await ApiService().postBookmark(
+          Bookmark(
             user_id: user_id,
             bookmarks: Bookmarks(
               news_id: widget.news_id!,
               query: query,
               topic: "",
-            )));
+            ),
+          ),
+        );
       } else {
         await ApiService().updateBookmark(
-            user_id,
-            Bookmark(
-                user_id: user_id,
-                bookmarks: Bookmarks(
-                  news_id: widget.news_id!,
-                  query: query,
-                  topic: "",
-                )));
+          user_id,
+          Bookmark(
+            user_id: user_id,
+            bookmarks: Bookmarks(
+              news_id: widget.news_id!,
+              query: query,
+              topic: "",
+            ),
+          ),
+        );
       }
     }
 

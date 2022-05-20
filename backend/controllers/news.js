@@ -20,7 +20,7 @@ const getNews = async (req, res) => {
         const page = Number(req.query.page);
         const perPage = Number(req.query.perPage);
         await News.find(
-            {'$or': [ {'title': {'$regex':regexQuery}},{'content': {'$regex':regexQuery}} ]}, 
+            {'$or': [ {'title': {'$regex':regexQuery, '$options': 'i'}},{'content': {'$regex':regexQuery, '$options': 'i'}} ]}, 
         )
         // .sort({ 'date': -1 })
         .skip(perPage * (page - 1))
