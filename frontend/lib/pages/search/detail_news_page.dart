@@ -189,7 +189,7 @@ class _DetailNewsPageState extends State<DetailNewsPage> {
                       children: [
                         widget.topicNum != null
                             ? SizedBox(
-                                width: double.infinity,
+                                width: size.width * 0.9,
                                 height: size.height * 0.03,
                                 child: Slider(
                                   value: topicStep/num,
@@ -201,10 +201,10 @@ class _DetailNewsPageState extends State<DetailNewsPage> {
                             : Container(),
                         Center(
                           child: Container(
-                            margin: EdgeInsets.only(top: size.height * 0.02),
+                            margin: EdgeInsets.only(top: size.height * 0.02, bottom: size.height*0.02),
                             width: size.width * 0.8,
                             // height: size.height * 0.07,
-                            // padding: EdgeInset
+                            padding: EdgeInsets.only(top: size.height*0.015, bottom: size.height*0.015, left: size.width*0.05, right: size.width*0.05),
                             decoration: BoxDecoration(
                               color: Colors.white,
                               borderRadius: BorderRadius.circular(30),
@@ -214,6 +214,55 @@ class _DetailNewsPageState extends State<DetailNewsPage> {
                                     style: TextStyle(
                                       fontSize: size.width * 0.05,
                                     ))),
+                          ),
+                        ),
+                        Center(
+                          child: SizedBox(
+                            width: size.width*0.8,
+                            child: SingleChildScrollView(
+                              scrollDirection: Axis.horizontal,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Container(
+                                    padding: EdgeInsets.only(top: size.height*0.005, bottom: size.height*0.005, left: size.width*0.02, right: size.width*0.02),
+                                    margin: EdgeInsets.only(left: size.width*0.01, right: size.width*0.01),
+                                    child: Text('2022-05-22'),
+                                    decoration: BoxDecoration(
+                                    border: Border.all(
+                                        color: Color.fromARGB(255, 19, 17, 17),
+                                        width: size.width * 0.0025,
+                                      ),
+                                      borderRadius: BorderRadius.circular(30),
+                                    ),
+                                  ),
+                                  Container(
+                                    padding: EdgeInsets.only(top: size.height*0.005, bottom: size.height*0.005, left: size.width*0.02, right: size.width*0.02),
+                                    margin: EdgeInsets.only(left: size.width*0.02, right: size.width*0.02),
+                                    child: Text('한겨레'),
+                                    decoration: BoxDecoration(
+                                    border: Border.all(
+                                        color: Color(0xff000000),
+                                        width: size.width * 0.0025,
+                                      ),
+                                      borderRadius: BorderRadius.circular(30),
+                                    ),
+                                  ),
+                                  Container(
+                                    padding: EdgeInsets.only(top: size.height*0.005, bottom: size.height*0.005, left: size.width*0.02, right: size.width*0.02),
+                                    margin: EdgeInsets.only(left: size.width*0.02, right: size.width*0.02),
+                                    child: Text('백신, 접종, 시작'),
+                                    decoration: BoxDecoration(
+                                    border: Border.all(
+                                        color: Color(0xff000000),
+                                        width: size.width * 0.0025,
+                                      ),
+                                      borderRadius: BorderRadius.circular(30),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            )
                           ),
                         ),
                         Center(
@@ -230,7 +279,7 @@ class _DetailNewsPageState extends State<DetailNewsPage> {
                               color: Colors.white,
                               borderRadius: BorderRadius.circular(30),
                             ),
-                            child: Text(data[0]['summary']),
+                            child: SingleChildScrollView(child: Text(data[0]['summary'])),
                           ),
                         ),
                         buttonTwo(
