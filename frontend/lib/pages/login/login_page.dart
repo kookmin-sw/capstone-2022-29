@@ -6,6 +6,8 @@ import 'package:flutter_kakao_login/flutter_kakao_login.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:frontend/api/api_service.dart';
+import 'package:frontend/api/kakao_signin_api.dart';
+import 'package:frontend/components/button.dart';
 import 'package:frontend/models/user_model.dart';
 import 'package:frontend/pages/navigator.dart';
 
@@ -208,6 +210,34 @@ class _LoginPageState extends State<LoginPage> {
             SizedBox(
               height: size.height * 0.1,
             ),
+            button(size, '로그인', (){Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) {
+                  return NavigatorPage(
+                    index: 10,
+                    // query: widget.title,
+                    // user_id: widget.user_id,
+                    // nickname: widget.nickname,
+                    // news_id: widget.news_id,
+                  );
+                },
+              ),
+            );}),
+            button(size, '회원가입', (){Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) {
+                  return NavigatorPage(
+                    index: 11,
+                    // query: widget.title,
+                    // user_id: widget.user_id,
+                    // nickname: widget.nickname,
+                    // news_id: widget.news_id,
+                  );
+                },
+              ),
+            );}),
             SignInButtonBuilder(
               backgroundColor: Color(0xffF2E52D),
               onPressed: () {
