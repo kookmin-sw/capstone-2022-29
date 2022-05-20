@@ -127,7 +127,7 @@ class _NewsPageState extends State<NewsPage> {
         List<dynamic> news = await ApiService().getNewsID(widget.news![i]["news_id"]);
 
         if (mounted){
-        setState(() {
+          setState(() {
             data.add({
               'date': news[0]['date'],
               'title': news[0]["title"],
@@ -164,7 +164,9 @@ class _NewsPageState extends State<NewsPage> {
     List<dynamic> news = await ApiService().getNews(query, nextPage, perPage);
     setState(() {
       for (var i = 0; i < news.length; i++) {
+        // print(news[i]['date']);
         data.add({
+          // 'date': news[i]['date'],
           'title': news[i]['title'],
           'navigate': () async {
             Uri url = Uri.parse(news[i]['url']);
@@ -206,7 +208,7 @@ class _NewsPageState extends State<NewsPage> {
                             child: Container(
                               child: Column(children: [
                                 Container(
-                                  child: Text(data[index]['date'],maxLines: 1, overflow: TextOverflow.ellipsis),
+                                  child: Text(data[index]['date']??'',maxLines: 1, overflow: TextOverflow.ellipsis),
                                   width: size.width,
                                   height: size.height * 0.04,
                                   decoration: BoxDecoration(
