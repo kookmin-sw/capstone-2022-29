@@ -13,8 +13,8 @@ class searchBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    SearchProvider _searchProvider = Provider.of<SearchProvider>(context);
-
+    SearchProvider _searchProvider = Provider.of<SearchProvider>(context, listen: false);
+    // print(Provider.of<SearchProvider>(context).searchQuery);
     return Center(
       child: Container(
         height: size.height * 0.065,
@@ -23,6 +23,7 @@ class searchBar extends StatelessWidget {
           top: size.height * 0.01,
           bottom: size.height * 0.01,
         ),
+        
         child: OutlineSearchBar(
           hideSearchButton: color? true:false,
           borderRadius: BorderRadius.circular(30),

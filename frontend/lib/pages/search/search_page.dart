@@ -23,6 +23,10 @@ class _SearchPageState extends State<SearchPage> {
   Set ranking = {};
   late SearchProvider _searchProvider;
   bool isRanking = true;
+  FocusNode _focus = FocusNode();
+
+  final _verifyKey = GlobalKey<FormState>();
+  var _verify = "";
 
   Future<dynamic> getRanking() async {
     data.clear();
@@ -65,6 +69,44 @@ class _SearchPageState extends State<SearchPage> {
     }
   }
 
+   String? validateSearch(FocusNode focusNode, String value) {
+    if(value.isEmpty) {
+      focusNode.requestFocus();
+      return '검색어를 입력하세요';
+    }
+  }
+
+  Widget searchInput(Size size) {
+    return Form(
+      key: _verifyKey,
+      child: Center(
+        child: SizedBox(
+          width: size.width * 0.8,
+          child: TextFormField(
+            decoration: InputDecoration(
+                contentPadding: EdgeInsets.all(size.height * 0.02),
+                border: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.black),
+                    borderRadius: BorderRadius.circular(30)),
+                focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Color(0xff0039A4)),
+                    borderRadius: BorderRadius.circular(30)),
+                hintText: "주제 검색",
+                hintStyle: TextStyle(color: Colors.grey[400])),
+            validator: (value) => validateSearch(_focus, value!),
+            onChanged: (value) {
+              _verify = value;
+              context.read<SearchProvider>().onChange(value);
+              if (_verifyKey.currentState != null) {
+                _verifyKey.currentState!.validate();
+              }
+            },
+          ),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -91,7 +133,7 @@ class _SearchPageState extends State<SearchPage> {
                           content: SingleChildScrollView(
                             child: ListBody(
                               children: <Widget>[
-                                searchBar(size: size, color: true, value: ""),
+                                searchInput(size),
                                 Slider(
                                   value: _currentSliderValue,
                                   max: 2,
@@ -115,23 +157,24 @@ class _SearchPageState extends State<SearchPage> {
                                     ),
                                   ),
                                   onPressed: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) {
-                                          return NavigatorPage(
-                                            index: 4,
-                                            query: Provider.of<SearchProvider>(
-                                                    context)
-                                                .searchQuery,
-                                            user_id: widget.user_id,
-                                            nickname: widget.nickname,
-                                            topicNum:
-                                                _currentSliderValue.toInt(),
-                                          );
-                                        },
-                                      ),
-                                    );
+                                    if(_verifyKey.currentState!.validate()) {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) {
+                                            return NavigatorPage(
+                                              index: 4,
+                                              query: Provider.of<SearchProvider>(context, listen: false)
+                                                  .searchQuery,
+                                              user_id: widget.user_id,
+                                              nickname: widget.nickname,
+                                              topicNum:
+                                                  _currentSliderValue.toInt(),
+                                            );
+                                          },
+                                        ),
+                                      );
+                                    }
                                   },
                                   child: Text("검색하기"),
                                 ),

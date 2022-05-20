@@ -120,35 +120,36 @@ class _NewsPageState extends State<NewsPage> {
       });
     } else {
       for (var i = 0; i < widget.news!.length; i++) {
-        List<dynamic> news =
-            await ApiService().getNewsID(widget.news![i]["news_id"]);
+        List<dynamic> news = await ApiService().getNewsID(widget.news![i]["news_id"]);
 
+        if (mounted){
         setState(() {
-          data.add({
-            'title': news[0]["title"],
-            'url': news[0]["url"],
-            'summary': news[0]["summary"],
-            'navigate': () async {
-              await addBubble(widget.user_id, widget.news![i]["news_id"],
-                  widget.query, query);
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) {
-                    return NavigatorPage(
-                      index: 5,
-                      user_id: widget.user_id,
-                      nickname: widget.nickname,
-                      news_id: widget.news![i]["news_id"],
-                      topicNum: widget.topicNum,
-                      topicStepNum: widget.topicStepNum,
-                    );
-                  },
-                ),
-              );
-            },
+            data.add({
+              'title': news[0]["title"],
+              'url': news[0]["url"],
+              'summary': news[0]["summary"],
+              'navigate': () async {
+                await addBubble(widget.user_id, widget.news![i]["news_id"],
+                    widget.query, query);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) {
+                      return NavigatorPage(
+                        index: 5,
+                        user_id: widget.user_id,
+                        nickname: widget.nickname,
+                        news_id: widget.news![i]["news_id"],
+                        topicNum: widget.topicNum,
+                        topicStepNum: widget.topicStepNum,
+                      );
+                    },
+                  ),
+                );
+              },
+            });
           });
-        });
+        }
       }
     }
   }
