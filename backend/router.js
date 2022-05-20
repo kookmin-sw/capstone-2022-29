@@ -13,6 +13,7 @@ const request = require("./controllers/request");
 
 // user
 router.post("/users", user.postUserInfo);
+router.post("/user", user.createUser);
 router.get("/users", user.getUserInfo);
 router.put("/users", user.updateUser);
 
