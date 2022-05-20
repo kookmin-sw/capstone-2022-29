@@ -22,14 +22,18 @@ class _BookmarkPageState extends State<BookmarkPage> {
     data.clear();
     List<dynamic> bookmark = await ApiService().getBookmark(user_id);
     if (bookmark.isNotEmpty) {
-      isBookmark = true;
       for (var i = 0; i < bookmark.length; i++) {
-        for (var j = 0; j < bookmark[i]['bookmark'].length; j++) {
-          data.add({
-            'news_id': bookmark[i]['bookmark'][j]['news_id'],
-            'news_title': bookmark[i]['bookmark'][j]['news_id'],
-            'query': bookmark[i]['bookmark'][j]['query']
-          });
+        if (bookmark[i]['bookmark'].length == 0) {
+          isBookmark = false;
+        } else {
+          isBookmark = true;
+          for (var j = 0; j < bookmark[i]['bookmark'].length; j++) {
+            data.add({
+              'news_id': bookmark[i]['bookmark'][j]['news_id'],
+              'news_title': bookmark[i]['bookmark'][j]['news_id'],
+              'query': bookmark[i]['bookmark'][j]['query']
+            });
+          }
         }
       }
       for (var i = 0; i < data.length; i++) {
@@ -50,6 +54,10 @@ class _BookmarkPageState extends State<BookmarkPage> {
     await ApiService().deleteBookmark(user_id, news_id);
     setState(() {
       data.removeWhere((element) => element['news_id'] == news_id);
+      // print(data.length);
+      if (data.isEmpty) {
+        isBookmark = false;
+      }
     });
   }
 

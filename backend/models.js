@@ -1,9 +1,11 @@
 const mongoose = require('mongoose');
 
 const UserSchema = new mongoose.Schema({
-    access_token: { type: String, required: true },
     nickname: { type: String, required : true },
     profile: { type: String, required : true },
+    id: { type: String, required : false },
+    password : { type: String, required : false },
+    access_token: { type: String, required: true },
 }, { collection: "users" });
 
 const NewsSchema = new mongoose.Schema({

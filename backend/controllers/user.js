@@ -2,6 +2,7 @@ const models = require("../models");
 
 const User = models.User;
 
+//kakao 회원가입
 const postUserInfo = async (req, res) => {
     const newUser = new User(req.body);
     await newUser.save(function(err){
@@ -12,6 +13,17 @@ const postUserInfo = async (req, res) => {
         res.json({ message : 'success' });
     });
 };
+
+const createUser = async (req, res) => {
+    const user = new User(req.body);
+    await user.save(function(err){
+        if(err){
+            console.error(err);
+            res.json({ message : 'fail' });
+        }
+        res.json({ message : 'success' });
+    });
+}
 
 const getUserInfo = async (req, res) => {
     const regex = new RegExp(req.query.nickname);
@@ -34,4 +46,5 @@ module.exports = {
     postUserInfo,
     getUserInfo,
     updateUser,
+    createUser,
 }

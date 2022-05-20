@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_signin_button/flutter_signin_button.dart';
 import 'package:flutter_kakao_login/flutter_kakao_login.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:frontend/api/api_service.dart';
 import 'package:frontend/api/kakao_signin_api.dart';
@@ -21,33 +22,60 @@ class _LoginPageState extends State<LoginPage> {
   String _nativeAppKey = dotenv.get('NATIVE_APP_KEY');
   String method = '';
 
+  static final FlutterKakaoLogin kakaoSignIn = FlutterKakaoLogin();
+  bool _isLogined = false;
+  String _accessToken = '';
+  String _refreshToken = '';
+  String _accountInfo = '';
+  String _loginMessage = 'Not Logged In';
+
+  @override
+  void initState() {
+    super.initState();
+    loadKakao();
+  }
+
+  void loadKakao() async {
+    await kakaoSignIn.init(_nativeAppKey);
+  }
+
+  // Kakao Login
   Future<void> flutterKakaoLogin() async {
-    await KakaoSignInAPI.init();
-    final _logInResult = await KakaoSignInAPI.login();
-    if (_logInResult.status == KakaoLoginStatus.loggedIn) {
-      final kakaoUser = await KakaoSignInAPI.getUserMe();
-      if (kakaoUser.account == null) {
-        debugPrint('Kakao Sign in Failed');
-      } else {
-        var user =
-            await ApiService().getUserInfo(kakaoUser.account!.userNickname);
+    try {
+      final logInResult = await kakaoSignIn.logIn();
+      _processLoginResult(logInResult);
+
+      // get User Info
+      final result = await kakaoSignIn.getUserMe();
+      final KakaoAccountResult? account = result.account;
+      if (account != null) {
+        final KakaoAccountResult? account = result.account!;
+        // final userID = account?.userID;
+        // final userEmail = account?.userEmail;
+        final userNickname = account?.userNickname;
+        final userProfileImagePath = account?.userProfileImagePath;
+        debugPrint("userNickName: ${userNickname}");
+        debugPrint("userProfileImagePath: ${userProfileImagePath}");
+        debugPrint("token: ${_accessToken}");
+
+        var user = await ApiService().getUserInfo(userNickname);
         if (user == null) {
           await ApiService().postUserInfo(
             User(
-              accessToken: kakaoUser.token!.accessToken!,
-              nickname: kakaoUser.account!.userNickname!,
-              profile: kakaoUser.account!.userProfileImagePath!,
+              accessToken: _accessToken,
+              nickname: userNickname!,
+              profile: userProfileImagePath!,
+              // email: userEmail!,
             ),
           );
+          var result = await ApiService().getUserInfo(userNickname);
 
-          var result =
-              await ApiService().getUserInfo(kakaoUser.account!.userNickname);
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(
               builder: (context) => NavigatorPage(
                 index: 0,
-                nickname: kakaoUser.account!.userNickname,
+                nickname: userNickname,
                 user_id: result['_id'],
                 method: method,
               ),
@@ -59,7 +87,7 @@ class _LoginPageState extends State<LoginPage> {
             MaterialPageRoute(
               builder: (context) => NavigatorPage(
                 index: 0,
-                nickname: kakaoUser.account!.userNickname,
+                nickname: userNickname,
                 user_id: user['_id'],
                 method: method,
               ),
@@ -67,15 +95,84 @@ class _LoginPageState extends State<LoginPage> {
           );
 
           await ApiService().updateUserInfo(
-            kakaoUser.account!.userNickname,
+            userNickname,
             User(
-              accessToken: kakaoUser.token!.accessToken!,
-              nickname: kakaoUser.account!.userNickname!,
-              profile: kakaoUser.account!.userProfileImagePath!,
+              accessToken: _accessToken,
+              nickname: userNickname!,
+              profile: userProfileImagePath!,
             ),
           );
         }
       }
+    } on PlatformException catch (e) {
+      debugPrint("${e.code} ${e.message}");
+    }
+  }
+
+  void _updateAccessToken(String accessToken) {
+    setState(() {
+      _accessToken = accessToken;
+    });
+  }
+
+  void _updateRefreshToken(String refreshToken) {
+    setState(() {
+      _refreshToken = refreshToken;
+    });
+  }
+
+  void _updateAccountMessage(String message) {
+    setState(() {
+      _accountInfo = message;
+    });
+  }
+
+  void _updateStateLogin(bool isLogined, KakaoLoginResult result) async {
+    setState(() {
+      _isLogined = isLogined;
+    });
+    if (!isLogined) {
+      _updateAccessToken('');
+      _updateRefreshToken('');
+      _updateAccountMessage('');
+
+      debugPrint("Kakao login fail");
+    } else {
+      if (result.token != null && result.token!.accessToken != null) {
+        _updateAccessToken(result.token!.accessToken!);
+        _updateRefreshToken(result.token!.refreshToken!);
+      }
+
+      debugPrint("Kakao login success");
+      debugPrint("access_token: $_accessToken");
+      debugPrint("refresh_token: $_refreshToken");
+      debugPrint("accountInfo: $_accountInfo");
+    }
+  }
+
+  void _updateLoginMessage(String message) {
+    setState(() {
+      _loginMessage = message;
+    });
+  }
+
+  void _processLoginResult(KakaoLoginResult result) {
+    switch (result.status) {
+      case KakaoLoginStatus.loggedIn:
+        debugPrint('login');
+        _updateLoginMessage('Logged In by the user.');
+        _updateStateLogin(true, result);
+        break;
+      case KakaoLoginStatus.loggedOut:
+        debugPrint('logout');
+        _updateLoginMessage('Logged Out by the user.');
+        _updateStateLogin(false, result);
+        break;
+      case KakaoLoginStatus.unlinked:
+        debugPrint('unlink');
+        _updateLoginMessage('Unlinked by the user');
+        _updateStateLogin(false, result);
+        break;
     }
   }
 

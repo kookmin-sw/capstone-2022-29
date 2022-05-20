@@ -20,16 +20,16 @@ def timelining(num_topics, per_contrib, num_news_threshold, folder):
       histogram = {}  
       prev_date = datetime(2999, 12, 30)
       for date in topic_news["Date"].tolist(): 
-        date_list = list(map(int, date.split('-')))
-        #print(date_list)
-        cur_date = datetime(date_list[0], date_list[1], date_list[2])
-        diff_date = prev_date - cur_date
+        # date_list = list(map(int, date.split('-')))
+        # #print(date_list)
+        # cur_date = datetime(date_list[0], date_list[1], date_list[2])
+        # diff_date = prev_date - cur_date
         #print(diff_date.days)
-        if diff_date.days <= 7: # 일주일 이내의 중복된 토픽은 제거
-          continue
+        # if diff_date.days <= 7: # 일주일 이내의 중복된 토픽은 제거
+        #   continue
         
         histogram[date] = histogram.get(date, 0) + 1 # histogram은 날짜에 해당 토픽이 몇번 나왔는지 들어있음
-        prev_date = cur_date
+        # prev_date = cur_date
       #   print(histogram[date])
       # print(histogram)
       #print(histogram)
