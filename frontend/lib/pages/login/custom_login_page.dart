@@ -33,19 +33,7 @@ class _CustomLoginPageState extends State<CustomLoginPage> {
     if (formKey.currentState!.validate()) {
       print('nickname: $nickname, id: $id, password: $password');
       var user = await ApiService().getUserInfo(nickname);
-      if (user != null && user['id'] == id && user['password'] == password) {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (context) => NavigatorPage(
-              index: 0,
-              nickname: nickname,
-              user_id: user['_id'],
-              method: 'custom',
-            ),
-          ),
-        );
-      } else {
+      if (user == null) {
         showDialog(
           context: context,
           barrierDismissible: false,
@@ -66,6 +54,41 @@ class _CustomLoginPageState extends State<CustomLoginPage> {
             );
           },
         );
+      } else {
+        if (user['id'] == id && user['password'] == password) {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => NavigatorPage(
+                index: 0,
+                nickname: nickname,
+                user_id: user['_id'],
+                method: 'custom',
+              ),
+            ),
+          );
+        } else {
+          showDialog(
+            context: context,
+            barrierDismissible: false,
+            builder: (context) {
+              return AlertDialog(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10)),
+                title: Text("로그인 실패"),
+                // content: Text("로그인 실패"),
+                actions: <Widget>[
+                  TextButton(
+                    child: Text("확인"),
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                  ),
+                ],
+              );
+            },
+          );
+        }
       }
     } else {
       formKey.currentState!.validate();
