@@ -42,6 +42,7 @@ class _BookmarkPageState extends State<BookmarkPage> {
 
   Future getNewsTitle(dynamic news_id, int i) async {
     List<dynamic> news = await ApiService().getNewsID(news_id);
+    // print(news);
     data[i]['news_title'] = news[0]['title'];
   }
 

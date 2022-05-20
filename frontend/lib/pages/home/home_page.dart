@@ -271,7 +271,7 @@ class _HomePageState extends State<HomePage>
                                             Text("공지사항",
                                                 style: TextStyle(
                                                     color: Colors.black,
-                                                    fontSize: 16)),
+                                                    fontSize: screenHeight * 0.02)),
                                           ],
                                         ),
                                         Icon(Icons.arrow_forward_ios,
@@ -309,7 +309,7 @@ class _HomePageState extends State<HomePage>
                                             Text("Q&A",
                                                 style: TextStyle(
                                                     color: Colors.black,
-                                                    fontSize: 16)),
+                                                    fontSize: screenHeight * 0.02)),
                                           ],
                                         ),
                                         Icon(Icons.arrow_forward_ios,
@@ -347,7 +347,7 @@ class _HomePageState extends State<HomePage>
                                           Text("나의 키워드",
                                               style: TextStyle(
                                                   color: Colors.black,
-                                                  fontSize: 16)),
+                                                  fontSize: screenHeight * 0.02)),
                                         ],
                                       ),
                                       Icon(Icons.arrow_forward_ios,
@@ -381,7 +381,7 @@ class _HomePageState extends State<HomePage>
                                   SizedBox(width: screenWidth * 0.02),
                                   Text("로그아웃",
                                       style: TextStyle(
-                                          color: Colors.black, fontSize: 16)),
+                                          color: Colors.black, fontSize: screenHeight * 0.02)),
                                 ],
                               ),
                               onTap: () {

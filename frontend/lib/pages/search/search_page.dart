@@ -211,7 +211,7 @@ class _SearchPageState extends State<SearchPage> {
                             child: Text(
                               "검색 순위",
                               style: TextStyle(
-                                fontSize: 25,
+                                fontSize: size.width*0.05,
                               ),
                             ),
                           ),
@@ -243,13 +243,13 @@ class _SearchPageState extends State<SearchPage> {
                                               style: TextStyle(
                                                 color: Color.fromRGBO(
                                                     93, 109, 190, 1),
-                                                fontSize: 20,
+                                                fontSize: size.width * 0.05,
                                               )),
                                           width: size.width * 0.13,
                                         ),
                                         Text(data[index]["keyword"],
                                             style: TextStyle(
-                                              fontSize: 20,
+                                              fontSize:  size.width * 0.05,
                                             )),
                                       ],
                                     ));

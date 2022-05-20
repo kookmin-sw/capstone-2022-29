@@ -6,11 +6,12 @@ import 'package:frontend/components/app_bar.dart';
 import 'package:frontend/components/button.dart';
 import 'package:frontend/components/button2.dart';
 import 'package:frontend/models/bookmark_model.dart';
-import 'package:timelines/timelines.dart';
+// import 'package:timelines/timelines.dart';
 import 'package:provider/provider.dart';
 import 'package:frontend/pages/search/search_provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:share_plus/share_plus.dart';
+// import 'package:percent_indicator/percent_indicator.dart';
 
 class DetailNewsPage extends StatefulWidget {
   DetailNewsPage(
@@ -117,57 +118,57 @@ class _DetailNewsPageState extends State<DetailNewsPage> {
       onConfirmDialog();
     }
 
-    void onSimailarPressed() {
-      showDialog(
-          context: context,
-          barrierDismissible: true,
-          builder: (context) {
-            return StatefulBuilder(
-                builder: (BuildContext context, StateSetter setState) {
-              return AlertDialog(
-                content: SingleChildScrollView(
-                  child: ListBody(
-                    children: <Widget>[
-                      SizedBox(
-                        width: size.width * 0.9,
-                        height: size.height * 0.5,
-                        child: ListView.builder(
-                          scrollDirection: Axis.vertical,
-                          shrinkWrap: true,
-                          itemCount: data == [] ? 0 : data.length,
-                          itemBuilder: (BuildContext context, int index) {
-                            return Container(
-                              margin: EdgeInsets.only(
-                                  left: size.width * 0.05,
-                                  right: size.width * 0.05,
-                                  top: size.height * 0.02),
-                              padding: EdgeInsets.only(
-                                  left: size.width * 0.05,
-                                  right: size.width * 0.05,
-                                  top: size.height * 0.02),
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                border: Border.all(
-                                    color: Colors.black,
-                                    width: 1.0,
-                                    style: BorderStyle.solid),
-                                borderRadius: BorderRadius.circular(30),
-                              ),
-                              width: size.width * 0.8,
-                              height: size.height * 0.07,
-                              child: Text(data[index]["title"]),
-                            );
-                          },
-                        ),
-                      ),
-                      button(size, "닫기", closeSimilar),
-                    ],
-                  ),
-                ),
-              );
-            });
-          });
-    }
+    // void onSimailarPressed() {
+    //   showDialog(
+    //     context: context,
+    //     barrierDismissible: true,
+    //     builder: (context) {
+    //       return StatefulBuilder(
+    //           builder: (BuildContext context, StateSetter setState) {
+    //         return AlertDialog(
+    //           content: SingleChildScrollView(
+    //             child: ListBody(
+    //               children: <Widget>[
+    //                 SizedBox(
+    //                   width: size.width * 0.9,
+    //                   height: size.height * 0.5,
+    //                   child: ListView.builder(
+    //                     scrollDirection: Axis.vertical,
+    //                     shrinkWrap: true,
+    //                     itemCount: data == [] ? 0 : data.length,
+    //                     itemBuilder: (BuildContext context, int index) {
+    //                       return Container(
+    //                         margin: EdgeInsets.only(
+    //                             left: size.width * 0.05,
+    //                             right: size.width * 0.05,
+    //                             top: size.height * 0.02),
+    //                         padding: EdgeInsets.only(
+    //                             left: size.width * 0.05,
+    //                             right: size.width * 0.05,
+    //                             top: size.height * 0.02),
+    //                         decoration: BoxDecoration(
+    //                           color: Colors.white,
+    //                           border: Border.all(
+    //                               color: Colors.black,
+    //                               width: 1.0,
+    //                               style: BorderStyle.solid),
+    //                           borderRadius: BorderRadius.circular(30),
+    //                         ),
+    //                         width: size.width * 0.8,
+    //                         height: size.height * 0.07,
+    //                         child: Text(data[index]["title"]),
+    //                       );
+    //                     },
+    //                   ),
+    //                 ),
+    //                 button(size, "닫기", closeSimilar),
+    //               ],
+    //             ),
+    //           ),
+    //         );
+    //       });
+    //     });
+    // }
 
     return Scaffold(
         extendBody: true,
@@ -184,42 +185,11 @@ class _DetailNewsPageState extends State<DetailNewsPage> {
                             ? SizedBox(
                                 width: double.infinity,
                                 height: size.height * 0.03,
-                                child: Timeline.tileBuilder(
-                                  scrollDirection: Axis.horizontal,
-                                  builder: TimelineTileBuilder.connected(
-                                    indicatorBuilder: (_, index) {
-                                      if (topicStep - 1 == index)
-                                        return DotIndicator(
-                                            color: Color.fromRGBO(
-                                                48, 105, 171, 1));
-                                      else
-                                        return DotIndicator(
-                                            color: Color.fromRGBO(
-                                                198, 225, 255, 1));
-                                    },
-                                    connectorBuilder:
-                                        (_, index, connectorType) {
-                                      return SolidLineConnector(
-                                        indent:
-                                            connectorType == ConnectorType.start
-                                                ? 0
-                                                : 2.0,
-                                        endIndent:
-                                            connectorType == ConnectorType.end
-                                                ? 0
-                                                : 2.0,
-                                        thickness: 4,
-                                        color: Color.fromRGBO(198, 225, 255, 1),
-                                      );
-                                    },
-                                    contentsAlign: ContentsAlign.basic,
-                                    contentsBuilder: (context, index) =>
-                                        Padding(
-                                      padding: EdgeInsets.only(
-                                          left: size.width / (num)),
-                                    ),
-                                    itemCount: num,
-                                  ),
+                                child: Slider(
+                                  value: topicStep/num,
+                                  max: 1,
+                                  onChanged: (double value) {
+                                  },
                                 ),
                               )
                             : Container(),
@@ -227,7 +197,8 @@ class _DetailNewsPageState extends State<DetailNewsPage> {
                           child: Container(
                             margin: EdgeInsets.only(top: size.height * 0.02),
                             width: size.width * 0.8,
-                            height: size.height * 0.07,
+                            // height: size.height * 0.07,
+                            // padding: EdgeInset
                             decoration: BoxDecoration(
                               color: Colors.white,
                               borderRadius: BorderRadius.circular(30),
@@ -235,7 +206,7 @@ class _DetailNewsPageState extends State<DetailNewsPage> {
                             child: Center(
                                 child: Text(data[0]['title'],
                                     style: TextStyle(
-                                      fontSize: 24,
+                                      fontSize: size.width * 0.05,
                                     ))),
                           ),
                         ),
