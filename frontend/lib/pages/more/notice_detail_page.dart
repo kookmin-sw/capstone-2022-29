@@ -27,7 +27,7 @@ class _NoticeDetailPageState extends State<NoticeDetailPage> {
           child: Column(children: [
             Container(
               width: size.width,
-              height: 40,
+              height: size.height * 0.05,
               child: Center(child: Text(widget.title ?? '')),
               decoration: BoxDecoration(
                 color: Colors.white,
@@ -36,14 +36,14 @@ class _NoticeDetailPageState extends State<NoticeDetailPage> {
             ),
             Container(
                 width: size.width,
-                height: 400,
+                height: size.height * 0.6,
                 child: SingleChildScrollView(child: Text(widget.content ?? '')),
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(30),
                 ),
-                margin: EdgeInsets.fromLTRB(0, 20, 0, 20),
-                padding: EdgeInsets.fromLTRB(15, 15, 15, 15))
+                margin: EdgeInsets.fromLTRB(0, size.height*0.02, 0, size.height*0.02),
+                padding: EdgeInsets.fromLTRB(size.width*0.03, size.height*0.025, size.width*0.03, size.height*0.025))
           ]),
           margin: EdgeInsets.fromLTRB(48, 20, 48, 20),
         ));

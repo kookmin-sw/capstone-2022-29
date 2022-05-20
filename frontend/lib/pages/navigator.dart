@@ -31,6 +31,7 @@ class NavigatorPage extends StatefulWidget {
     this.news,
     this.topicStepNum,
     this.method,
+    this.topicName,
   }) : super(key: key);
   int index = 0;
   String? nickname;
@@ -45,6 +46,7 @@ class NavigatorPage extends StatefulWidget {
   List<dynamic>? news;
   int? topicStepNum;
   String? method;
+  String? topicName;
 
   @override
   State<NavigatorPage> createState() => _NavigatorPageState();
@@ -75,6 +77,7 @@ class _NavigatorPageState extends State<NavigatorPage> {
           topic: widget.topic,
           topicNum: widget.topicNum,
           topicStepNum: widget.topicStepNum,
+          topicName: widget.topicName,
         ),
         TimelinePage(
             user_id: widget.user_id,
@@ -88,6 +91,7 @@ class _NavigatorPageState extends State<NavigatorPage> {
           query: widget.query,
           topicNum: widget.topicNum,
           topicStepNum: widget.topicStepNum,
+          topicName: widget.topicName,
         ),
         NoticePage(
           user_id: widget.user_id,
