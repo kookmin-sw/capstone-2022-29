@@ -21,15 +21,28 @@ mecab = Mecab()
 
 # 1. Preprocessing Data
 def get_key_tokens(text):
+    f = open("stopwords.txt", 'r')
+    lines = f.readlines()
+    f.close()
+
+    stopwords = []
+    for line in lines:
+        stopwords.append(line.strip())
+    
     key_pos = ['SL', 'NNG', 'NNP', 'VV', 'VA', 'XR', 'SH'] # ['NNG', 'NNP', 'SL', 'SH']
+    
     text = re.sub(r'\[[^)]*\]', '', text) # 한겨레 [포토], [인터뷰], [11회 비정규 노동 수기 공모전], [단독] 이런거 없애기
+    
     text = text.lower()
+    
     tokens = mecab.pos(text)
     token_list = []
     for token, pos in filter(lambda x: (x[1] in key_pos), tokens):
         if pos == 'VV' or pos == 'VA' or pos == 'XR':
             if len(token) <= 1:
                 continue
+        if token in stopwords:
+            continue
         token_list.append(token)
     #print(token_list)
     return token_list
@@ -94,7 +107,7 @@ def timelining(per_contrib, num_news_threshold, news_df, timeline_df):
     # print(news_df["Topic_Perc_Contrib"])
     print(news_df["Topic_Perc_Contrib"])
     topic_news = news_df[news_df["Topic_Perc_Contrib"] >= per_contrib]
-    # topic_news = topic_news.sort_values(by='Date', ascending=False)
+    topic_news.sort_values(by='Date', ascending=False)
 
     #print(topic_news)
     if len(topic_news) != 0:
