@@ -90,6 +90,10 @@ const RequestSchema = new mongoose.Schema({
     title: {type: String, required: true},
 }, {collection: "requests"});
 
+const WordSchema = new mongoose.Schema({
+    word: {type: String, required: true},
+}, {collection: "words"});
+
 const User = mongoose.model("User", UserSchema);
 const News = mongoose.model("News", NewsSchema);
 const Bubble = mongoose.model("Bubble", BubbleSchema);
@@ -99,6 +103,7 @@ const Keyword = mongoose.model("Keyword", KeywordSchema);
 const Notice = mongoose.model("Notice", NoticeSchema);
 const QA = mongoose.model("QA", QASchema);
 const Request = mongoose.model("Request", RequestSchema);
+const Word = mongoose.model("Word", WordSchema);
 
 module.exports = {
     User,
@@ -110,4 +115,5 @@ module.exports = {
     Notice,
     QA,
     Request,
+    Word,
 };
