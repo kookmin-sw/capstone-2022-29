@@ -11,9 +11,14 @@
 /DM/TopicModeling/test2.py
 .DS_Store
 index.md
-*.csv
+/DM/TopicModeling/한겨레_코로나_요약.csv
 /.vscode/
 /result/
 /image/
+/data/
+/content_40/
+/content_60/
+/content_70/
+/backend/.env.
 /tmp/
 *.tar.gz
