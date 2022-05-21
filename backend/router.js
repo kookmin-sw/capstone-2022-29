@@ -10,6 +10,7 @@ const keyword = require("./controllers/keyword");
 const notice = require("./controllers/notice");
 const qa = require("./controllers/qa");
 const request = require("./controllers/request");
+const word = require("./controllers/word");
 
 // user
 router.post("/users", user.postUserInfo);
@@ -51,5 +52,9 @@ router.get("/qa", qa.getQA);
 // request
 router.post("/requests", request.postRequest);
 router.get("/requests", request.getRequest);
+
+// word
+router.post("/words", word.postWord);
+router.get("/words", word.getWord);
 
 module.exports = router;

@@ -305,6 +305,7 @@ class _TimelinePageState extends State<TimelinePage> {
                                                                     topicStepNum:
                                                                         index +
                                                                             1,
+                                                                    topicName: data[index]["topic"],
                                                                   );
                                                                 },
                                                               ),

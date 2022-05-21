@@ -87,8 +87,6 @@ class _ColorListState extends State<ColorList> {
                     user_id: widget.user_id,
                     nickname: widget.nickname,
                     news_id: widget.news_id,
-                    // topicNum: 0,
-                    // topicStepNum: 0,
                   );
                 },
               ),

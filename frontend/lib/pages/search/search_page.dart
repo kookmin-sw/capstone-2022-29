@@ -222,37 +222,57 @@ class _SearchPageState extends State<SearchPage> {
                               shrinkWrap: true,
                               itemCount: data == [] ? 0 : data.length,
                               itemBuilder: (BuildContext context, int index) {
-                                return Container(
-                                    margin: EdgeInsets.only(
-                                        left: size.width * 0.05,
-                                        right: size.width * 0.05,
-                                        top: size.height * 0.02),
-                                    padding: EdgeInsets.only(
-                                        left: size.width * 0.05,
-                                        right: size.width * 0.05),
-                                    decoration: BoxDecoration(
-                                      color: Color.fromRGBO(231, 243, 255, 1),
-                                      borderRadius: BorderRadius.circular(30),
-                                    ),
-                                    width: size.width * 0.5,
-                                    height: size.height * 0.08,
-                                    child: Row(
-                                      children: [
-                                        SizedBox(
-                                          child: Text(data[index]["rank"],
-                                              style: TextStyle(
-                                                color: Color.fromRGBO(
-                                                    93, 109, 190, 1),
-                                                fontSize: size.width * 0.05,
-                                              )),
-                                          width: size.width * 0.13,
+                                return InkWell(
+                                  onTap: (){
+                                    context.read<SearchProvider>().onChange(data[index]["keyword"],);
+                                     Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) {
+                                            return NavigatorPage(
+                                              index: 4,
+                                              query: Provider.of<SearchProvider>(context, listen: false)
+                                                  .searchQuery,
+                                              user_id: widget.user_id,
+                                              nickname: widget.nickname,
+                                              topicNum: 1,
+                                            );
+                                          },
                                         ),
-                                        Text(data[index]["keyword"],
-                                            style: TextStyle(
-                                              fontSize:  size.width * 0.05,
-                                            )),
-                                      ],
-                                    ));
+                                      );
+                                  },
+                                  child: Container(
+                                      margin: EdgeInsets.only(
+                                          left: size.width * 0.05,
+                                          right: size.width * 0.05,
+                                          top: size.height * 0.02),
+                                      padding: EdgeInsets.only(
+                                          left: size.width * 0.05,
+                                          right: size.width * 0.05),
+                                      decoration: BoxDecoration(
+                                        color: Color.fromRGBO(231, 243, 255, 1),
+                                        borderRadius: BorderRadius.circular(30),
+                                      ),
+                                      width: size.width * 0.5,
+                                      height: size.height * 0.08,
+                                      child: Row(
+                                        children: [
+                                          SizedBox(
+                                            child: Text(data[index]["rank"],
+                                                style: TextStyle(
+                                                  color: Color.fromRGBO(
+                                                      93, 109, 190, 1),
+                                                  fontSize: size.width * 0.05,
+                                                )),
+                                            width: size.width * 0.13,
+                                          ),
+                                          Text(data[index]["keyword"],
+                                              style: TextStyle(
+                                                fontSize:  size.width * 0.05,
+                                              )),
+                                        ],
+                                      )),
+                                );
                               },
                             ),
                           ),

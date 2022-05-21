@@ -23,6 +23,7 @@ mecab = Mecab()
 def get_key_tokens(text):
     key_pos = ['SL', 'NNG', 'NNP', 'VV', 'VA', 'XR', 'SH'] # ['NNG', 'NNP', 'SL', 'SH']
     text = re.sub(r'\[[^)]*\]', '', text) # 한겨레 [포토], [인터뷰], [11회 비정규 노동 수기 공모전], [단독] 이런거 없애기
+    text = text.lower()
     tokens = mecab.pos(text)
     token_list = []
     for token, pos in filter(lambda x: (x[1] in key_pos), tokens):
@@ -161,8 +162,10 @@ def topics_to_timeline(news_df, ldamodel, corpus, num_keywords, num_topics, perc
     topic_per_list = []
     for i in range(1, num_topics+1):
         df = topics_info_df.loc[topics_info_df.Dominant_Topic==str(i)]
-        topic_per_list.append(df.loc[:10, 'Topic_Perc_Contrib'].mean())
-        print(topic_per_list)
+        for j in range(10):
+            print(df.loc[:10, 'Topic_Perc_Contrib'])
+        # topic_per_list.append(df.loc[:10, 'Topic_Perc_Contrib'].mean())
+        # print(topic_per_list)
             
 
 

@@ -5,8 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:frontend/pages/bookmark/bookmark_page.dart';
 import 'package:frontend/pages/home/home_page.dart';
 import 'package:frontend/pages/home/news_page.dart';
-import 'package:frontend/pages/login/CustomJoin.dart';
-import 'package:frontend/pages/login/CustomLogin.dart';
 import 'package:frontend/pages/more/my_keyword_page.dart';
 import 'package:frontend/pages/more/notice_detail_page.dart';
 import 'package:frontend/pages/more/notice_page.dart';
@@ -33,7 +31,7 @@ class NavigatorPage extends StatefulWidget {
     this.news,
     this.topicStepNum,
     this.method,
-    this.password,
+    this.topicName,
   }) : super(key: key);
   int index = 0;
   String? nickname;
@@ -48,7 +46,7 @@ class NavigatorPage extends StatefulWidget {
   List<dynamic>? news;
   int? topicStepNum;
   String? method;
-  String? password;
+  String? topicName;
 
   @override
   State<NavigatorPage> createState() => _NavigatorPageState();
@@ -79,6 +77,7 @@ class _NavigatorPageState extends State<NavigatorPage> {
           topic: widget.topic,
           topicNum: widget.topicNum,
           topicStepNum: widget.topicStepNum,
+          topicName: widget.topicName,
         ),
         TimelinePage(
             user_id: widget.user_id,
@@ -92,6 +91,7 @@ class _NavigatorPageState extends State<NavigatorPage> {
           query: widget.query,
           topicNum: widget.topicNum,
           topicStepNum: widget.topicStepNum,
+          topicName: widget.topicName,
         ),
         NoticePage(
           user_id: widget.user_id,
@@ -110,16 +110,6 @@ class _NavigatorPageState extends State<NavigatorPage> {
         MyKeywordPage(
           user_id: widget.user_id,
           nickname: widget.nickname,
-        ),
-        CustomLoginPage(
-          // user_id: widget.user_id,
-          // nickname: widget.nickname,
-          // password: widget.password,
-        ),
-        CustomJoinPage(
-          // user_id: widget.user_id,
-          // nickname: widget.nickname,
-          // password: widget.password,
         ),
       ];
 
