@@ -16,31 +16,40 @@ from pymongo import MongoClient
 from pandas import json_normalize
 from api import *
 
-mallet_path = "/home/ubuntu/capstone-2022-29/tmp/mallet-2.0.8/bin/mallet"  # 이거 mallet2108어쩌구인가로도 바꿔보기
+mallet_path = "/home/ubuntu/capstone-2022-29/tmp/mallet-2.0.8/bin/mallet"
 mecab = Mecab()
 
-# 1. Preprocessing Data
 def get_key_tokens(text):
+    f = open("stopwords.txt", 'r')
+    lines = f.readlines()
+    f.close()
+
+    stopwords = []
+    for line in lines:
+        stopwords.append(line.strip())
+    
     key_pos = ['SL', 'NNG', 'NNP', 'VV', 'VA', 'XR', 'SH'] # ['NNG', 'NNP', 'SL', 'SH']
+    
     text = re.sub(r'\[[^)]*\]', '', text) # 한겨레 [포토], [인터뷰], [11회 비정규 노동 수기 공모전], [단독] 이런거 없애기
+    
     text = text.lower()
+    
     tokens = mecab.pos(text)
     token_list = []
     for token, pos in filter(lambda x: (x[1] in key_pos), tokens):
         if pos == 'VV' or pos == 'VA' or pos == 'XR':
             if len(token) <= 1:
                 continue
+        if token in stopwords:
+            continue
         token_list.append(token)
-    #print(token_list)
-    return token_list
 
-  # return ','.join([token for token, pos in filter(lambda x: (x[1] in key_pos), tokens)])
+    return token_list
 
 def preprocess(news_data, nobelow):
     news_df = json_normalize(json.loads(news_data.text))
 
     news_df_len = len(news_df.index)
-
 
     # get only the time, title data
     news_df = news_df[['_id', 'date', 'title']]
@@ -49,23 +58,22 @@ def preprocess(news_data, nobelow):
     news_df['date'] = pd.to_datetime(news_df['date'])
     news_df['title'] = news_df['title'].astype(str)
     news_df['_id'] = news_df['_id'].astype(str)
-    #2. Delete Stopwords
-    # 2.1 tokenize & get the pos
-    # 뉴스 데이터의 특징: 띄어쓰기, 오탈자 문제 적음.
+
+    # tokenize & get the pos
     title_list = []
     for i in tqdm(range(len(news_df['title']))):
         title_list.append(get_key_tokens(news_df.loc[i,'title']))
 
-    # 3. Make Corpus
+    # make Corpus
     id2word = corpora.Dictionary(title_list)
     id2word.filter_extremes(no_below=nobelow) 
     corpus = [id2word.doc2bow(content) for content in title_list]
 
     return news_df, id2word, corpus, title_list
 
-# 2.2 delete stopwords => TODO
+# 2.2 delete stopwords => TODO => 완료
 
-# 2.3 make user dictionary => TODO
+# 2.3 make user dictionary => TODO => 완료
 
 
 
@@ -92,9 +100,9 @@ def topic_modeling(id2word, corpus, title_list, num_topics):
 
 def timelining(per_contrib, num_news_threshold, news_df, timeline_df):
     # print(news_df["Topic_Perc_Contrib"])
-    print(news_df["Topic_Perc_Contrib"])
+    #print(news_df["Topic_Perc_Contrib"])
     topic_news = news_df[news_df["Topic_Perc_Contrib"] >= per_contrib]
-    # topic_news = topic_news.sort_values(by='Date', ascending=False)
+    topic_news.sort_values(by='Date', ascending=False)
 
     #print(topic_news)
     if len(topic_news) != 0:
@@ -159,13 +167,15 @@ def topics_to_timeline(news_df, ldamodel, corpus, num_keywords, num_topics, perc
     topics_info_df['Dominant_Topic'] =topics_info_df['Dominant_Topic'] +1
     topics_info_df.Dominant_Topic = topics_info_df.Dominant_Topic.astype(str)
     topics_info_df['Dominant_Topic'] = topics_info_df['Dominant_Topic'].str.split('.').str[0]
-    topic_per_list = []
+    topic_per_mean_list = []
     for i in range(1, num_topics+1):
         df = topics_info_df.loc[topics_info_df.Dominant_Topic==str(i)]
-        for j in range(10):
-            print(df.loc[:10, 'Topic_Perc_Contrib'])
+        print('num_topics:', i, df['Topic_Perc_Contrib'].mean())
+        topic_per_mean_list.append(df['Topic_Perc_Contrib'].mean())
         # topic_per_list.append(df.loc[:10, 'Topic_Perc_Contrib'].mean())
         # print(topic_per_list)
+    per_mean = sum(topic_per_mean_list) / len(topic_per_mean_list)
+    print("total mean:", per_mean)
             
 
 
@@ -174,7 +184,7 @@ def topics_to_timeline(news_df, ldamodel, corpus, num_keywords, num_topics, perc
         globals()['df_{}'.format(i)]=topics_info_df.loc[topics_info_df.Dominant_Topic==str(i)]
 
         globals()['df_{}'.format(i)].sort_values('Topic_Perc_Contrib',ascending=False,inplace = True)
-        timeline_df = timelining(perc_threshold, 3, globals()['df_{}'.format(i)], timeline_df)
+        timeline_df = timelining(per_mean + 0.0005*(100-num_topics), 3, globals()['df_{}'.format(i)], timeline_df)
 
     timeline_df = timeline_df.sort_values(by='Date', ascending=False)
     timeline_df.Date = timeline_df.Date.astype(str)
@@ -185,7 +195,7 @@ def topics_to_timeline(news_df, ldamodel, corpus, num_keywords, num_topics, perc
 
 
 if __name__ == '__main__':
-    query = '커피'
+    query = '코로나19'
     news_data = requests.get(req + query)
     client = MongoClient("mongodb+srv://BaekYeonsun:hello12345@cluster.3dypr.mongodb.net/database?retryWrites=true&w=majority")
 
@@ -209,7 +219,7 @@ if __name__ == '__main__':
 
     for i in range(len(topic_priority)):
         ldamallet = topic_modeling(id2word, corpus, title_list, topic_priority[i])
-        timeline = topics_to_timeline(news_df, ldamallet, corpus, 3, topic_priority[i], -0.0025 * topic_priority[i] + 0.15) # 마지막 인자 키워드 개수
+        timeline = topics_to_timeline(news_df, ldamallet, corpus, 3, topic_priority[i], -0.0025 * topic_priority[i] + 0.13) # 마지막 인자 키워드 개수
 
         topics = []
         for j in range(len(timeline.index)):
