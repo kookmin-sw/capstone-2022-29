@@ -10,8 +10,8 @@ def is_korean(word):
         return True
     return False
 
-file = "C:\\Users\\rosy0\\OneDrive\\문서\\소융대 자료\\capstone-2022-29\\DM\\TopicModeling\\queries.csv"
-user_dic_file = "C:\\Users\\rosy0\\OneDrive\\문서\\소융대 자료\\capstone-2022-29\\DM\\TopicModeling\\user_dic.csv"
+file = "./queries.csv"
+user_dic_file = "./user_dic.csv"
 
 queries_df = pd.read_csv(file)
 f = open(user_dic_file, 'w')
