@@ -20,3 +20,5 @@ index.md
 /content_60/
 /content_70/
 /backend/.env.
+/tmp/
+*.tar.gz

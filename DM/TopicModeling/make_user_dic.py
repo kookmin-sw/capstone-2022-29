@@ -9,8 +9,9 @@ def is_korean(word):
         return True
     return False
 
-# file = "queries.csv"
-user_dic_file = "user_dic.csv"
+file = "./queries.csv"
+user_dic_file = "./user_dic.csv"
+
 
 # queries_df = pd.read_csv(file)
 f = open(user_dic_file, 'a')
@@ -27,6 +28,7 @@ f = open(user_dic_file, 'a')
 #         else:
 #             f.write(word+',,,,SLㅑ,ㅑi*,T,'+word+',*,*,*,*,*\n')
 
+
 for word in ['비대면', '코로나', '거리두기']:
     if is_korean(word):
         if has_jongseong(word):
@@ -37,3 +39,4 @@ for word in ['비대면', '코로나', '거리두기']:
     else:
         f.write(word+',,,,SL,*,T,'+word+',*,*,*,*,*\n')
 f.close()
+
