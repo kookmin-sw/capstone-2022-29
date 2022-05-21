@@ -33,8 +33,10 @@ ITEM_PIPELINES = {'ScrapyNews.pipelines.CsvPipeline': 300}
 INSTALLED_APPS = (
     'django_crontab'
 )
-CRONJOBS = [
-    ('*/15 * * * *', '/Users/choihyewon/VScode/capstone-2022-29/DM/Crawling/ScrapyNews/crawl.sh')
-]
 
 FEED_EXPORT_ENCODING = 'utf-8'
+
+# MONGO_URI = 'mongodb://localhost:27017'  #로컬호스트에 mongdb저장시
+# MONGO_DATABASE = 'ecommerce'  #자신의 몽고db db명
+
+CONCURRENT_REQUESTS = 1  #순서대로 저장하고 싶을때 주석처리해도 무관

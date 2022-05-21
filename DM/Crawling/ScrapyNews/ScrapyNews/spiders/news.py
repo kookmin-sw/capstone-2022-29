@@ -8,15 +8,16 @@ class DongaNewsSpider(scrapy.Spider):
     name = 'NewsCrawler'
 
     def start_requests(self):
-        yesterday = date.today() - timedelta(1)
-        yesterday = yesterday.strftime("%Y%m%d")
+        # yesterday = date.today() - timedelta(1)
+        # yesterday = yesterday.strftime("%Y%m%d")
+        today = date.today().strftime("%Y%m%d")
 
         urlList = []
         for page in range(1,300,20):
-            urlList.append(['https://www.donga.com/news/List?p={}&prod=news&ymd={}&m=NP'.format(page, yesterday),self.dongaParse])
+            # urlList.append(['https://www.donga.com/news/List?p={}&prod=news&ymd={}&m=NP'.format(page, yesterday),self.dongaParse])
+            urlList.append(['https://www.donga.com/news/List?p={}&prod=news&ymd={}&m=NP'.format(page, today),self.dongaParse])
         for page in range(0,20):
             urlList.append(['https://www.hani.co.kr/arti/list{}.html'.format(page),self.haniParse])
-        
         for url, parse in urlList:
             yield scrapy.Request(url=url, callback=parse)
 
@@ -47,8 +48,9 @@ class DongaNewsSpider(scrapy.Spider):
         for i in range(1,16):
             item = ScrapynewsItem()
 
-            yesterday = datetime.today() - timedelta(1)
-            yesterday = yesterday.strftime("%Y-%m-%d")
+            # yesterday = datetime.today() - timedelta(1)
+            # yesterday = yesterday.strftime("%Y-%m-%d")
+            # today = datetime.today().strftime("%Y-%m-%d")
 
             date = response.xpath('//*[@id="section-left-scroll-in"]/div[3]/div[{}]/div/p/span[@class="date"]/text()'.format(i)).extract_first()
             date = datetime.fromisoformat(date).strftime("%Y-%m-%d")

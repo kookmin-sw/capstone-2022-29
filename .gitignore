@@ -6,3 +6,9 @@
 index.md
 *.png
 /.vscode/
+<<<<<<< Updated upstream
+=======
+/result/
+/image/
+/DM/Crawling/ScrapyNews/ScrapyNews/spiders/spider.log
+>>>>>>> Stashed changes
