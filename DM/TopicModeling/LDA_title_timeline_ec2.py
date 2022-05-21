@@ -16,10 +16,9 @@ from pymongo import MongoClient
 from pandas import json_normalize
 from api import *
 
-mallet_path = "/home/ubuntu/capstone-2022-29/tmp/mallet-2.0.8/bin/mallet"  # 이거 mallet2108어쩌구인가로도 바꿔보기
+mallet_path = "/home/ubuntu/capstone-2022-29/tmp/mallet-2.0.8/bin/mallet"
 mecab = Mecab()
 
-# 1. Preprocessing Data
 def get_key_tokens(text):
     f = open("stopwords.txt", 'r')
     lines = f.readlines()
@@ -44,16 +43,13 @@ def get_key_tokens(text):
         if token in stopwords:
             continue
         token_list.append(token)
-    #print(token_list)
-    return token_list
 
-  # return ','.join([token for token, pos in filter(lambda x: (x[1] in key_pos), tokens)])
+    return token_list
 
 def preprocess(news_data, nobelow):
     news_df = json_normalize(json.loads(news_data.text))
 
     news_df_len = len(news_df.index)
-
 
     # get only the time, title data
     news_df = news_df[['_id', 'date', 'title']]
@@ -62,23 +58,22 @@ def preprocess(news_data, nobelow):
     news_df['date'] = pd.to_datetime(news_df['date'])
     news_df['title'] = news_df['title'].astype(str)
     news_df['_id'] = news_df['_id'].astype(str)
-    #2. Delete Stopwords
-    # 2.1 tokenize & get the pos
-    # 뉴스 데이터의 특징: 띄어쓰기, 오탈자 문제 적음.
+
+    # tokenize & get the pos
     title_list = []
     for i in tqdm(range(len(news_df['title']))):
         title_list.append(get_key_tokens(news_df.loc[i,'title']))
 
-    # 3. Make Corpus
+    # make Corpus
     id2word = corpora.Dictionary(title_list)
     id2word.filter_extremes(no_below=nobelow) 
     corpus = [id2word.doc2bow(content) for content in title_list]
 
     return news_df, id2word, corpus, title_list
 
-# 2.2 delete stopwords => TODO
+# 2.2 delete stopwords => TODO => 완료
 
-# 2.3 make user dictionary => TODO
+# 2.3 make user dictionary => TODO => 완료
 
 
 
