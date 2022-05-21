@@ -184,7 +184,7 @@ def topics_to_timeline(news_df, ldamodel, corpus, num_keywords, num_topics, perc
         globals()['df_{}'.format(i)]=topics_info_df.loc[topics_info_df.Dominant_Topic==str(i)]
 
         globals()['df_{}'.format(i)].sort_values('Topic_Perc_Contrib',ascending=False,inplace = True)
-        timeline_df = timelining(per_mean, 3, globals()['df_{}'.format(i)], timeline_df)
+        timeline_df = timelining(per_mean + 0.0005*(100-num_topics), 3, globals()['df_{}'.format(i)], timeline_df)
 
     timeline_df = timeline_df.sort_values(by='Date', ascending=False)
     timeline_df.Date = timeline_df.Date.astype(str)
