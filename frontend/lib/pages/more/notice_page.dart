@@ -54,7 +54,7 @@ class _NoticePageState extends State<NoticePage> {
                   itemCount: data.length,
                   itemBuilder: (context, index) {
                     return InkWell(
-                        onTap: () {
+                      onTap: (){
                           Navigator.push(
                             context,
                             MaterialPageRoute(
@@ -70,10 +70,44 @@ class _NoticePageState extends State<NoticePage> {
                             ),
                           );
                         },
-                        child: ColorList(
-                          title: data[index]['title'],
-                          content: data[index]['content'],
-                        ));
+                      child: Container(
+                        child: Column(children: [
+                          Container(
+                            child: Text(data[index]['title'],maxLines: 1, overflow: TextOverflow.ellipsis),
+                            width: size.width,
+                            height: size.height * 0.04,
+                            decoration: BoxDecoration(
+                                color: Color.fromRGBO(198, 228, 255, 1),
+                                borderRadius: BorderRadius.only(
+                                  topLeft: const Radius.circular(40.0),
+                                  topRight: const Radius.circular(40.0),
+                                )),
+                            padding: EdgeInsets.fromLTRB(size.width * 0.05, size.height*0.01, size.width * 0.05, 0),
+                          ),
+                          Container(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(data[index]['content'], maxLines: 1, overflow: TextOverflow.ellipsis),
+                                ],
+                              ),
+                              width: size.width,
+                              height: size.height * 0.05,
+                              decoration: BoxDecoration(
+                                  color: Color.fromRGBO(247, 247, 247, 1),
+                                  borderRadius: BorderRadius.only(
+                                    bottomLeft: const Radius.circular(30),
+                                    bottomRight: const Radius.circular(30),
+                                  )),
+                              padding: EdgeInsets.fromLTRB(
+                                  size.width * 0.05, 0, size.width * 0.05, 0),
+                            ),
+                        ]),
+                        margin: EdgeInsets.fromLTRB(size.width * 0.05, size.height * 0.02,
+                            size.width * 0.05, size.height * 0.01),
+                      ),
+                    );
                   },
                 );
               } else {

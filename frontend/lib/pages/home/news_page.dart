@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/api/api_service.dart';
 import 'package:frontend/components/app_bar.dart';
+import 'package:frontend/components/list_color.dart';
 import 'package:frontend/components/news_title.dart';
 import 'package:frontend/pages/navigator.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -16,7 +17,8 @@ class NewsPage extends StatefulWidget {
       this.query,
       this.topic,
       this.topicNum,
-      this.topicStepNum})
+      this.topicStepNum,
+      this.topicName})
       : super(key: key);
   String? user_id;
   String? nickname;
@@ -26,6 +28,7 @@ class NewsPage extends StatefulWidget {
 
   int? topicNum;
   int? topicStepNum;
+  String? topicName;
 
   @override
   State<NewsPage> createState() => _NewsPageState();
@@ -109,6 +112,7 @@ class _NewsPageState extends State<NewsPage> {
       setState(() {
         for (var i = 0; i < news.length; i++) {
           data.add({
+              'date': news[i]['date'],
             'title': news[i]['title'],
             'navigate': () async {
               Uri url = Uri.parse(news[i]['url']);
@@ -123,8 +127,9 @@ class _NewsPageState extends State<NewsPage> {
         List<dynamic> news = await ApiService().getNewsID(widget.news![i]["news_id"]);
 
         if (mounted){
-        setState(() {
+          setState(() {
             data.add({
+              'date': news[0]['date'],
               'title': news[0]["title"],
               'url': news[0]["url"],
               'summary': news[0]["summary"],
@@ -142,6 +147,7 @@ class _NewsPageState extends State<NewsPage> {
                         news_id: widget.news![i]["news_id"],
                         topicNum: widget.topicNum,
                         topicStepNum: widget.topicStepNum,
+                        topicName: widget.topicName,
                       );
                     },
                   ),
@@ -158,7 +164,9 @@ class _NewsPageState extends State<NewsPage> {
     List<dynamic> news = await ApiService().getNews(query, nextPage, perPage);
     setState(() {
       for (var i = 0; i < news.length; i++) {
+        // print(news[i]['date']);
         data.add({
+          // 'date': news[i]['date'],
           'title': news[i]['title'],
           'navigate': () async {
             Uri url = Uri.parse(news[i]['url']);
@@ -195,8 +203,47 @@ class _NewsPageState extends State<NewsPage> {
                       itemCount: data.length + 1,
                       itemBuilder: (context, index) {
                         if (index < data.length) {
-                          return newsTitle(size, data[index]['title'],
-                              data[index]['navigate']);
+                          return InkWell(
+                            onTap: data[index]['navigate'],
+                            child: Container(
+                              child: Column(children: [
+                                Container(
+                                  child: Text(data[index]['date']??'',maxLines: 1, overflow: TextOverflow.ellipsis),
+                                  width: size.width,
+                                  height: size.height * 0.04,
+                                  decoration: BoxDecoration(
+                                      color: Color.fromRGBO(198, 228, 255, 1),
+                                      borderRadius: BorderRadius.only(
+                                        topLeft: const Radius.circular(40.0),
+                                        topRight: const Radius.circular(40.0),
+                                      )),
+                                  padding: EdgeInsets.fromLTRB(size.width * 0.05, size.height*0.01, size.width * 0.05, 0),
+                                ),
+                                Container(
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Text(data[index]['title'], maxLines: 2, overflow: TextOverflow.ellipsis),
+                                      ],
+                                    ),
+                                    width: size.width,
+                                    height: size.height * 0.06,
+                                    decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius: BorderRadius.only(
+                                          bottomLeft: const Radius.circular(30),
+                                          bottomRight: const Radius.circular(30),
+                                        )),
+                                    padding: EdgeInsets.fromLTRB(
+                                        size.width * 0.05, 0, size.width * 0.05, 0),
+                                  ),
+                              ]),
+                              margin: EdgeInsets.fromLTRB(size.width * 0.05, size.height * 0.02,
+                                  size.width * 0.05, size.height * 0.01),
+                              decoration: BoxDecoration(),
+                            ),
+                          );
                         } else {
                           return isMoreRequesting
                               ? Container(
