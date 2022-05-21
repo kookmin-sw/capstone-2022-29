@@ -15,3 +15,5 @@ index.md
 /.vscode/
 /result/
 /image/
+/tmp/
+*.tar.gz
