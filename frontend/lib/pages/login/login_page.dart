@@ -216,27 +216,9 @@ class _LoginPageState extends State<LoginPage> {
             ),
             Container(
               width: size.width * 0.57,
+              height: size.height * 0.05,
               child: OutlinedButton(
-                child: Text('회원가입'),
-                style: OutlinedButton.styleFrom(
-                  primary: Colors.black,
-                  backgroundColor: Color(0xffC6E4FF),
-                  shadowColor: Colors.grey,
-                  elevation: 2,
-                  side: BorderSide.none,
-                ),
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => CustomJoinPage()),
-                  );
-                },
-              ),
-            ),
-            Container(
-              width: size.width * 0.57,
-              child: OutlinedButton(
-                child: Text('로그인'),
+                child: Text('로그인하기'),
                 style: OutlinedButton.styleFrom(
                   primary: Colors.black,
                   backgroundColor: Color(0xffC6E4FF),
@@ -257,6 +239,7 @@ class _LoginPageState extends State<LoginPage> {
             ),
             SignInButtonBuilder(
               backgroundColor: Color(0xffF2E52D),
+              height: size.height * 0.05,
               onPressed: () {
                 method = 'kakao';
                 flutterKakaoLogin();
@@ -269,8 +252,27 @@ class _LoginPageState extends State<LoginPage> {
                 child: Image.asset('lib/assets/images/kakao_logo.png'),
               ),
             ),
-          ],
-        ),
+            SizedBox(
+              height: size.height * 0.04,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text("계정이 없으신가요?"),
+                SizedBox(width: size.width*0.02),
+                InkWell(
+                  onTap: (){
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => CustomJoinPage()),
+                    );
+                  },
+                  child: Text("회원가입", style: TextStyle(decoration: TextDecoration.underline, color: Color.fromARGB(255, 23, 147, 255),)),
+                )
+              ]
+            )
+          ]
+        )
       ),
     );
   }
