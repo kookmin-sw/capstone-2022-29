@@ -105,10 +105,10 @@ def timelining(per_contrib, num_news_threshold, news_df, timeline_df):
     topic_news = news_df[news_df["Topic_Perc_Contrib"] >= per_contrib]
     topic_news.sort_values(by='Date', ascending=False)
 
-    #print(topic_news)
+    print(topic_news)
     if len(topic_news) != 0:
         histogram = {}  
-        prev_date = datetime(2999, 12, 30)
+        prev_date = datetime(2023, 12, 30)
         for date in topic_news["Date"].tolist(): 
             histogram[date] = histogram.get(date, 0) + 1 # histogram은 날짜에 해당 토픽이 몇번 나왔는지 들어있음
         date_frequency = list(histogram.items())
@@ -124,8 +124,8 @@ def timelining(per_contrib, num_news_threshold, news_df, timeline_df):
             print(prev_date, date)
             
             date_diff = prev_date - date
-            print(date_diff)
-            if date_diff > 30:
+            print(date_diff.days)
+            if date_diff.days > 30:
                 if frequency >= num_news_threshold:
                     title_list = list(topic_news['Title'])
                     id_list = list(topic_news['ID'])
@@ -201,9 +201,7 @@ def topics_to_timeline(news_df, ldamodel, corpus, num_keywords, num_topics, perc
 
 
 if __name__ == '__main__':
-
     query = '네이버'
-
     news_data = requests.get(req + query)
     client = MongoClient("mongodb+srv://BaekYeonsun:hello12345@cluster.3dypr.mongodb.net/database?retryWrites=true&w=majority")
 
