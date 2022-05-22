@@ -67,7 +67,7 @@ class _DetailNewsPageState extends State<DetailNewsPage> {
             bookmarks: Bookmarks(
               news_id: widget.news_id!,
               query: query,
-              topic: "",
+              topic: widget.topicName!,
             ),
           ),
         );
@@ -79,7 +79,7 @@ class _DetailNewsPageState extends State<DetailNewsPage> {
             bookmarks: Bookmarks(
               news_id: widget.news_id!,
               query: query,
-              topic: "",
+              topic: widget.topicName!,
             ),
           ),
         );

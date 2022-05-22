@@ -23,30 +23,7 @@ class MyApp extends StatefulWidget {
   State<MyApp> createState() => _MyAppState();
 }
 
-class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
-  late ThemeModeNotifier _themeModeNotifier;
-  late final WidgetsBinding _widgetsBinding;
-  late final FlutterWindow _window;
-
-  @override
-  void initState() {
-    _widgetsBinding = WidgetsBinding.instance!;
-    _widgetsBinding.addObserver(this);
-    _window = _widgetsBinding.window;
-    _themeModeNotifier = ThemeModeNotifier(
-      ValueNotifier<Brightness>(_window.platformDispatcher.platformBrightness),
-    );
-    super.initState();
-  }
-
-  @override
-  void didChangePlatformBrightness() {
-    _themeModeNotifier.changeBrightness(
-      brightness: _window.platformDispatcher.platformBrightness,
-    );
-    super.didChangePlatformBrightness();
-  }
-
+class _MyAppState extends State<MyApp> {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
@@ -54,35 +31,17 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
       create: (context) {
         return SearchProvider();
       },
-      child: ValueListenableBuilder<Brightness>(
-        valueListenable: _themeModeNotifier.appBrightness,
-        builder: (context, value, child) {
-          return MaterialApp(
-            debugShowCheckedModeBanner: false,
-            builder: ((context, child) {
-              return MediaQuery(
-                data: MediaQuery.of(context).copyWith(textScaleFactor: 1),
-                child: child!,
-              );
-            }),
-            title: '뉴익',
-            theme: ThemeData(
-              brightness: value,
-            ),
-            home: SplashPage(),
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        builder: ((context, child) {
+          return MediaQuery(
+            data: MediaQuery.of(context).copyWith(textScaleFactor: 1),
+            child: child!,
           );
-        },
+        }),
+        title: '뉴익',
+        home: SplashPage(),
       ),
     );
-  }
-}
-
-class ThemeModeNotifier {
-  ThemeModeNotifier(this.appBrightness);
-
-  final appBrightness;
-
-  changeBrightness({required Brightness brightness}) {
-    appBrightness.value = brightness;
   }
 }

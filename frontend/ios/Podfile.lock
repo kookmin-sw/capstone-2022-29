@@ -1,11 +1,5 @@
 PODS:
   - Alamofire (5.5.0)
-  - AppAuth (1.5.0):
-    - AppAuth/Core (= 1.5.0)
-    - AppAuth/ExternalUserAgent (= 1.5.0)
-  - AppAuth/Core (1.5.0)
-  - AppAuth/ExternalUserAgent (1.5.0):
-    - AppAuth/Core
   - Flutter (1.0.0)
   - flutter_email_sender (0.0.1):
     - Flutter
@@ -16,17 +10,6 @@ PODS:
     - KakaoSDKUser (~> 2.7.0)
   - flutter_keyboard_visibility (0.0.1):
     - Flutter
-  - google_sign_in_ios (0.0.1):
-    - Flutter
-    - GoogleSignIn (~> 5.0)
-  - GoogleSignIn (5.0.2):
-    - AppAuth (~> 1.2)
-    - GTMAppAuth (~> 1.0)
-    - GTMSessionFetcher/Core (~> 1.1)
-  - GTMAppAuth (1.3.0):
-    - AppAuth/Core (~> 1.4)
-    - GTMSessionFetcher/Core (~> 1.5)
-  - GTMSessionFetcher/Core (1.7.0)
   - KakaoSDKAuth (2.7.1):
     - KakaoSDKCommon (= 2.7.1)
   - KakaoSDKCommon (2.7.1):
@@ -48,17 +31,12 @@ DEPENDENCIES:
   - flutter_email_sender (from `.symlinks/plugins/flutter_email_sender/ios`)
   - flutter_kakao_login (from `.symlinks/plugins/flutter_kakao_login/ios`)
   - flutter_keyboard_visibility (from `.symlinks/plugins/flutter_keyboard_visibility/ios`)
-  - google_sign_in_ios (from `.symlinks/plugins/google_sign_in_ios/ios`)
   - share_plus (from `.symlinks/plugins/share_plus/ios`)
   - url_launcher_ios (from `.symlinks/plugins/url_launcher_ios/ios`)
 
 SPEC REPOS:
   trunk:
     - Alamofire
-    - AppAuth
-    - GoogleSignIn
-    - GTMAppAuth
-    - GTMSessionFetcher
     - KakaoSDKAuth
     - KakaoSDKCommon
     - KakaoSDKUser
@@ -72,8 +50,6 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/flutter_kakao_login/ios"
   flutter_keyboard_visibility:
     :path: ".symlinks/plugins/flutter_keyboard_visibility/ios"
-  google_sign_in_ios:
-    :path: ".symlinks/plugins/google_sign_in_ios/ios"
   share_plus:
     :path: ".symlinks/plugins/share_plus/ios"
   url_launcher_ios:
@@ -81,21 +57,16 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   Alamofire: 1c4fb5369c3fe93d2857c780d8bbe09f06f97e7c
-  AppAuth: 80317d99ac7ff2801a2f18ff86b48cd315ed465d
   Flutter: 405776dd0763d7e32a8f989d4e271ca1317d080c
   flutter_email_sender: 02d7443217d8c41483223627972bfdc09f74276b
   flutter_kakao_login: 86c80e6be43227e35ac3a9cbc667d60d5173fb48
   flutter_keyboard_visibility: 0339d06371254c3eb25eeb90ba8d17dca8f9c069
-  google_sign_in_ios: ed71c0dbddfba8b1ea9aa210dbda695f46bf51bd
-  GoogleSignIn: 7137d297ddc022a7e0aa4619c86d72c909fa7213
-  GTMAppAuth: 4d8f864896f3646f0c33baf38a28362f4c601e15
-  GTMSessionFetcher: 43748f93435c2aa068b1cbe39655aaf600652e91
   KakaoSDKAuth: 70cfb1e4e60f543fd5f0ece2995c3b0e879c532e
   KakaoSDKCommon: 48fe293e8970a8db8d10d5ca63600a7a8cc5f74c
   KakaoSDKUser: 5609a2679b6beda86298d63c45961953c7203101
   share_plus: 056a1e8ac890df3e33cb503afffaf1e9b4fbae68
   url_launcher_ios: 839c58cdb4279282219f5e248c3321761ff3c4de
 
-PODFILE CHECKSUM: 4e8f8b2be68aeea4c0d5beb6ff1e79fface1d048
+PODFILE CHECKSUM: ef19549a9bc3046e7bb7d2fab4d021637c0c58a3
 
 COCOAPODS: 1.11.3
