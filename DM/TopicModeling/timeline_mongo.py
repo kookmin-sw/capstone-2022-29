@@ -51,17 +51,19 @@ if __name__ == '__main__':
   db = client.database
   topic_collection = db.topics
   post = {
-          'query': '코로나테스트',
+          'query': '19',
           'topicNum': [{'num': 0},
                        {'num': 1},
                        {'num': 2}]
          }
 
   # 추후에는 폴더 이름 query_토픽개수로 바꾸기
-  folders = ["C:\\Users\\rosy0\\OneDrive\\문서\\소융대 자료\\capstone-2022-29\\result\\한겨레_title_민주당_10\\", "C:\\Users\\rosy0\\OneDrive\\문서\\소융대 자료\\capstone-2022-29\\result\\한겨레_title_민주당_60\\", "C:\\Users\\rosy0\\OneDrive\\문서\\소융대 자료\\capstone-2022-29\\result\\한겨레_title_민주당_70\\"]
+  folders = ["/home/ubuntu/capstone-2022-29/DM/TopicModeling/result/19_title_35/", "/home/ubuntu/capstone-2022-29/DM/TopicModeling/result/19_title_45/", "/home/ubuntu/capstone-2022-29/DM/TopicModeling/result/19_title_65/"]
   for i in range(3):
     folder = folders[i]
-    num_topic = int(folder.split('\\')[-2].split('_')[-1])
+    print(folder.split('/'))
+    num_topic = int(folder.split('/')[-2].split('_')[-1])
+    print(num_topic)
     timeline = timelining(num_topic, 0.09, 1, folder)
     print(timeline)
     topics = []
@@ -76,5 +78,4 @@ if __name__ == '__main__':
     # print(topic_collection.index_information())
     #   post.append(a)
   result = topic_collection.insert_one(post)
-
 

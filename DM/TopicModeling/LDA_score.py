@@ -10,8 +10,8 @@ def get_score(corpus, id2word, text_list, start, end, steps):
     perplexity_values = []
     coherence_dict = {}
     for t in tqdm(range(start, end, steps)):
-        # lda_model = gensim.models.LdaModel(corpus=corpus, num_topics=t, id2word=id2word) # 아래랑 성능 비교하기
-        lda_model = gensim.models.wrappers.LdaMallet(mallet_path, corpus=corpus, num_topics=t, id2word=id2word)
+        lda_model = gensim.models.LdaModel(corpus=corpus, num_topics=t, id2word=id2word) # 아래랑 성능 비교하기
+        #lda_model = gensim.models.wrappers.LdaMallet(mallet_path, corpus=corpus, num_topics=t, id2word=id2word)
         coherence_model = CoherenceModel(model=lda_model, texts=text_list, dictionary=id2word, topn=3)
         coherence = coherence_model.get_coherence()
         coherence_values.append(coherence)
