@@ -58,34 +58,6 @@ class _DetailNewsPageState extends State<DetailNewsPage> {
     String query = widget.query ??
         Provider.of<SearchProvider>(context, listen: false).searchQuery;
 
-    Future<void> postBookmark(String user_id) async {
-      List<dynamic> isBookmark = await ApiService().getBookmark(user_id);
-      if (isBookmark.isEmpty) {
-        await ApiService().postBookmark(
-          Bookmark(
-            user_id: user_id,
-            bookmarks: Bookmarks(
-              news_id: widget.news_id!,
-              query: query,
-              topic: widget.topicName!,
-            ),
-          ),
-        );
-      } else {
-        await ApiService().updateBookmark(
-          user_id,
-          Bookmark(
-            user_id: user_id,
-            bookmarks: Bookmarks(
-              news_id: widget.news_id!,
-              query: query,
-              topic: widget.topicName!,
-            ),
-          ),
-        );
-      }
-    }
-
     void onSharePressed() {
       String title = data.isNotEmpty ? data[0]["title"] : '';
       String summary = data.isNotEmpty ? data[0]["summary"] : '';
@@ -101,12 +73,62 @@ class _DetailNewsPageState extends State<DetailNewsPage> {
       Navigator.pop(context);
     }
 
-    void onConfirmDialog() {
-      showDialog(
-          context: context,
-          barrierDismissible: true,
-          builder: (context) {
-            return AlertDialog(
+    // void onConfirmDialog() {
+    //   showDialog(
+    //       context: context,
+    //       barrierDismissible: true,
+    //       builder: (context) {
+    //         return AlertDialog(
+    //             content: SizedBox(
+    //                 height: size.height * 0.15,
+    //                 child: Column(
+    //                   mainAxisAlignment: MainAxisAlignment.center,
+    //                   children: [
+    //                     Text(widget.topicNum != null
+    //                         ? '북마크가 정상적으로 등록되었습니다.'
+    //                         : '북마크가 이미 등록되어 있습니다.'),
+    //                     button(size, "닫기", closeSimilar),
+    //                   ],
+    //                 )));
+    //       });
+    // }
+
+    Future<void> postBookmark(String user_id) async {
+      List<dynamic> isBookmark = await ApiService().getBookmark(user_id);
+      if (isBookmark.isEmpty) {
+        await ApiService().postBookmark(
+          Bookmark(
+            user_id: user_id,
+            bookmarks: Bookmarks(
+              news_id: widget.news_id!,
+              query: query,
+              topic: widget.topicName!,
+            ),
+          ),
+        );
+      } else {
+        bool isExisted = false;
+        for (var i = 0; i < isBookmark[0]['bookmark'].length; i++) {
+          if (isBookmark[0]['bookmark'][i]['news_id'] == widget.news_id)
+            isExisted = true;
+        }
+        if (isExisted == false) {
+          await ApiService().updateBookmark(
+            user_id,
+            Bookmark(
+              user_id: user_id,
+              bookmarks: Bookmarks(
+                news_id: widget.news_id!,
+                query: query,
+                topic: widget.topicName!,
+              ),
+            ),
+          );
+          showDialog(
+            context: context,
+            barrierDismissible: false,
+            builder: (context) {
+              return AlertDialog(
                 content: SizedBox(
                     height: size.height * 0.15,
                     child: Column(
@@ -117,13 +139,35 @@ class _DetailNewsPageState extends State<DetailNewsPage> {
                             : '북마크가 이미 등록되어 있습니다.'),
                         button(size, "닫기", closeSimilar),
                       ],
-                    )));
-          });
+                    )),
+              );
+            },
+          );
+        } else {
+          showDialog(
+            context: context,
+            barrierDismissible: false,
+            builder: (context) {
+              return AlertDialog(
+                content: SizedBox(
+                    height: size.height * 0.15,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text('북마크가 이미 등록되어 있습니다.'),
+                        button(size, "닫기", closeSimilar),
+                      ],
+                    )),
+              );
+            },
+          );
+        }
+      }
     }
 
     void onSavePressed() async {
       if (widget.topicNum != null) await postBookmark(widget.user_id!);
-      onConfirmDialog();
+      // onConfirmDialog();
     }
 
     // void onSimailarPressed() {
