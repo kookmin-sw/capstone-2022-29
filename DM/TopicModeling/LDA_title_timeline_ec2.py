@@ -101,14 +101,14 @@ def topic_modeling(id2word, corpus, title_list, num_topics):
 
 def timelining(per_contrib, num_news_threshold, news_df, timeline_df):
     # print(news_df["Topic_Perc_Contrib"])
-    print(news_df["Topic_Perc_Contrib"])
+    # print(news_df["Topic_Perc_Contrib"])
     topic_news = news_df[news_df["Topic_Perc_Contrib"] >= per_contrib]
-    topic_news.sort_values(by='Date', ascending=False)
+    topic_news = topic_news.sort_values(by='Date', ascending=False)
 
     #print(topic_news)
     if len(topic_news) != 0:
         histogram = {}  
-        prev_date = datetime(2999, 12, 30)
+        prev_date = datetime(2023, 12, 30)
         for date in topic_news["Date"].tolist(): 
             histogram[date] = histogram.get(date, 0) + 1 # histogram은 날짜에 해당 토픽이 몇번 나왔는지 들어있음
         date_frequency = list(histogram.items())
@@ -125,7 +125,7 @@ def timelining(per_contrib, num_news_threshold, news_df, timeline_df):
             
             date_diff = prev_date - date
             print(date_diff)
-            if date_diff > 30:
+            if date_diff.days > 30:
                 if frequency >= num_news_threshold:
                     title_list = list(topic_news['Title'])
                     id_list = list(topic_news['ID'])
@@ -187,7 +187,7 @@ def topics_to_timeline(news_df, ldamodel, corpus, num_keywords, num_topics, perc
     for i in range(1,num_topics+1):
         globals()['df_{}'.format(i)]=topics_info_df.loc[topics_info_df.Dominant_Topic==str(i)]
 
-        globals()['df_{}'.format(i)].sort_values('Topic_Perc_Contrib',ascending=False,inplace = True)
+        globals()['df_{}'.format(i)] = globals()['df_{}'.format(i)].sort_values('Topic_Perc_Contrib',ascending=False,inplace = True)
         timeline_df = timelining(perc_threshold, 3, globals()['df_{}'.format(i)], timeline_df)
 
     timeline_df = timeline_df.sort_values(by='Date', ascending=False)
