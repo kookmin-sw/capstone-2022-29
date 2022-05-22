@@ -55,8 +55,8 @@ class _DetailNewsPageState extends State<DetailNewsPage> {
     final int num = widget.topicNum ?? 0;
     final int topicStep = widget.topicStepNum ?? 0;
     Size size = MediaQuery.of(context).size;
-    String query =
-        widget.query ?? Provider.of<SearchProvider>(context, listen: false).searchQuery;
+    String query = widget.query ??
+        Provider.of<SearchProvider>(context, listen: false).searchQuery;
 
     Future<void> postBookmark(String user_id) async {
       List<dynamic> isBookmark = await ApiService().getBookmark(user_id);
@@ -193,79 +193,103 @@ class _DetailNewsPageState extends State<DetailNewsPage> {
                                 width: size.width * 0.9,
                                 height: size.height * 0.03,
                                 child: Slider(
-                                  value: (topicStep-1)/(num-1),
+                                  value: (topicStep - 1) / (num - 1),
                                   max: 1,
-                                  onChanged: (double value) {
-                                  },
+                                  onChanged: (double value) {},
                                 ),
                               )
                             : Container(),
                         Center(
                           child: Container(
-                            margin: EdgeInsets.only(top: size.height * 0.02, bottom: size.height*0.02),
+                            margin: EdgeInsets.only(
+                                top: size.height * 0.02,
+                                bottom: size.height * 0.02),
                             width: size.width * 0.8,
-                            padding: EdgeInsets.only(top: size.height*0.015, bottom: size.height*0.015, left: size.width*0.05, right: size.width*0.05),
+                            padding: EdgeInsets.only(
+                                top: size.height * 0.015,
+                                bottom: size.height * 0.015,
+                                left: size.width * 0.05,
+                                right: size.width * 0.05),
                             decoration: BoxDecoration(
                               color: Colors.white,
                               borderRadius: BorderRadius.circular(30),
                             ),
                             child: Center(
-                              child: Text(data[0]['title'],
-                                style: TextStyle(
-                                  fontSize: size.width * 0.05,
-                                )
-                              )
-                            ),
+                                child: Text(data[0]['title'],
+                                    style: TextStyle(
+                                      fontSize: size.width * 0.05,
+                                    ))),
                           ),
                         ),
                         Center(
                           child: SizedBox(
-                            width: size.width*0.8,
-                            child: SingleChildScrollView(
-                              scrollDirection: Axis.horizontal,
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Container(
-                                    padding: EdgeInsets.only(top: size.height*0.005, bottom: size.height*0.005, left: size.width*0.02, right: size.width*0.02),
-                                    margin: EdgeInsets.only(left: size.width*0.01, right: size.width*0.01),
-                                    child: Text(data[0]['date']),
-                                    decoration: BoxDecoration(
-                                    border: Border.all(
-                                        color: Color.fromARGB(255, 19, 17, 17),
-                                        width: size.width * 0.0025,
+                              width: size.width * 0.8,
+                              child: SingleChildScrollView(
+                                scrollDirection: Axis.horizontal,
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Container(
+                                      padding: EdgeInsets.only(
+                                          top: size.height * 0.005,
+                                          bottom: size.height * 0.005,
+                                          left: size.width * 0.02,
+                                          right: size.width * 0.02),
+                                      margin: EdgeInsets.only(
+                                          left: size.width * 0.01,
+                                          right: size.width * 0.01),
+                                      child: Text(data[0]['date']),
+                                      decoration: BoxDecoration(
+                                        border: Border.all(
+                                          color:
+                                              Color.fromARGB(255, 19, 17, 17),
+                                          width: size.width * 0.0025,
+                                        ),
+                                        borderRadius: BorderRadius.circular(30),
                                       ),
-                                      borderRadius: BorderRadius.circular(30),
                                     ),
-                                  ),
-                                  Container(
-                                    padding: EdgeInsets.only(top: size.height*0.005, bottom: size.height*0.005, left: size.width*0.02, right: size.width*0.02),
-                                    margin: EdgeInsets.only(left: size.width*0.02, right: size.width*0.02),
-                                    child: Text(data[0]['journal']),
-                                    decoration: BoxDecoration(
-                                    border: Border.all(
-                                        color: Color(0xff000000),
-                                        width: size.width * 0.0025,
+                                    Container(
+                                      padding: EdgeInsets.only(
+                                          top: size.height * 0.005,
+                                          bottom: size.height * 0.005,
+                                          left: size.width * 0.02,
+                                          right: size.width * 0.02),
+                                      margin: EdgeInsets.only(
+                                          left: size.width * 0.02,
+                                          right: size.width * 0.02),
+                                      child: Text(data[0]['journal']),
+                                      decoration: BoxDecoration(
+                                        border: Border.all(
+                                          color: Color(0xff000000),
+                                          width: size.width * 0.0025,
+                                        ),
+                                        borderRadius: BorderRadius.circular(30),
                                       ),
-                                      borderRadius: BorderRadius.circular(30),
                                     ),
-                                  ),
-                                  widget.topicName != ''? Container(
-                                    padding: EdgeInsets.only(top: size.height*0.005, bottom: size.height*0.005, left: size.width*0.02, right: size.width*0.02),
-                                    margin: EdgeInsets.only(left: size.width*0.02, right: size.width*0.02),
-                                    child: Text(widget.topicName??''),
-                                    decoration: BoxDecoration(
-                                    border: Border.all(
-                                        color: Color(0xff000000),
-                                        width: size.width * 0.0025,
-                                      ),
-                                      borderRadius: BorderRadius.circular(30),
-                                    ),
-                                  ):Container(),
-                                ],
-                              ),
-                            )
-                          ),
+                                    widget.topicName != ''
+                                        ? Container(
+                                            padding: EdgeInsets.only(
+                                                top: size.height * 0.005,
+                                                bottom: size.height * 0.005,
+                                                left: size.width * 0.02,
+                                                right: size.width * 0.02),
+                                            margin: EdgeInsets.only(
+                                                left: size.width * 0.02,
+                                                right: size.width * 0.02),
+                                            child: Text(widget.topicName ?? ''),
+                                            decoration: BoxDecoration(
+                                              border: Border.all(
+                                                color: Color(0xff000000),
+                                                width: size.width * 0.0025,
+                                              ),
+                                              borderRadius:
+                                                  BorderRadius.circular(30),
+                                            ),
+                                          )
+                                        : Container(),
+                                  ],
+                                ),
+                              )),
                         ),
                         Center(
                           child: Container(
@@ -281,7 +305,8 @@ class _DetailNewsPageState extends State<DetailNewsPage> {
                               color: Colors.white,
                               borderRadius: BorderRadius.circular(30),
                             ),
-                            child: SingleChildScrollView(child: Text(data[0]['summary'])),
+                            child: SingleChildScrollView(
+                                child: Text(data[0]['summary'])),
                           ),
                         ),
                         buttonTwo(

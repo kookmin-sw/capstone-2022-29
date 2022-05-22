@@ -58,10 +58,11 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         valueListenable: _themeModeNotifier.appBrightness,
         builder: (context, value, child) {
           return MaterialApp(
+            debugShowCheckedModeBanner: false,
             builder: ((context, child) {
               return MediaQuery(
                 data: MediaQuery.of(context).copyWith(textScaleFactor: 1),
-                child: child!, 
+                child: child!,
               );
             }),
             title: '뉴익',
