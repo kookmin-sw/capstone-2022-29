@@ -15,6 +15,7 @@ import json
 from pymongo import MongoClient
 from pandas import json_normalize
 from api import *
+from datetime import datetime
 
 mallet_path = "/home/ubuntu/capstone-2022-29/tmp/mallet-2.0.8/bin/mallet"
 mecab = Mecab()
@@ -107,7 +108,7 @@ def timelining(per_contrib, num_news_threshold, news_df, timeline_df):
     #print(topic_news)
     if len(topic_news) != 0:
         histogram = {}  
-        # prev_date = datetime(2999, 12, 30)
+        prev_date = datetime(2999, 12, 30)
         for date in topic_news["Date"].tolist(): 
             histogram[date] = histogram.get(date, 0) + 1 # histogram은 날짜에 해당 토픽이 몇번 나왔는지 들어있음
         date_frequency = list(histogram.items())
@@ -120,16 +121,21 @@ def timelining(per_contrib, num_news_threshold, news_df, timeline_df):
             
             # print(key, value)
             #key = key.split(' ')[0]
-
-            if frequency >= num_news_threshold:
-                title_list = list(topic_news['Title'])
-                id_list = list(topic_news['ID'])
-                # id_list = list(topic_news['ID'])
-                # print('ID',id_list)
-                # print('Keywords', topic_news["Keywords"].iloc[0])
-                # print('Date', key)
-                # print('Title',title_list)
-                timeline_df = timeline_df.append({'ID': id_list, 'Keywords': topic_news["Keywords"].iloc[0], 'Date': date, 'Title':title_list}, ignore_index=True)
+            print(prev_date, date)
+            
+            date_diff = prev_date - date
+            print(date_diff)
+            if date_diff > 30:
+                if frequency >= num_news_threshold:
+                    title_list = list(topic_news['Title'])
+                    id_list = list(topic_news['ID'])
+                    # id_list = list(topic_news['ID'])
+                    # print('ID',id_list)
+                    # print('Keywords', topic_news["Keywords"].iloc[0])
+                    # print('Date', key)
+                    # print('Title',title_list)
+                    timeline_df = timeline_df.append({'ID': id_list, 'Keywords': topic_news["Keywords"].iloc[0], 'Date': date, 'Title':title_list}, ignore_index=True)
+                    prev_date = date
 
     return timeline_df
 
@@ -195,7 +201,9 @@ def topics_to_timeline(news_df, ldamodel, corpus, num_keywords, num_topics, perc
 
 
 if __name__ == '__main__':
-    query = '코로나19'
+
+    query = '네이버'
+
     news_data = requests.get(req + query)
     client = MongoClient("mongodb+srv://BaekYeonsun:hello12345@cluster.3dypr.mongodb.net/database?retryWrites=true&w=majority")
 
