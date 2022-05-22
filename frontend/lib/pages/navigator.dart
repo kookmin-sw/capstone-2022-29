@@ -122,6 +122,7 @@ class _NavigatorPageState extends State<NavigatorPage> {
       // widget.index == 7 ? Color(0xFFe7f3ff) : Color(0xfff7f7f7),
       extendBodyBehindAppBar: true,
       extendBody: true,
+      resizeToAvoidBottomInset: false,
       body: Center(
         child: widgetOptions.elementAt(widget.index),
       ),

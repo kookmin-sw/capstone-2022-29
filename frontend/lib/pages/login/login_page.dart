@@ -184,96 +184,98 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: Container(
-        height: size.height,
-        width: size.width,
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [
-              Color(0xffC6E4FF),
-              Color(0xffFFFFFF),
-            ],
-            stops: [0.0, 0.9177],
+          height: size.height,
+          width: size.width,
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [
+                Color(0xffC6E4FF),
+                Color(0xffFFFFFF),
+              ],
+              stops: [0.0, 0.9177],
+            ),
           ),
-        ),
-        child: Column(
-          // mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            SizedBox(
-              height: size.height * 0.02,
-            ),
-            Center(
-              child: Container(
-                height: size.height * 0.45,
-                child: Image.asset('lib/assets/images/logo.png'),
-              ),
-            ),
-            SizedBox(
-              height: size.height * 0.08,
-            ),
-            Container(
-              width: size.width * 0.57,
-              height: size.height * 0.05,
-              child: OutlinedButton(
-                child: Text('로그인하기'),
-                style: OutlinedButton.styleFrom(
-                  primary: Colors.black,
-                  backgroundColor: Color(0xffC6E4FF),
-                  shadowColor: Colors.grey,
-                  elevation: 2,
-                  side: BorderSide.none,
-                ),
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => CustomLoginPage()),
-                  );
-                },
-              ),
-            ),
-            SizedBox(
-              height: size.height * 0.02,
-            ),
-            SignInButtonBuilder(
-              backgroundColor: Color(0xffF2E52D),
-              height: size.height * 0.05,
-              onPressed: () {
-                method = 'kakao';
-                flutterKakaoLogin();
-              },
-              text: "카카오 계정으로 로그인",
-              textColor: Colors.black,
-              image: Container(
-                height: size.height * 0.02,
-                padding: EdgeInsets.only(left: size.width * 0.005),
-                child: Image.asset('lib/assets/images/kakao_logo.png'),
-              ),
-            ),
-            SizedBox(
-              height: size.height * 0.04,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+          child: Column(
+              // mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Text("계정이 없으신가요?"),
-                SizedBox(width: size.width*0.02),
-                InkWell(
-                  onTap: (){
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => CustomJoinPage()),
-                    );
+                SizedBox(
+                  height: size.height * 0.02,
+                ),
+                Center(
+                  child: Container(
+                    height: size.height * 0.45,
+                    child: Image.asset('lib/assets/images/logo.png'),
+                  ),
+                ),
+                SizedBox(
+                  height: size.height * 0.08,
+                ),
+                Container(
+                  width: size.width * 0.57,
+                  height: size.height * 0.05,
+                  child: OutlinedButton(
+                    child: Text('로그인하기'),
+                    style: OutlinedButton.styleFrom(
+                      primary: Colors.black,
+                      backgroundColor: Color(0xffC6E4FF),
+                      shadowColor: Colors.grey,
+                      elevation: 2,
+                      side: BorderSide.none,
+                    ),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => CustomLoginPage()),
+                      );
+                    },
+                  ),
+                ),
+                SizedBox(
+                  height: size.height * 0.02,
+                ),
+                SignInButtonBuilder(
+                  backgroundColor: Color(0xffF2E52D),
+                  height: size.height * 0.05,
+                  onPressed: () {
+                    method = 'kakao';
+                    flutterKakaoLogin();
                   },
-                  child: Text("회원가입", style: TextStyle(decoration: TextDecoration.underline, color: Color.fromARGB(255, 23, 147, 255),)),
-                )
-              ]
-            )
-          ]
-        )
-      ),
+                  text: "카카오 계정으로 로그인",
+                  textColor: Colors.black,
+                  image: Container(
+                    height: size.height * 0.02,
+                    padding: EdgeInsets.only(left: size.width * 0.005),
+                    child: Image.asset('lib/assets/images/kakao_logo.png'),
+                  ),
+                ),
+                SizedBox(
+                  height: size.height * 0.04,
+                ),
+                Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                  Text("계정이 없으신가요?"),
+                  SizedBox(width: size.width * 0.02),
+                  InkWell(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => CustomJoinPage()),
+                      );
+                    },
+                    child: Text("회원가입",
+                        style: TextStyle(
+                          decoration: TextDecoration.underline,
+                          color: Color.fromARGB(255, 23, 147, 255),
+                        )),
+                  )
+                ])
+              ])),
     );
   }
 }

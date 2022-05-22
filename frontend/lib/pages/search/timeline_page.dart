@@ -102,6 +102,7 @@ class _TimelinePageState extends State<TimelinePage> {
     query = Provider.of<SearchProvider>(context, listen: false).searchQuery;
     return Scaffold(
       extendBody: true,
+      resizeToAvoidBottomInset: false,
       backgroundColor: Color.fromRGBO(247, 247, 247, 1),
       appBar: appBar(size, ' ', context, true, false, () {}),
       body: SafeArea(

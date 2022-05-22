@@ -72,6 +72,7 @@ class _QnAPageState extends State<QnAPage> {
 
     return Scaffold(
         backgroundColor: Color.fromRGBO(247, 247, 247, 1),
+        resizeToAvoidBottomInset: false,
         appBar: appBar(size, 'Q&A', context, true, false, () {}),
         body: Column(
           children: <Widget>[

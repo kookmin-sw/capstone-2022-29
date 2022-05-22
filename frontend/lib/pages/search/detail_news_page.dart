@@ -113,17 +113,6 @@ class _DetailNewsPageState extends State<DetailNewsPage> {
             isExisted = true;
         }
         if (isExisted == false) {
-          await ApiService().updateBookmark(
-            user_id,
-            Bookmark(
-              user_id: user_id,
-              bookmarks: Bookmarks(
-                news_id: widget.news_id!,
-                query: query,
-                topic: widget.topicName!,
-              ),
-            ),
-          );
           showDialog(
             context: context,
             barrierDismissible: false,
@@ -142,6 +131,17 @@ class _DetailNewsPageState extends State<DetailNewsPage> {
                     )),
               );
             },
+          );
+          await ApiService().updateBookmark(
+            user_id,
+            Bookmark(
+              user_id: user_id,
+              bookmarks: Bookmarks(
+                news_id: widget.news_id!,
+                query: query,
+                topic: widget.topicName!,
+              ),
+            ),
           );
         } else {
           showDialog(
@@ -223,6 +223,7 @@ class _DetailNewsPageState extends State<DetailNewsPage> {
     // }
     return Scaffold(
         extendBody: true,
+        resizeToAvoidBottomInset: false,
         appBar: appBar(size, query, context, true, true, onSharePressed),
         backgroundColor: Color(0xffF7F7F7),
         body: SafeArea(

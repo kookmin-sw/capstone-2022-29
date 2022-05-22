@@ -214,6 +214,7 @@ class _HomePageState extends State<HomePage>
 
     return Scaffold(
       backgroundColor: isCollapsed ? Color(0xfff7f7f7) : Color(0xFFe7f3ff),
+      resizeToAvoidBottomInset: false,
       body: Stack(
         children: <Widget>[
           menu(context),
