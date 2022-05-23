@@ -218,7 +218,7 @@ if __name__ == '__main__':
 
     news_df, id2word, corpus, title_list, num_doc = preprocess(news_data, 5) # 인자값 = no_below 값
     
-    iteration = 1000
+    iteration = 3000
 
     # find optimal topic nums
     #ldamallet, coherence_mallet = topic_modeling(id2word, corpus, title_list)
