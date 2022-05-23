@@ -40,7 +40,7 @@ export default function App() {
       <>
         <ToastContainer/>
         <div className="min-h-full">
-          <Disclosure as="nav" className="bg-gray-800">
+          <Disclosure as="nav" className="bg-gray-800 fixed top-0 left-0 right-0">
             {({ open }) => (
                 <>
                   <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -187,6 +187,7 @@ export default function App() {
                 </>
             )}
           </Disclosure>
+          <div className="mt-16"/>
           {page === 0 && <News/>}
           {page === 1 && <SearchWord/>}
           {page === 2 && <Notice/>}

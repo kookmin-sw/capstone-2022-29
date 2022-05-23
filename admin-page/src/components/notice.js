@@ -39,12 +39,12 @@ function Notice() {
     const onPostClick = async() => {
         const title = document.getElementById("title").value;
         const content = document.getElementById("content").value;
-        const result = await postNotice(title, content);
-        console.log(result);
-        return result;
+        if (title !== "" && content !== "") await postNotice(title, content);
+        else toast.warning("제목과 내용을 입력해주세요");
     }
     const onResetClick = () => {
-        console.log('reset');
+        document.getElementById("title").value = "";
+        document.getElementById("content").value = "";
     }
 
     const RequestColumns = React.useMemo(() => [
@@ -136,7 +136,6 @@ function Notice() {
                                 </div>
                             </div>
                         </div>
-
                     </div>
 
                     <div className="mt-4">
