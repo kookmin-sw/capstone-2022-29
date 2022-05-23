@@ -214,6 +214,7 @@ class _HomePageState extends State<HomePage>
 
     return Scaffold(
       backgroundColor: isCollapsed ? Color(0xfff7f7f7) : Color(0xFFe7f3ff),
+      resizeToAvoidBottomInset: false,
       body: Stack(
         children: <Widget>[
           menu(context),
@@ -252,7 +253,7 @@ class _HomePageState extends State<HomePage>
                                 child: Image.network(userInfo["profile"] !=
                                         "profile"
                                     ? userInfo["profile"]
-                                    : "https://user-images.githubusercontent.com/55418359/169589510-d4e500d4-49c4-48c9-83ab-ef38c7502284.png"),
+                                    : "https://user-images.githubusercontent.com/55418359/169818330-5f48b4c2-6acf-4a5a-a3e0-29bc36d7974b.png"),
                               ),
                               SizedBox(height: screenHeight * 0.01),
                               Text(userInfo["nickname"]),

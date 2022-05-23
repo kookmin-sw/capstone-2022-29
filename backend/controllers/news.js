@@ -22,7 +22,7 @@ const getNews = async (req, res) => {
         await News.find(
             {'$or': [ {'title': {'$regex':regexQuery, '$options': 'i'}},{'content': {'$regex':regexQuery, '$options': 'i'}} ]}, 
         )
-        // .sort({ 'date': -1 })
+        .sort({ 'date': -1 })
         .skip(perPage * (page - 1))
         .limit(perPage)
         .then(news => {

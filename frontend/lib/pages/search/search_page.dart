@@ -69,8 +69,8 @@ class _SearchPageState extends State<SearchPage> {
     }
   }
 
-   String? validateSearch(FocusNode focusNode, String value) {
-    if(value.isEmpty) {
+  String? validateSearch(FocusNode focusNode, String value) {
+    if (value.isEmpty) {
       focusNode.requestFocus();
       return '검색어를 입력하세요';
     }
@@ -114,6 +114,7 @@ class _SearchPageState extends State<SearchPage> {
 
     return Scaffold(
       extendBody: true,
+      resizeToAvoidBottomInset: false,
       backgroundColor: Color(0xffF7F7F7),
       body: SafeArea(
         child: Column(
@@ -157,15 +158,18 @@ class _SearchPageState extends State<SearchPage> {
                                     ),
                                   ),
                                   onPressed: () {
-                                    if(_verifyKey.currentState!.validate()) {
+                                    if (_verifyKey.currentState!.validate()) {
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(
                                           builder: (context) {
                                             return NavigatorPage(
                                               index: 4,
-                                              query: Provider.of<SearchProvider>(context, listen: false)
-                                                  .searchQuery,
+                                              query:
+                                                  Provider.of<SearchProvider>(
+                                                          context,
+                                                          listen: false)
+                                                      .searchQuery,
                                               user_id: widget.user_id,
                                               nickname: widget.nickname,
                                               topicNum:
@@ -211,7 +215,7 @@ class _SearchPageState extends State<SearchPage> {
                             child: Text(
                               "검색 순위",
                               style: TextStyle(
-                                fontSize: size.width*0.05,
+                                fontSize: size.width * 0.05,
                               ),
                             ),
                           ),
@@ -223,23 +227,27 @@ class _SearchPageState extends State<SearchPage> {
                               itemCount: data == [] ? 0 : data.length,
                               itemBuilder: (BuildContext context, int index) {
                                 return InkWell(
-                                  onTap: (){
-                                    context.read<SearchProvider>().onChange(data[index]["keyword"],);
-                                     Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) {
-                                            return NavigatorPage(
-                                              index: 4,
-                                              query: Provider.of<SearchProvider>(context, listen: false)
-                                                  .searchQuery,
-                                              user_id: widget.user_id,
-                                              nickname: widget.nickname,
-                                              topicNum: 1,
-                                            );
-                                          },
-                                        ),
-                                      );
+                                  onTap: () {
+                                    context.read<SearchProvider>().onChange(
+                                          data[index]["keyword"],
+                                        );
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) {
+                                          return NavigatorPage(
+                                            index: 4,
+                                            query: Provider.of<SearchProvider>(
+                                                    context,
+                                                    listen: false)
+                                                .searchQuery,
+                                            user_id: widget.user_id,
+                                            nickname: widget.nickname,
+                                            topicNum: 1,
+                                          );
+                                        },
+                                      ),
+                                    );
                                   },
                                   child: Container(
                                       margin: EdgeInsets.only(
@@ -268,7 +276,7 @@ class _SearchPageState extends State<SearchPage> {
                                           ),
                                           Text(data[index]["keyword"],
                                               style: TextStyle(
-                                                fontSize:  size.width * 0.05,
+                                                fontSize: size.width * 0.05,
                                               )),
                                         ],
                                       )),

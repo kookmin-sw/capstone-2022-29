@@ -55,36 +55,8 @@ class _DetailNewsPageState extends State<DetailNewsPage> {
     final int num = widget.topicNum ?? 0;
     final int topicStep = widget.topicStepNum ?? 0;
     Size size = MediaQuery.of(context).size;
-    String query =
-        widget.query ?? Provider.of<SearchProvider>(context, listen: false).searchQuery;
-
-    Future<void> postBookmark(String user_id) async {
-      List<dynamic> isBookmark = await ApiService().getBookmark(user_id);
-      if (isBookmark.isEmpty) {
-        await ApiService().postBookmark(
-          Bookmark(
-            user_id: user_id,
-            bookmarks: Bookmarks(
-              news_id: widget.news_id!,
-              query: query,
-              topic: "",
-            ),
-          ),
-        );
-      } else {
-        await ApiService().updateBookmark(
-          user_id,
-          Bookmark(
-            user_id: user_id,
-            bookmarks: Bookmarks(
-              news_id: widget.news_id!,
-              query: query,
-              topic: "",
-            ),
-          ),
-        );
-      }
-    }
+    String query = widget.query ??
+        Provider.of<SearchProvider>(context, listen: false).searchQuery;
 
     void onSharePressed() {
       String title = data.isNotEmpty ? data[0]["title"] : '';
@@ -101,12 +73,51 @@ class _DetailNewsPageState extends State<DetailNewsPage> {
       Navigator.pop(context);
     }
 
-    void onConfirmDialog() {
-      showDialog(
-          context: context,
-          barrierDismissible: true,
-          builder: (context) {
-            return AlertDialog(
+    // void onConfirmDialog() {
+    //   showDialog(
+    //       context: context,
+    //       barrierDismissible: true,
+    //       builder: (context) {
+    //         return AlertDialog(
+    //             content: SizedBox(
+    //                 height: size.height * 0.15,
+    //                 child: Column(
+    //                   mainAxisAlignment: MainAxisAlignment.center,
+    //                   children: [
+    //                     Text(widget.topicNum != null
+    //                         ? '북마크가 정상적으로 등록되었습니다.'
+    //                         : '북마크가 이미 등록되어 있습니다.'),
+    //                     button(size, "닫기", closeSimilar),
+    //                   ],
+    //                 )));
+    //       });
+    // }
+
+    Future<void> postBookmark(String user_id) async {
+      List<dynamic> isBookmark = await ApiService().getBookmark(user_id);
+      if (isBookmark.isEmpty) {
+        await ApiService().postBookmark(
+          Bookmark(
+            user_id: user_id,
+            bookmarks: Bookmarks(
+              news_id: widget.news_id!,
+              query: query,
+              topic: widget.topicName!,
+            ),
+          ),
+        );
+      } else {
+        bool isExisted = false;
+        for (var i = 0; i < isBookmark[0]['bookmark'].length; i++) {
+          if (isBookmark[0]['bookmark'][i]['news_id'] == widget.news_id)
+            isExisted = true;
+        }
+        if (isExisted == false) {
+          showDialog(
+            context: context,
+            barrierDismissible: false,
+            builder: (context) {
+              return AlertDialog(
                 content: SizedBox(
                     height: size.height * 0.15,
                     child: Column(
@@ -117,13 +128,46 @@ class _DetailNewsPageState extends State<DetailNewsPage> {
                             : '북마크가 이미 등록되어 있습니다.'),
                         button(size, "닫기", closeSimilar),
                       ],
-                    )));
-          });
+                    )),
+              );
+            },
+          );
+          await ApiService().updateBookmark(
+            user_id,
+            Bookmark(
+              user_id: user_id,
+              bookmarks: Bookmarks(
+                news_id: widget.news_id!,
+                query: query,
+                topic: widget.topicName!,
+              ),
+            ),
+          );
+        } else {
+          showDialog(
+            context: context,
+            barrierDismissible: false,
+            builder: (context) {
+              return AlertDialog(
+                content: SizedBox(
+                    height: size.height * 0.15,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text('북마크가 이미 등록되어 있습니다.'),
+                        button(size, "닫기", closeSimilar),
+                      ],
+                    )),
+              );
+            },
+          );
+        }
+      }
     }
 
     void onSavePressed() async {
       if (widget.topicNum != null) await postBookmark(widget.user_id!);
-      onConfirmDialog();
+      // onConfirmDialog();
     }
 
     // void onSimailarPressed() {
@@ -179,6 +223,7 @@ class _DetailNewsPageState extends State<DetailNewsPage> {
     // }
     return Scaffold(
         extendBody: true,
+        resizeToAvoidBottomInset: false,
         appBar: appBar(size, query, context, true, true, onSharePressed),
         backgroundColor: Color(0xffF7F7F7),
         body: SafeArea(
@@ -193,79 +238,103 @@ class _DetailNewsPageState extends State<DetailNewsPage> {
                                 width: size.width * 0.9,
                                 height: size.height * 0.03,
                                 child: Slider(
-                                  value: (topicStep-1)/(num-1),
+                                  value: (topicStep - 1) / (num - 1),
                                   max: 1,
-                                  onChanged: (double value) {
-                                  },
+                                  onChanged: (double value) {},
                                 ),
                               )
                             : Container(),
                         Center(
                           child: Container(
-                            margin: EdgeInsets.only(top: size.height * 0.02, bottom: size.height*0.02),
+                            margin: EdgeInsets.only(
+                                top: size.height * 0.02,
+                                bottom: size.height * 0.02),
                             width: size.width * 0.8,
-                            padding: EdgeInsets.only(top: size.height*0.015, bottom: size.height*0.015, left: size.width*0.05, right: size.width*0.05),
+                            padding: EdgeInsets.only(
+                                top: size.height * 0.015,
+                                bottom: size.height * 0.015,
+                                left: size.width * 0.05,
+                                right: size.width * 0.05),
                             decoration: BoxDecoration(
                               color: Colors.white,
                               borderRadius: BorderRadius.circular(30),
                             ),
                             child: Center(
-                              child: Text(data[0]['title'],
-                                style: TextStyle(
-                                  fontSize: size.width * 0.05,
-                                )
-                              )
-                            ),
+                                child: Text(data[0]['title'],
+                                    style: TextStyle(
+                                      fontSize: size.width * 0.05,
+                                    ))),
                           ),
                         ),
                         Center(
                           child: SizedBox(
-                            width: size.width*0.8,
-                            child: SingleChildScrollView(
-                              scrollDirection: Axis.horizontal,
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Container(
-                                    padding: EdgeInsets.only(top: size.height*0.005, bottom: size.height*0.005, left: size.width*0.02, right: size.width*0.02),
-                                    margin: EdgeInsets.only(left: size.width*0.01, right: size.width*0.01),
-                                    child: Text(data[0]['date']),
-                                    decoration: BoxDecoration(
-                                    border: Border.all(
-                                        color: Color.fromARGB(255, 19, 17, 17),
-                                        width: size.width * 0.0025,
+                              width: size.width * 0.8,
+                              child: SingleChildScrollView(
+                                scrollDirection: Axis.horizontal,
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Container(
+                                      padding: EdgeInsets.only(
+                                          top: size.height * 0.005,
+                                          bottom: size.height * 0.005,
+                                          left: size.width * 0.02,
+                                          right: size.width * 0.02),
+                                      margin: EdgeInsets.only(
+                                          left: size.width * 0.01,
+                                          right: size.width * 0.01),
+                                      child: Text(data[0]['date']),
+                                      decoration: BoxDecoration(
+                                        border: Border.all(
+                                          color:
+                                              Color.fromARGB(255, 19, 17, 17),
+                                          width: size.width * 0.0025,
+                                        ),
+                                        borderRadius: BorderRadius.circular(30),
                                       ),
-                                      borderRadius: BorderRadius.circular(30),
                                     ),
-                                  ),
-                                  Container(
-                                    padding: EdgeInsets.only(top: size.height*0.005, bottom: size.height*0.005, left: size.width*0.02, right: size.width*0.02),
-                                    margin: EdgeInsets.only(left: size.width*0.02, right: size.width*0.02),
-                                    child: Text(data[0]['journal']),
-                                    decoration: BoxDecoration(
-                                    border: Border.all(
-                                        color: Color(0xff000000),
-                                        width: size.width * 0.0025,
+                                    Container(
+                                      padding: EdgeInsets.only(
+                                          top: size.height * 0.005,
+                                          bottom: size.height * 0.005,
+                                          left: size.width * 0.02,
+                                          right: size.width * 0.02),
+                                      margin: EdgeInsets.only(
+                                          left: size.width * 0.02,
+                                          right: size.width * 0.02),
+                                      child: Text(data[0]['journal']),
+                                      decoration: BoxDecoration(
+                                        border: Border.all(
+                                          color: Color(0xff000000),
+                                          width: size.width * 0.0025,
+                                        ),
+                                        borderRadius: BorderRadius.circular(30),
                                       ),
-                                      borderRadius: BorderRadius.circular(30),
                                     ),
-                                  ),
-                                  widget.topicName != ''? Container(
-                                    padding: EdgeInsets.only(top: size.height*0.005, bottom: size.height*0.005, left: size.width*0.02, right: size.width*0.02),
-                                    margin: EdgeInsets.only(left: size.width*0.02, right: size.width*0.02),
-                                    child: Text(widget.topicName??''),
-                                    decoration: BoxDecoration(
-                                    border: Border.all(
-                                        color: Color(0xff000000),
-                                        width: size.width * 0.0025,
-                                      ),
-                                      borderRadius: BorderRadius.circular(30),
-                                    ),
-                                  ):Container(),
-                                ],
-                              ),
-                            )
-                          ),
+                                    widget.topicName != ''
+                                        ? Container(
+                                            padding: EdgeInsets.only(
+                                                top: size.height * 0.005,
+                                                bottom: size.height * 0.005,
+                                                left: size.width * 0.02,
+                                                right: size.width * 0.02),
+                                            margin: EdgeInsets.only(
+                                                left: size.width * 0.02,
+                                                right: size.width * 0.02),
+                                            child: Text(widget.topicName ?? ''),
+                                            decoration: BoxDecoration(
+                                              border: Border.all(
+                                                color: Color(0xff000000),
+                                                width: size.width * 0.0025,
+                                              ),
+                                              borderRadius:
+                                                  BorderRadius.circular(30),
+                                            ),
+                                          )
+                                        : Container(),
+                                  ],
+                                ),
+                              )),
                         ),
                         Center(
                           child: Container(
@@ -281,7 +350,8 @@ class _DetailNewsPageState extends State<DetailNewsPage> {
                               color: Colors.white,
                               borderRadius: BorderRadius.circular(30),
                             ),
-                            child: SingleChildScrollView(child: Text(data[0]['summary'])),
+                            child: SingleChildScrollView(
+                                child: Text(data[0]['summary'])),
                           ),
                         ),
                         buttonTwo(
