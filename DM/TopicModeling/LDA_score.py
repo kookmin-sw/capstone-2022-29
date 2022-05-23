@@ -27,7 +27,7 @@ def get_score(corpus, id2word, text_list, start, end, steps, query, iteration, n
     plt.xlabel('num of topics')
     plt.ylabel('coherence score')
     plt.show()
-    plt.savefig('./image/coherence_content_'+query+'_'+str(iteration)+'_'+str(num_doc))
+    plt.savefig('./image/coherence_summary_'+query+'_'+str(iteration)+'_'+str(num_doc))
     # 높을수록 의미론적 일관성 높음
     
     plt.plot(range(start, end, steps), perplexity_values)
@@ -35,7 +35,7 @@ def get_score(corpus, id2word, text_list, start, end, steps, query, iteration, n
     plt.xlabel('num of topics')
     plt.ylabel('perplexity score')
     plt.show()
-    plt.savefig('./image/perplexity_content_'+query+'_'+str(iteration)+'_'+str(num_doc))
+    plt.savefig('./image/perplexity_summary_'+query+'_'+str(iteration)+'_'+str(num_doc))
     # 즉 특정 확률 모델이 실제도 관측되는 값을 어마나 잘 예측하는지를 뜻합니다. Perlexity값이 작으면 토픽모델이 문서를 잘 반영된다고 알 수 있습니다. 따라서 작아지는것이 중요합니다.
     
     return sorted(num_topic_priority[:3])
