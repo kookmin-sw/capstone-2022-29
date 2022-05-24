@@ -112,7 +112,7 @@ class _NewsPageState extends State<NewsPage> {
       setState(() {
         for (var i = 0; i < news.length; i++) {
           data.add({
-              'date': news[i]['date'],
+            'date': news[i]['date'],
             'title': news[i]['title'],
             'navigate': () async {
               Uri url = Uri.parse(news[i]['url']);
@@ -124,9 +124,10 @@ class _NewsPageState extends State<NewsPage> {
       });
     } else {
       for (var i = 0; i < widget.news!.length; i++) {
-        List<dynamic> news = await ApiService().getNewsID(widget.news![i]["news_id"]);
+        List<dynamic> news =
+            await ApiService().getNewsID(widget.news![i]["news_id"]);
 
-        if (mounted){
+        if (mounted) {
           setState(() {
             data.add({
               'date': news[0]['date'],
@@ -166,7 +167,7 @@ class _NewsPageState extends State<NewsPage> {
       for (var i = 0; i < news.length; i++) {
         // print(news[i]['date']);
         data.add({
-          // 'date': news[i]['date'],
+          'date': news[i]['date'],
           'title': news[i]['title'],
           'navigate': () async {
             Uri url = Uri.parse(news[i]['url']);
@@ -208,7 +209,9 @@ class _NewsPageState extends State<NewsPage> {
                             child: Container(
                               child: Column(children: [
                                 Container(
-                                  child: Text(data[index]['date']??'',maxLines: 1, overflow: TextOverflow.ellipsis),
+                                  child: Text(data[index]['date'] ?? '',
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis),
                                   width: size.width,
                                   height: size.height * 0.04,
                                   decoration: BoxDecoration(
@@ -217,30 +220,43 @@ class _NewsPageState extends State<NewsPage> {
                                         topLeft: const Radius.circular(40.0),
                                         topRight: const Radius.circular(40.0),
                                       )),
-                                  padding: EdgeInsets.fromLTRB(size.width * 0.05, size.height*0.01, size.width * 0.05, 0),
+                                  padding: EdgeInsets.fromLTRB(
+                                      size.width * 0.05,
+                                      size.height * 0.01,
+                                      size.width * 0.05,
+                                      0),
                                 ),
                                 Container(
-                                    child: Column(
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        Text(data[index]['title'], maxLines: 2, overflow: TextOverflow.ellipsis),
-                                      ],
-                                    ),
-                                    width: size.width,
-                                    height: size.height * 0.06,
-                                    decoration: BoxDecoration(
-                                        color: Colors.white,
-                                        borderRadius: BorderRadius.only(
-                                          bottomLeft: const Radius.circular(30),
-                                          bottomRight: const Radius.circular(30),
-                                        )),
-                                    padding: EdgeInsets.fromLTRB(
-                                        size.width * 0.05, 0, size.width * 0.05, 0),
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(data[index]['title'],
+                                          maxLines: 2,
+                                          overflow: TextOverflow.ellipsis),
+                                    ],
                                   ),
+                                  width: size.width,
+                                  height: size.height * 0.06,
+                                  decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.only(
+                                        bottomLeft: const Radius.circular(30),
+                                        bottomRight: const Radius.circular(30),
+                                      )),
+                                  padding: EdgeInsets.fromLTRB(
+                                      size.width * 0.05,
+                                      0,
+                                      size.width * 0.05,
+                                      0),
+                                ),
                               ]),
-                              margin: EdgeInsets.fromLTRB(size.width * 0.05, size.height * 0.02,
-                                  size.width * 0.05, size.height * 0.01),
+                              margin: EdgeInsets.fromLTRB(
+                                  size.width * 0.05,
+                                  size.height * 0.02,
+                                  size.width * 0.05,
+                                  size.height * 0.01),
                               decoration: BoxDecoration(),
                             ),
                           );

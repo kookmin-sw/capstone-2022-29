@@ -41,10 +41,9 @@ class _CustomJoinPageState extends State<CustomJoinPage> {
     }
   }
 
-
   Widget _showNicknameInput(Size size) {
     return Container(
-      margin: EdgeInsets.only(top: size.height*0.01),
+      margin: EdgeInsets.only(top: size.height * 0.01),
       child: TextFormField(
         keyboardType: TextInputType.text,
         focusNode: _nicknameFocus,
@@ -58,8 +57,7 @@ class _CustomJoinPageState extends State<CustomJoinPage> {
           ),
           focusedBorder: OutlineInputBorder(
               borderSide: BorderSide(color: Color.fromARGB(255, 23, 147, 255)),
-              borderRadius: BorderRadius.circular(20)
-          ),
+              borderRadius: BorderRadius.circular(20)),
           prefixIcon: Icon(Icons.emoji_emotions_outlined),
         ),
         validator: (value) =>
@@ -68,13 +66,13 @@ class _CustomJoinPageState extends State<CustomJoinPage> {
           nickname = value;
         },
         onSaved: (input) => nickname = input!,
-      ),         
+      ),
     );
   }
 
   Widget _showIdInput(Size size) {
     return Container(
-      margin: EdgeInsets.only(top: size.height*0.01),
+      margin: EdgeInsets.only(top: size.height * 0.01),
       child: TextFormField(
         keyboardType: TextInputType.text,
         focusNode: _idFocus,
@@ -88,9 +86,10 @@ class _CustomJoinPageState extends State<CustomJoinPage> {
           ),
           focusedBorder: OutlineInputBorder(
               borderSide: BorderSide(color: Color.fromARGB(255, 23, 147, 255)),
-              borderRadius: BorderRadius.circular(20)
+              borderRadius: BorderRadius.circular(20)),
+          prefixIcon: Icon(
+            Icons.person_outline,
           ),
-          prefixIcon: Icon(Icons.person_outline,),
         ),
         validator: (value) => CheckValidate().validateId(_idFocus, value!),
         onChanged: (value) {
@@ -102,7 +101,7 @@ class _CustomJoinPageState extends State<CustomJoinPage> {
 
   Widget _showPasswordInput(Size size) {
     return Container(
-      margin: EdgeInsets.only(top: size.height*0.01),
+      margin: EdgeInsets.only(top: size.height * 0.01),
       child: TextFormField(
         focusNode: _passwordFocus,
         keyboardType: TextInputType.visiblePassword,
@@ -117,8 +116,7 @@ class _CustomJoinPageState extends State<CustomJoinPage> {
           ),
           focusedBorder: OutlineInputBorder(
               borderSide: BorderSide(color: Color.fromARGB(255, 23, 147, 255)),
-              borderRadius: BorderRadius.circular(20)
-          ),
+              borderRadius: BorderRadius.circular(20)),
           prefixIcon: Icon(Icons.lock_outline_rounded),
         ),
         validator: (value) =>
@@ -135,29 +133,39 @@ class _CustomJoinPageState extends State<CustomJoinPage> {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       extendBody: true,
+      resizeToAvoidBottomInset: false,
       backgroundColor: Color(0xffF7F7F7),
       appBar: appBar(size, ' ', context, true, false, () {}),
       body: SafeArea(
         child: Form(
           key: formKey,
           child: Container(
-            margin: EdgeInsets.fromLTRB(size.width*0.08, 0, size.width*0.08, 0),
+            margin:
+                EdgeInsets.fromLTRB(size.width * 0.08, 0, size.width * 0.08, 0),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Center(child: Text("회원가입", style: TextStyle(fontSize: size.width * 0.08, fontWeight: FontWeight.bold),)),
-                SizedBox(height: size.height*0.05),
-
+                Center(
+                    child: Text(
+                  "회원가입",
+                  style: TextStyle(
+                      fontSize: size.width * 0.08, fontWeight: FontWeight.bold),
+                )),
+                SizedBox(height: size.height * 0.05),
                 Text("Nickname"),
                 _showNicknameInput(size),
-                SizedBox(height: size.height*0.03),
-
-                Text("ID", textAlign: TextAlign.left,),
+                SizedBox(height: size.height * 0.03),
+                Text(
+                  "ID",
+                  textAlign: TextAlign.left,
+                ),
                 _showIdInput(size),
-                SizedBox(height: size.height*0.03),
-
-                Text("Password", textAlign: TextAlign.left,),
+                SizedBox(height: size.height * 0.03),
+                Text(
+                  "Password",
+                  textAlign: TextAlign.left,
+                ),
                 _showPasswordInput(size),
                 SizedBox(
                   height: size.height * 0.05,
@@ -179,24 +187,26 @@ class _CustomJoinPageState extends State<CustomJoinPage> {
                     ),
                   ),
                 ),
-                SizedBox(height: size.height*0.02),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text("이미 계정이 있으신가요?"),
-                    SizedBox(width: size.width*0.02),
-                    InkWell(
-                      onTap: (){
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => CustomLoginPage()),
-                        );
-                      },
-                      child: Text("로그인", style: TextStyle(decoration: TextDecoration.underline, color: Color.fromARGB(255, 23, 147, 255),)),
-                    )
-                  ]
-                ),
-                SizedBox(height: size.height*0.08),
+                SizedBox(height: size.height * 0.02),
+                Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                  Text("이미 계정이 있으신가요?"),
+                  SizedBox(width: size.width * 0.02),
+                  InkWell(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => CustomLoginPage()),
+                      );
+                    },
+                    child: Text("로그인",
+                        style: TextStyle(
+                          decoration: TextDecoration.underline,
+                          color: Color.fromARGB(255, 23, 147, 255),
+                        )),
+                  )
+                ]),
+                SizedBox(height: size.height * 0.08),
               ],
             ),
           ),

@@ -33,9 +33,9 @@ class _TimelinePageState extends State<TimelinePage> {
   FocusNode _focus = FocusNode();
   final _verifyKey = GlobalKey<FormState>();
   var _verify = "";
-  
+
   String? validateSearch(FocusNode focusNode, String value) {
-    if(value.isEmpty) {
+    if (value.isEmpty) {
       focusNode.requestFocus();
       return '검색어를 입력하세요';
     }
@@ -102,6 +102,7 @@ class _TimelinePageState extends State<TimelinePage> {
     query = Provider.of<SearchProvider>(context, listen: false).searchQuery;
     return Scaffold(
       extendBody: true,
+      resizeToAvoidBottomInset: false,
       backgroundColor: Color.fromRGBO(247, 247, 247, 1),
       appBar: appBar(size, ' ', context, true, false, () {}),
       body: SafeArea(
@@ -145,17 +146,19 @@ class _TimelinePageState extends State<TimelinePage> {
                                     ),
                                   ),
                                   onPressed: () {
-                                    if(_verifyKey.currentState!.validate()) {
+                                    if (_verifyKey.currentState!.validate()) {
                                       Navigator.of(context).push(
                                         MaterialPageRoute(
                                           builder: (context) => NavigatorPage(
                                             index: 4,
                                             query: Provider.of<SearchProvider>(
-                                                    context, listen: false)
+                                                    context,
+                                                    listen: false)
                                                 .searchQuery,
                                             user_id: widget.user_id,
                                             nickname: widget.nickname,
-                                            topicNum: _currentSliderValue.toInt(),
+                                            topicNum:
+                                                _currentSliderValue.toInt(),
                                           ),
                                         ),
                                       );
@@ -187,8 +190,9 @@ class _TimelinePageState extends State<TimelinePage> {
                         borderRadius: BorderRadius.circular(30),
                       ),
                       width: size.width * 0.9,
-                      height: size.height * 0.6,
-                      padding: EdgeInsets.only(top: size.height * 0.03),
+                      height: size.height * 0.64,
+                      padding: EdgeInsets.only(
+                          top: size.height * 0.01, bottom: size.height * 0.01),
                       // data.length != 0 ?
                       child: data.isNotEmpty
                           ? Timeline.tileBuilder(
@@ -305,7 +309,10 @@ class _TimelinePageState extends State<TimelinePage> {
                                                                     topicStepNum:
                                                                         index +
                                                                             1,
-                                                                    topicName: data[index]["topic"],
+                                                                    topicName: data[
+                                                                            index]
+                                                                        [
+                                                                        "topic"],
                                                                   );
                                                                 },
                                                               ),
