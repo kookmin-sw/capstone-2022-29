@@ -38,7 +38,7 @@
 ### ✔️  실행 환경 구축
 | | | |
 |---|---|---|
-|[![001](https://user-images.githubusercontent.com/54919662/170016766-842a2e8d-f7c4-47c2-9a30-6c381c724caf.png)](https://github.com/kookmin-sw/capstone-2022-29/blob/main/docs/Flutter_Android_실행환경%20구축.pdf)|[![008](https://user-images.githubusercontent.com/54919662/170001330-1056c0d6-2398-43eb-844e-372a32e93767.png)](https://github.com/kookmin-sw/capstone-2022-29/blob/main/docs/Flutter_iOS_실행환경%20구축.pdf)|[![015](https://user-images.githubusercontent.com/54919662/170001351-c287e336-19d3-4807-a487-df9414c59337.png)](https://github.com/kookmin-sw/capstone-2022-29/blob/main/docs/React_실행환경%20구축.pdf)|
+|[![001](https://user-images.githubusercontent.com/54919662/170016766-842a2e8d-f7c4-47c2-9a30-6c381c724caf.png)](https://github.com/kookmin-sw/capstone-2022-29/blob/main/docs/Flutter_iOS_실행환경%20구축.pdf)|[![008](https://user-images.githubusercontent.com/54919662/170001330-1056c0d6-2398-43eb-844e-372a32e93767.png)](https://github.com/kookmin-sw/capstone-2022-29/blob/main/docs/Flutter_Android_실행환경%20구축.pdf)|[![015](https://user-images.githubusercontent.com/54919662/170001351-c287e336-19d3-4807-a487-df9414c59337.png)](https://github.com/kookmin-sw/capstone-2022-29/blob/main/docs/React_실행환경%20구축.pdf)|
 
 ### ✔️ 매뉴얼
 | | |
