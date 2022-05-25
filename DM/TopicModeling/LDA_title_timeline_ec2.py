@@ -53,9 +53,9 @@ def get_key_tokens(text):
     return token_list
 
 def preprocess(news_data, nobelow):
-    news_df = json_normalize(json.loads(news_data.text))
-   # print(list(news_data))
-   # print(json_normalize(list(news_data)))
+    #news_df = json_normalize(json.loads(news_data.text))
+    #print(list(news_data))
+    print(json_normalize(list(news_data)))
     #news_df = json_normalize(list(news_data))
     print(10)
     news_df_len = len(news_df.index)
@@ -213,11 +213,11 @@ if __name__ == '__main__':
     query = '코로나19'
     client = MongoClient("mongodb+srv://BaekYeonsun:hello12345@cluster.3dypr.mongodb.net/database?retryWrites=true&w=majority")
     db = client.database
-    #collection = db.news
-    # news_data = collection.find({'$or': [{'_id': {'$regex': '~T~C~@~D~J', '$options': 'i'}}, {'date': {'$regex': '~T~C~@~D~J', '$options': 'i'}}, {'title': {'$regex': '~T~C~@~D~J', '$options': 'i'}} ]})
+    collection = db.news
+    news_data = collection.find({'$or': [{'content': {'$regex': '코로나19', '$options': 'i'}}, {'title': {'$regex': '코로나19', '$options': 'i'}} ]})
     #client = MongoClient("mongodb+srv://BaekYeonsun:hello12345@cluster.3dypr.mongodb.net/database?retryWrites=true&w=majority")
     print(1)
-    news_data = requests.get(req + query)
+    #news_data = requests.get(req + query)
     #_data = requests.get(req + query)b = client.database
     topic_collection = db.topics
     post = {
