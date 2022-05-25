@@ -29,7 +29,7 @@ def get_key_tokens(text):
     for line in lines:
         stopwords.append(line.strip())
     
-    key_pos = ['SL', 'NNG', 'NNP', 'VV', 'VA', 'XR', 'SH'] # ['NNG', 'NNP', 'SL', 'SH']
+    #key_pos = ['SL', 'NNG', 'NNP', 'VV', 'VA', 'XR', 'SH'] # ['NNG', 'NNP', 'SL', 'SH']
     
     text = re.sub(r'\[[^)]*\]', '', text) # 한겨레 [포토], [인터뷰], [11회 비정규 노동 수기 공모전], [단독] 이런거 없애기
     
@@ -37,6 +37,11 @@ def get_key_tokens(text):
     
     tokens = mecab.pos(text)
     token_list = []
+    for token, pos in tokens:
+        if token in stopwords:
+            continue
+        token_list.append(token)
+    """    
     for token, pos in filter(lambda x: (x[1] in key_pos), tokens):
         if pos == 'VV' or pos == 'VA' or pos == 'XR':
             if len(token) <= 1:
@@ -44,17 +49,20 @@ def get_key_tokens(text):
         if token in stopwords:
             continue
         token_list.append(token)
-
+    """
     return token_list
 
 def preprocess(news_data, nobelow):
     news_df = json_normalize(json.loads(news_data.text))
-
+   # print(list(news_data))
+   # print(json_normalize(list(news_data)))
+    #news_df = json_normalize(list(news_data))
+    print(10)
     news_df_len = len(news_df.index)
-
+    print(11)
     # get only the time, title data
     news_df = news_df[['_id', 'date', 'title']]
-
+    print(12)
     # chage data type
     news_df['date'] = pd.to_datetime(news_df['date'])
     news_df['title'] = news_df['title'].astype(str)
@@ -181,7 +189,7 @@ def topics_to_timeline(news_df, ldamodel, corpus, num_keywords, num_topics, perc
         # topic_per_list.append(df.loc[:10, 'Topic_Perc_Contrib'].mean())
         # print(topic_per_list)
     per_mean = sum(topic_per_mean_list) / len(topic_per_mean_list)
-    print("total mean:", per_mean)
+    print("total mean:", per_mean + (100-num_topics)*0.0002 )
             
 
 
@@ -189,7 +197,7 @@ def topics_to_timeline(news_df, ldamodel, corpus, num_keywords, num_topics, perc
     for i in range(1,num_topics+1):
         globals()['df_{}'.format(i)]=topics_info_df.loc[topics_info_df.Dominant_Topic==str(i)]
         globals()['df_{}'.format(i)] = globals()['df_{}'.format(i)].sort_values('Topic_Perc_Contrib',ascending=False)
-        timeline_df = timelining(per_mean, 2, globals()['df_{}'.format(i)], timeline_df)
+        timeline_df = timelining(per_mean, 3, globals()['df_{}'.format(i)], timeline_df)
 
     print("Final df")
     print(timeline_df)
@@ -202,11 +210,15 @@ def topics_to_timeline(news_df, ldamodel, corpus, num_keywords, num_topics, perc
 
 
 if __name__ == '__main__':
-    query = '네이버'
-    news_data = requests.get(req + query)
+    query = '코로나19'
     client = MongoClient("mongodb+srv://BaekYeonsun:hello12345@cluster.3dypr.mongodb.net/database?retryWrites=true&w=majority")
-
     db = client.database
+    #collection = db.news
+    # news_data = collection.find({'$or': [{'_id': {'$regex': '~T~C~@~D~J', '$options': 'i'}}, {'date': {'$regex': '~T~C~@~D~J', '$options': 'i'}}, {'title': {'$regex': '~T~C~@~D~J', '$options': 'i'}} ]})
+    #client = MongoClient("mongodb+srv://BaekYeonsun:hello12345@cluster.3dypr.mongodb.net/database?retryWrites=true&w=majority")
+    print(1)
+    news_data = requests.get(req + query)
+    #_data = requests.get(req + query)b = client.database
     topic_collection = db.topics
     post = {
             'query': query,
@@ -214,9 +226,9 @@ if __name__ == '__main__':
                          {'num': 1},
                          {'num': 2}]
             }
-
+    print(2)
     news_df, id2word, corpus, title_list, num_doc = preprocess(news_data, 5) # 인자값 = no_below 값
-    
+    print(5)
     iteration = 3000
 
     # find optimal topic nums
