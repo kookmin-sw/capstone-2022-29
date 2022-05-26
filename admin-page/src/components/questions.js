@@ -8,7 +8,7 @@ import {toast} from "react-toastify";  // new
 const getData = async () => {
     const response = await axios({
         method: 'GET',
-        url: `http://ec2-3-39-192-200.ap-northeast-2.compute.amazonaws.com:5000/qa`,
+        url: `http://ec2-54-180-2-66.ap-northeast-2.compute.amazonaws.com:5000/qa`,
     });
     return response.data;
 }

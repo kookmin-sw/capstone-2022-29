@@ -23,7 +23,8 @@
 [![capstone-2022-29 / 뉴익[뉴스를 익히다] 소개 영상](https://user-images.githubusercontent.com/55418359/161452259-61e5afb4-23f8-4b20-b290-d81b9470706b.jpeg)](https://youtu.be/TEmlbx04ibs "capstone-2022-29 / 뉴익[뉴스를 익히다] 소개 영상")
 
 ### 📌 시연 영상
-[![capstone-2022-29 / 뉴익[뉴스를 익히다] 소개 영상](https://user-images.githubusercontent.com/55418359/170528797-88e8ef6b-69ee-4b24-bb16-562d1bb178aa.jpg)](https://youtu.be/yQVMcw4Qojc "capstone-2022-29 / 뉴익[뉴스를 익히다] 시연 영상")
+[![capstone-2022-29 / 뉴익[뉴스를 익히다] 소개 영상](https://user-images.githubusercontent.com/54919662/170021537-a30b9c21-3d3a-425b-b29f-b5332e71756b.png)](https://www.youtube.com/watch?v=yQVMcw4Qojc "capstone-2022-29 / 뉴익[뉴스를 익히다] 시연 영상")
+
 
 ### 🚀 주요기능
 ![capstone-2022-29 / 뉴익[뉴스를 익히다] 주요 기능](https://user-images.githubusercontent.com/54919662/170027346-409d8062-aab6-4466-adf2-638d2ecb25ac.png)
@@ -44,5 +45,6 @@
 | 사용자 매뉴얼 | 관리자 매뉴얼 |
 |:---:|:---:|
 |[![001](https://user-images.githubusercontent.com/54919662/170018721-c1376ed6-8223-4a14-9fb3-79905464f134.png)](https://www.miricanvas.com/v/114fygg)|[![001](https://user-images.githubusercontent.com/54919662/170019895-ee020678-7550-41f6-8ea6-2d07f399dbe1.png)](https://www.miricanvas.com/design/114npv9)|
+
 ### ✔️ 기타
 [FIGMA](https://www.figma.com/file/XKdWW52raly6bt1g75ldjE/%EB%89%B4%EC%9D%B5-UI "뉴익의 UI")

@@ -38,6 +38,7 @@ class DongaNewsSpider(scrapy.Spider):
             item['title'] = title
             item['url'] = url
             item['content'] = article.text
+            item['summary'] = 'NaN'
             print(title)
 
             yield item
@@ -66,6 +67,7 @@ class DongaNewsSpider(scrapy.Spider):
             item['title'] = title
             item['url'] = url
             item['content'] = article.text
+            item['summary'] = 'NaN'
 
             print(title)
 

@@ -7,7 +7,7 @@ import { toast } from 'react-toastify';
 const getData = async () => {
     const response = await axios({
         method: 'GET',
-        url: `http://ec2-3-39-192-200.ap-northeast-2.compute.amazonaws.com:5000/notices`,
+        url: `http://ec2-54-180-2-66.ap-northeast-2.compute.amazonaws.com:5000/notices`,
     });
     return response.data;
 }
@@ -15,7 +15,7 @@ const getData = async () => {
 const postNotice = async (title, content) => {
     await axios({
         method: 'POST',
-        url: 'http://ec2-3-39-192-200.ap-northeast-2.compute.amazonaws.com:5000/notices',
+        url: 'http://ec2-54-180-2-66.ap-northeast-2.compute.amazonaws.com:5000/notices',
         data : {
             'title': title,
             'content': content,
