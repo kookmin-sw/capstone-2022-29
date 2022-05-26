@@ -52,21 +52,22 @@ class DongaNewsSpider(scrapy.Spider):
 
             date = response.xpath('//*[@id="section-left-scroll-in"]/div[3]/div[{}]/div/p/span[@class="date"]/text()'.format(i)).extract_first()
             date = datetime.fromisoformat(date).strftime("%Y-%m-%d")
-            title = response.xpath('//*[@id="section-left-scroll-in"]/div[3]/div[{}]/div/h4/a/text()'.format(i)).extract_first()
+            if (date != yesterday)
+                title = response.xpath('//*[@id="section-left-scroll-in"]/div[3]/div[{}]/div/h4/a/text()'.format(i)).extract_first()
             
-            url = response.xpath('//*[@id="section-left-scroll-in"]/div[3]/div[{}]/div/h4/a/@href'.format(i)).extract_first()            
-            url = 'https://www.hani.co.kr' + url
+                url = response.xpath('//*[@id="section-left-scroll-in"]/div[3]/div[{}]/div/h4/a/@href'.format(i)).extract_first()            
+                url = 'https://www.hani.co.kr' + url
 
-            article = Article(url)
-            article.download()
-            article.parse()
+                article = Article(url)
+                article.download()
+                article.parse()
 
-            item['journal'] = '한겨레'
-            item['date'] = datetime.fromisoformat(date).strftime("%Y-%m-%d")
-            item['title'] = title
-            item['url'] = url
-            item['content'] = article.text
+                item['journal'] = '한겨레'
+                item['date'] = datetime.fromisoformat(date).strftime("%Y-%m-%d")
+                item['title'] = title
+                item['url'] = url
+                item['content'] = article.text
 
-            print(title)
+                print(title)
 
-            yield item
+                yield item
