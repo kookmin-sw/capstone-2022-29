@@ -27,9 +27,13 @@ CONCURRENT_REQUESTS = 1  # 기본값은 16
 
 HTTPCACHE_ENABLED = True  # 기본 값은 False
 
+MONGO_URI = 'mongodb+srv://BaekYeonsun:hello12345@cluster.3dypr.mongodb.net/database?retryWrites=true&w=majority'  #로컬호스트에 mongdb저장시
+MONGO_DATABASE = 'database'  #자신의 몽고db db명
+
+CONCURRENT_REQUESTS = 1  
 
 # Url 크롤링시 CSVPipeline 설정
-ITEM_PIPELINES = {'ScrapyNews.pipelines.CsvPipeline': 300}
+ITEM_PIPELINES = {'ScrapyNews.pipelines.MongoDBPipeline': 300}
 INSTALLED_APPS = (
     'django_crontab'
 )
