@@ -25,6 +25,7 @@
 ### 📌 시연 영상
 [![capstone-2022-29 / 뉴익[뉴스를 익히다] 소개 영상](https://user-images.githubusercontent.com/54919662/170021537-a30b9c21-3d3a-425b-b29f-b5332e71756b.png)](https://www.youtube.com/watch?v=yQVMcw4Qojc "capstone-2022-29 / 뉴익[뉴스를 익히다] 시연 영상")
 
+
 ### 🚀 주요기능
 ![capstone-2022-29 / 뉴익[뉴스를 익히다] 주요 기능](https://user-images.githubusercontent.com/54919662/170027346-409d8062-aab6-4466-adf2-638d2ecb25ac.png)
 
