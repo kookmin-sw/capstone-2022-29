@@ -23,7 +23,7 @@
 [![capstone-2022-29 / 뉴익[뉴스를 익히다] 소개 영상](https://user-images.githubusercontent.com/55418359/161452259-61e5afb4-23f8-4b20-b290-d81b9470706b.jpeg)](https://youtu.be/TEmlbx04ibs "capstone-2022-29 / 뉴익[뉴스를 익히다] 소개 영상")
 
 ### 📌 시연 영상
-[![capstone-2022-29 / 뉴익[뉴스를 익히다] 소개 영상](https://user-images.githubusercontent.com/54919662/170021537-a30b9c21-3d3a-425b-b29f-b5332e71756b.png)](https://youtu.be/L-2W3RsrU4s "capstone-2022-29 / 뉴익[뉴스를 익히다] 시연 영상")
+[![capstone-2022-29 / 뉴익[뉴스를 익히다] 소개 영상](https://user-images.githubusercontent.com/54919662/170021537-a30b9c21-3d3a-425b-b29f-b5332e71756b.png)](https://www.youtube.com/watch?v=yQVMcw4Qojc "capstone-2022-29 / 뉴익[뉴스를 익히다] 시연 영상")
 
 ### 🚀 주요기능
 ![capstone-2022-29 / 뉴익[뉴스를 익히다] 주요 기능](https://user-images.githubusercontent.com/54919662/170027346-409d8062-aab6-4466-adf2-638d2ecb25ac.png)
@@ -36,11 +36,13 @@
 
 ## 4. 사용법
 ### ✔️  실행 환경 구축
-| | | |
-|---|---|---|
-|[![001](https://user-images.githubusercontent.com/54919662/170016766-842a2e8d-f7c4-47c2-9a30-6c381c724caf.png)](https://github.com/kookmin-sw/capstone-2022-29/blob/main/docs/Flutter_Android_실행환경%20구축.pdf)|[![008](https://user-images.githubusercontent.com/54919662/170001330-1056c0d6-2398-43eb-844e-372a32e93767.png)](https://github.com/kookmin-sw/capstone-2022-29/blob/main/docs/Flutter_iOS_실행환경%20구축.pdf)|[![015](https://user-images.githubusercontent.com/54919662/170001351-c287e336-19d3-4807-a487-df9414c59337.png)](https://github.com/kookmin-sw/capstone-2022-29/blob/main/docs/React_실행환경%20구축.pdf)|
+[flutter-iOS 실행환경 구축](https://www.miricanvas.com/v/114qcfo "flutter-iOS 실행환경 구축")   
+[flutter-Andriod 실행환경 구축](https://www.miricanvas.com/v/1153cuh "flutter-iOS 실행환경 구축")   
+[React 실행환경 구축](https://www.miricanvas.com/v/1153dbo "react 실행환경 구축")
 
 ### ✔️ 매뉴얼
-| | |
-|---|---|
-|[![001](https://user-images.githubusercontent.com/54919662/170018721-c1376ed6-8223-4a14-9fb3-79905464f134.png)](https://github.com/kookmin-sw/capstone-2022-29/blob/main/docs/사용자-매뉴얼.pdf)|[![001](https://user-images.githubusercontent.com/54919662/170019895-ee020678-7550-41f6-8ea6-2d07f399dbe1.png)](https://github.com/kookmin-sw/capstone-2022-29/blob/main/docs/관리자-매뉴얼.pdf)|
+[사용자 매뉴얼](https://www.miricanvas.com/v/114fygg "뉴익의 사용자 매뉴얼")   
+[관리자 매뉴얼](https://www.miricanvas.com/design/114npv9 "뉴익의 관리자 매뉴얼")
+
+### ✔️ 기타
+[FIGMA](https://www.figma.com/file/XKdWW52raly6bt1g75ldjE/%EB%89%B4%EC%9D%B5-UI "뉴익의 UI")
