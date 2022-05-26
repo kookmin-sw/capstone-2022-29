@@ -253,7 +253,7 @@ class _HomePageState extends State<HomePage>
                                 child: Image.network(userInfo["profile"] !=
                                         "profile"
                                     ? userInfo["profile"]
-                                    : "https://user-images.githubusercontent.com/55418359/169818330-5f48b4c2-6acf-4a5a-a3e0-29bc36d7974b.png"),
+                                    : "https://user-images.githubusercontent.com/55418359/170538828-5c39e844-131d-4c3c-8fb7-38b5202b43fb.jpeg"),
                               ),
                               SizedBox(height: screenHeight * 0.01),
                               Text(userInfo["nickname"]),
