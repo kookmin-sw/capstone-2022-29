@@ -33,7 +33,7 @@
 ![capstone-2022-29 / 뉴익[뉴스를 익히다] 프로젝트 구성도](https://user-images.githubusercontent.com/54919662/170020896-d247083b-ecf3-458d-8ef7-3c969e4c75de.png)
 
 ## 3. 팀 소개
-![capstone-2022-29 / 뉴익[뉴스를 익히다] 팀원 소개](https://user-images.githubusercontent.com/54919662/170028107-ae24f934-6854-4064-8679-ed927d2402c6.png)
+![capstone-2022-29 / 뉴익[뉴스를 익히다] 팀원 소개](https://user-images.githubusercontent.com/54920378/170608682-fb66a6a8-104f-4bc0-94e7-80cfdfcaa180.png)
 
 ## 4. 사용법
 ### ✔️  실행 환경 구축
