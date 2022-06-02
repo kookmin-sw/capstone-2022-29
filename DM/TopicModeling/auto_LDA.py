@@ -235,87 +235,89 @@ def topics_to_timeline(news_df, ldamodel, corpus, num_keywords, num_topics, perc
 
 
 if __name__ == '__main__':
-    query = '인스타'
-    client = MongoClient("mongodb+srv://BaekYeonsun:hello12345@cluster.3dypr.mongodb.net/database?retryWrites=true&w=majority")
-    db = client.database
-    #collection = db.news
-    #news_data = list(collection.find({'$or': [{'content': {'$regex': query, '$options': 'i'}}, {'title': {'$regex':query, '$options': 'i'}} ]}))
-    #client = MongoClient("mongodb+srv://BaekYeonsun:hello12345@cluster.3dypr.mongodb.net/database?retryWrites=true&w=majority")
-    print(1)
-    news_data = requests.get(req + query)
-    topic_collection = db.topics
-    post = {
-            'query': query,
-            'topicNum': [{'num': 0},
-                         {'num': 1},
-                         {'num': 2}]
-            }
-    print(2)
-    news_df, id2word, corpus, title_list, num_doc = preprocess(news_data, 3) # 인자값 = no_below 값
-    print(5)
-    iteration = 3000
+    queries = ['비트코인', '자율주행', '유튜브', '축제', '인스타', '배달', '마블', '브라질', '아이유', '태풍', '국민대', '우크라이나', '올림픽', '월드컵', '삼성', '갤럭시', '애플', '선거', '대통령', '카카오', '네이버', '구글', '메타버스', 'NFT', '넷플릭스', '주식', '대한민국', '손흥민', '축구', '야구', '인공지능', '코로나19', '오미크론', '확진자', '부동산', '반도체', '민주당', '이재명', '지방선거', '마스크']
+    for query in quries:
 
-    # find optimal topic nums
-    #ldamallet, coherence_mallet = topic_modeling(id2word, corpus, title_list)
-    start = 25 # 이 범위는 뉴스 개수에 따라 다르게 하기
-    limit = 116
-    step = 10
-    topic_priority = get_score(corpus, id2word, title_list, start, limit, step, query, iteration, num_doc)
-    if num_doc < 200:
-        num_news = [2,2,2]
-        topic_perc = [0.01, 0.006, 0.002]
-        iters = 5
-        start = 2
-        limit = 21
-        step = 2
-    elif num_doc < 1000:
-        num_news = [2,2,2]
-        topic_perc = [0.013, 0.007, 0.003]
-        iters = 5
-        start = 5
-        limit = 51
-        step = 5
-    elif num_doc < 5000:
-        num_news = [2,2,2]
-        topic_perc = [0.013, 0.007, 0.003]
-        iters = 7
-        start = 10
-        limit = 74
-        step = 7
-    elif num_doc < 15000:
-        num_news = [2,2,2]
-        topic_perc = [0.03, 0.02, 0.01]
-        iters = 9
-        start = 20
-        limit = 111
+        client = MongoClient("mongodb+srv://BaekYeonsun:hello12345@cluster.3dypr.mongodb.net/database?retryWrites=true&w=majority")
+        db = client.database
+        #collection = db.news
+        #news_data = list(collection.find({'$or': [{'content': {'$regex': query, '$options': 'i'}}, {'title': {'$regex':query, '$options': 'i'}} ]}))
+        #client = MongoClient("mongodb+srv://BaekYeonsun:hello12345@cluster.3dypr.mongodb.net/database?retryWrites=true&w=majority")
+        print(1)
+        news_data = requests.get(req + query)
+        topic_collection = db.topics
+        post = {
+                'query': query,
+                'topicNum': [{'num': 0},
+                             {'num': 1},
+                             {'num': 2}]
+                }
+        print(2)
+        news_df, id2word, corpus, title_list, num_doc = preprocess(news_data, 3) # 인자값 = no_below 값
+        print(5)
+        iteration = 3000
+
+        # find optimal topic nums
+        #ldamallet, coherence_mallet = topic_modeling(id2word, corpus, title_list)
+        start = 25 # 이 범위는 뉴스 개수에 따라 다르게 하기
+        limit = 116
         step = 10
-    elif num_doc < 25000:
-        num_news = [3,3,3]
-        topic_perc = [0.035, 0.025, 0.015]
-        iters = 11
-        start = 30
-        limit = 166
-        step = 15
+        topic_priority = get_score(corpus, id2word, title_list, start, limit, step, query, iteration, num_doc)
+        if num_doc < 200:
+            num_news = [2,2,2]
+            topic_perc = [0.01, 0.006, 0.002]
+            iters = 5
+            start = 2
+            limit = 21
+            step = 2
+        elif num_doc < 1000:
+            num_news = [2,2,2]
+            topic_perc = [0.013, 0.007, 0.003]
+            iters = 5
+            start = 5
+            limit = 51
+            step = 5
+        elif num_doc < 5000:
+            num_news = [2,2,2]
+            topic_perc = [0.013, 0.007, 0.003]
+            iters = 7
+            start = 10
+            limit = 74
+            step = 7
+        elif num_doc < 15000:
+            num_news = [2,2,2]
+            topic_perc = [0.03, 0.02, 0.01]
+            iters = 9
+            start = 20
+            limit = 111
+            step = 10
+        elif num_doc < 25000:
+            num_news = [2,2,2]
+            topic_perc = [0.035, 0.025, 0.015]
+            iters = 11
+            start = 30
+            limit = 166
+            step = 15
 
-    else:
-        num_news = [3,3,3]
-        topic_perc = [0.04, 0.03, 0.02]
-        iters = 15
-        start = 40
-        limit = 176
-        step = 15
+        else:
+            num_news = [2,2,2]
+            topic_perc = [0.04, 0.03, 0.02]
+            iters = 15
+            start = 40
+            limit = 176
+            step = 15
 
 
-    for i in range(len(topic_priority)):
-        ldamallet = topic_modeling(id2word, corpus, title_list, topic_priority[i], iteration)
-        #timeline = topics_to_timeline(news_df, ldamallet, corpus, 3, topic_priority[i], -0.0025 * topic_priority[i] + 0.13, num_news[i]) # 마지막 인자 키워드 개수
-        timeline = topics_to_timeline(news_df, ldamallet, corpus, 3, topic_priority[i], topic_perc[i], num_news[i], iters) 
-        topics = []
-        for j in range(len(timeline.index)):
-            t = timeline.iloc[j]
-            a = {'date': t.Date,
-                 'news': [{'news_id': x} for x in t.ID],
-                 'topic': t.Keywords}
-            topics.append(a)
-        post['topicNum'][i]['topics'] = topics
-    result = topic_collection.insert_one(post)
+        for i in range(len(topic_priority)):
+            ldamallet = topic_modeling(id2word, corpus, title_list, topic_priority[i], iteration)
+            #timeline = topics_to_timeline(news_df, ldamallet, corpus, 3, topic_priority[i], -0.0025 * topic_priority[i] + 0.13, num_news[i]) # 마지막 인자 키워드 개수
+            timeline = topics_to_timeline(news_df, ldamallet, corpus, 3, topic_priority[i], topic_perc[i], num_news[i], iters) 
+            topics = []
+            for j in range(len(timeline.index)):
+                t = timeline.iloc[j]
+                a = {'date': t.Date,
+                     'news': [{'news_id': x} for x in t.ID],
+                     'topic': t.Keywords}
+                topics.append(a)
+            post['topicNum'][i]['topics'] = topics
+        result = topic_collection.insert_one(post)
