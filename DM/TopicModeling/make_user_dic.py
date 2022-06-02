@@ -26,10 +26,10 @@ f = open(user_dic_file, 'a')
 #             else:
 #                 f.write(word+',,,,NNP,*,F,'+word+',*,*,*,*,*\n')
 #         else:
-#             f.write(word+',,,,SLㅑ,ㅑi*,T,'+word+',*,*,*,*,*\n')
+#             f.write(word+',,,,SL,*,T,'+word+',*,*,*,*,*\n')
 
 
-for word in ['유벤투스', 'AC 밀란', '뮌헨', '파리 생 제르맹', '리버풀', '아스날', '첼시', '맨체스터 유나이티드', '레알 마드리드', 'FC 바르셀로나', '토트넘', '벤투호', '홍명보호', 'fc 서울', 'fc 전북']:
+for word in ['알감자', '스테이블코인', '아르헨티나', '국가', '배달비', '홈트', '을왕리', '4강', '8강', '16강', '32강', '64강', '128강', '서울시장', '성남시장', '맞장', ]:
     if is_korean(word):
         if has_jongseong(word):
             print(word)
