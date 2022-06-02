@@ -18,22 +18,31 @@
 > 　　  
 > 　Therefore, to solve these problems, we create the app called ‘뉴익’. ‘뉴익’ means ‘Master the news.', 'The news is beneficial.’. The app conducts topic modeling algorithm with big data of news article so that you can grasp the flow of major events by period at a glance. Also, it summarizes the text of the article and shows similar news in a bundle. Therefore users can find the content which they want faster and more conveniently. In particular, users can have a broad perspective by watching certain events in a large flow with ‘뉴익’.
 
-## 2. 소개 영상
+## 2. 뉴익 소개
+### 📌 소개 영상
 [![capstone-2022-29 / 뉴익[뉴스를 익히다] 소개 영상](https://user-images.githubusercontent.com/55418359/161452259-61e5afb4-23f8-4b20-b290-d81b9470706b.jpeg)](https://youtu.be/TEmlbx04ibs "capstone-2022-29 / 뉴익[뉴스를 익히다] 소개 영상")
 
+### 📌 시연 영상
+[![capstone-2022-29 / 뉴익[뉴스를 익히다] 소개 영상](https://user-images.githubusercontent.com/54919662/170021537-a30b9c21-3d3a-425b-b29f-b5332e71756b.png)](https://www.youtube.com/watch?v=yQVMcw4Qojc "capstone-2022-29 / 뉴익[뉴스를 익히다] 시연 영상")
+
 ### 🚀 주요기능
-![capstone-2022-29 / 뉴익[뉴스를 익히다] 주요 기능](https://user-images.githubusercontent.com/54919662/161482237-99a2c953-aeb7-48c1-8f51-13d6984e5f7a.png)
+![capstone-2022-29 / 뉴익[뉴스를 익히다] 주요 기능](https://user-images.githubusercontent.com/54919662/170027346-409d8062-aab6-4466-adf2-638d2ecb25ac.png)
 
 ### 👩🏻‍💻 프로젝트 구성도
-![capstone-2022-29 / 뉴익[뉴스를 익히다] 프로젝트 구성도](https://user-images.githubusercontent.com/54919662/161506722-7a9c6281-815e-47df-9be5-f9dc01de6fc8.png)
+![capstone-2022-29 / 뉴익[뉴스를 익히다] 프로젝트 구성도](https://user-images.githubusercontent.com/54919662/170020896-d247083b-ecf3-458d-8ef7-3c969e4c75de.png)
 
 ## 3. 팀 소개
-![capstone-2022-29 / 뉴익[뉴스를 익히다] 팀원 소개](https://user-images.githubusercontent.com/54919662/161482002-991c6eee-25cf-47b3-91c8-8e9f5f8d0642.png)
+![capstone-2022-29 / 뉴익[뉴스를 익히다] 팀원 소개](https://user-images.githubusercontent.com/54919662/170028107-ae24f934-6854-4064-8679-ed927d2402c6.png)
 
 ## 4. 사용법
+### ✔️  실행 환경 구축
+[flutter-iOS 실행환경 구축](https://www.miricanvas.com/v/114qcfo "flutter-iOS 실행환경 구축")   
+[flutter-Andriod 실행환경 구축](https://www.miricanvas.com/v/1153cuh "flutter-iOS 실행환경 구축")   
+[React 실행환경 구축](https://www.miricanvas.com/v/1153dbo "react 실행환경 구축")
 
-추후 작성 예정
+### ✔️ 매뉴얼
+[사용자 매뉴얼](https://www.miricanvas.com/v/114fygg "뉴익의 사용자 매뉴얼")   
+[관리자 매뉴얼](https://www.miricanvas.com/design/114npv9 "뉴익의 관리자 매뉴얼")
 
-## 5. 기타
-
-추후 작성 예정
+### ✔️ 기타
+[FIGMA](https://www.figma.com/file/XKdWW52raly6bt1g75ldjE/%EB%89%B4%EC%9D%B5-UI "뉴익의 UI")

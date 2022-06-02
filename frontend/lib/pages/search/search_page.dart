@@ -135,15 +135,23 @@ class _SearchPageState extends State<SearchPage> {
                             child: ListBody(
                               children: <Widget>[
                                 searchInput(size),
-                                Slider(
-                                  value: _currentSliderValue,
-                                  max: 2,
-                                  divisions: 2,
-                                  onChanged: (double value) {
-                                    setState(() {
-                                      _currentSliderValue = value;
-                                    });
-                                  },
+                                Row(
+                                  children: [
+                                    SizedBox(
+                                      width: size.width * 0.02,
+                                    ),
+                                    Text('Topic 수'),
+                                    Slider(
+                                      value: _currentSliderValue,
+                                      max: 2,
+                                      divisions: 2,
+                                      onChanged: (double value) {
+                                        setState(() {
+                                          _currentSliderValue = value;
+                                        });
+                                      },
+                                    ),
+                                  ],
                                 ),
                                 ElevatedButton(
                                   style: ElevatedButton.styleFrom(
