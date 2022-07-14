@@ -29,7 +29,7 @@ def get_key_tokens(text):
     for line in lines:
         stopwords.append(line.strip())
     
-    #key_pos = ['SL', 'NNG', 'NNP', 'VV', 'VA', 'XR', 'SH'] # ['NNG', 'NNP', 'SL', 'SH']
+    key_pos = ['SL', 'NNG', 'NNP', 'VV', 'VA', 'XR', 'SH'] # ['NNG', 'NNP', 'SL', 'SH']
     
     text = re.sub(r'\[[^)]*\]', '', text) # 한겨레 [포토], [인터뷰], [11회 비정규 노동 수기 공모전], [단독] 이런거 없애기
     
@@ -37,6 +37,7 @@ def get_key_tokens(text):
     
     tokens = mecab.pos(text)
     token_list = []
+    """
     for token, pos in tokens:
         if token in stopwords:
             continue
@@ -49,14 +50,20 @@ def get_key_tokens(text):
         if token in stopwords:
             continue
         token_list.append(token)
-    """
+    
     return token_list
 
 def preprocess(news_data, nobelow):
-    #news_df = json_normalize(json.loads(news_data.text))
+    news_df = json_normalize(json.loads(news_data.text))
     #print(list(news_data))
-    print(json_normalize(list(news_data)))
-    #news_df = json_normalize(list(news_data))
+    #print(pd.DataFrame(list(news_data)))
+    print(55)
+    #col_name = ["_id", "content", "date", "journal", "summary", "title", "url"]
+    #print(news_data)
+    #news_dict = list(news_data)
+    print(66)
+    #news_df = pd.DataFrame(news_data, columns=col_name)
+    #print(news_df.head())
     print(10)
     news_df_len = len(news_df.index)
     print(11)
@@ -107,7 +114,7 @@ def topic_modeling(id2word, corpus, title_list, num_topics, iteration):
 
     return ldamallet
 
-def timelining(per_contrib, num_news_threshold, news_df, timeline_df):
+def timelining(per_contrib, num_news_threshold, news_df, timeline_df, iters):
     # print(news_df["Topic_Perc_Contrib"])
 
     topic_news = news_df[news_df["Topic_Perc_Contrib"] >= per_contrib]
@@ -121,7 +128,7 @@ def timelining(per_contrib, num_news_threshold, news_df, timeline_df):
             histogram[date] = histogram.get(date, 0) + 1 # histogram은 날짜에 해당 토픽이 몇번 나왔는지 들어있음
         date_frequency = list(histogram.items())
         
-        for i in range(3):
+        for i in range(iters):
             if i >= len(date_frequency): 
                 break
             date = date_frequency[i][0] 
@@ -151,7 +158,7 @@ def split_date(x):
     return x.split(' ')[0]
 
 # 4.3 formmating output with DF
-def topics_to_timeline(news_df, ldamodel, corpus, num_keywords, num_topics, perc_threshold):
+def topics_to_timeline(news_df, ldamodel, corpus, num_keywords, num_topics, perc_threshold, num_news, iters):
     # Init output
     topics_info_df = pd.DataFrame()
 
@@ -182,14 +189,29 @@ def topics_to_timeline(news_df, ldamodel, corpus, num_keywords, num_topics, perc
     topics_info_df.Dominant_Topic = topics_info_df.Dominant_Topic.astype(str)
     topics_info_df['Dominant_Topic'] = topics_info_df['Dominant_Topic'].str.split('.').str[0]
     topic_per_mean_list = []
+    topic_per_thres_list = []
     for i in range(1, num_topics+1):
         df = topics_info_df.loc[topics_info_df.Dominant_Topic==str(i)]
+        print(df)
+        print('len: ', len(df.index))
+        # df.set_index('ID')
         print('num_topics:', i, df['Topic_Perc_Contrib'].mean())
-        topic_per_mean_list.append(df['Topic_Perc_Contrib'].mean())
+        #idx = round(len(df.index) * 0.8)
+        #idx = int(df['Document_No'].iloc[round(len(df.index) * 0.8)])
+        #print('idx', idx)
+        #idx = df.index[(df['Document_No'] == idx)]
+        #thres_row = df.loc[df['Document_No'] == idx]
+        #print('idx',idx)
+        #print(thres_row['Topic_Perc_Contrib'].item())
+        #if thres_row['Topic_Perc_Contrib'].item():
+        if len(df.index) > 2:
+           topic_per_thres_list.append(df['Topic_Perc_Contrib'].iloc[round(len(df.index)*0.8)])
+        #topic_per_thres_list.append(thres_row['Topic_Perc_Contrib'].item())
+        #topic_per_mean_list.append(df['Topic_Perc_Contrib'].mean())
         # topic_per_list.append(df.loc[:10, 'Topic_Perc_Contrib'].mean())
         # print(topic_per_list)
-    per_mean = sum(topic_per_mean_list) / len(topic_per_mean_list)
-    print("total mean:", per_mean + (100-num_topics)*0.0002 )
+    per_mean = sum(topic_per_thres_list) / len(topic_per_thres_list)
+    print("total mean:", per_mean)
             
 
 
@@ -197,7 +219,10 @@ def topics_to_timeline(news_df, ldamodel, corpus, num_keywords, num_topics, perc
     for i in range(1,num_topics+1):
         globals()['df_{}'.format(i)]=topics_info_df.loc[topics_info_df.Dominant_Topic==str(i)]
         globals()['df_{}'.format(i)] = globals()['df_{}'.format(i)].sort_values('Topic_Perc_Contrib',ascending=False)
-        timeline_df = timelining(per_mean, 3, globals()['df_{}'.format(i)], timeline_df)
+        #timeline_df = timelining(per_mean-0.0004*num_topics, 2, globals()['df_{}'.format(i)], timeline_df)
+        #timeline_df = timelining(per_mean-0.0002*(100-num_topics), 2, globals()['df_{}'.format(i)], timeline_df)
+        timeline_df = timelining(0.003, num_news, globals()['df_{}'.format(i)], timeline_df, iters)
+
 
     print("Final df")
     print(timeline_df)
@@ -210,15 +235,14 @@ def topics_to_timeline(news_df, ldamodel, corpus, num_keywords, num_topics, perc
 
 
 if __name__ == '__main__':
-    query = '코로나19'
+    query = '인스타'
     client = MongoClient("mongodb+srv://BaekYeonsun:hello12345@cluster.3dypr.mongodb.net/database?retryWrites=true&w=majority")
     db = client.database
-    collection = db.news
-    news_data = collection.find({'$or': [{'content': {'$regex': '코로나19', '$options': 'i'}}, {'title': {'$regex': '코로나19', '$options': 'i'}} ]})
+    #collection = db.news
+    #news_data = list(collection.find({'$or': [{'content': {'$regex': query, '$options': 'i'}}, {'title': {'$regex':query, '$options': 'i'}} ]}))
     #client = MongoClient("mongodb+srv://BaekYeonsun:hello12345@cluster.3dypr.mongodb.net/database?retryWrites=true&w=majority")
     print(1)
-    #news_data = requests.get(req + query)
-    #_data = requests.get(req + query)b = client.database
+    news_data = requests.get(req + query)
     topic_collection = db.topics
     post = {
             'query': query,
@@ -227,21 +251,65 @@ if __name__ == '__main__':
                          {'num': 2}]
             }
     print(2)
-    news_df, id2word, corpus, title_list, num_doc = preprocess(news_data, 5) # 인자값 = no_below 값
+    news_df, id2word, corpus, title_list, num_doc = preprocess(news_data, 3) # 인자값 = no_below 값
     print(5)
     iteration = 3000
 
     # find optimal topic nums
     #ldamallet, coherence_mallet = topic_modeling(id2word, corpus, title_list)
-    start = 30 # 이 범위는 뉴스 개수에 따라 다르게 하기
-    limit = 101
+    start = 25 # 이 범위는 뉴스 개수에 따라 다르게 하기
+    limit = 116
     step = 10
     topic_priority = get_score(corpus, id2word, title_list, start, limit, step, query, iteration, num_doc)
+    if num_doc < 200:
+        num_news = [2,2,2]
+        topic_perc = [0.01, 0.006, 0.002]
+        iters = 5
+        start = 2
+        limit = 21
+        step = 2
+    elif num_doc < 1000:
+        num_news = [2,2,2]
+        topic_perc = [0.013, 0.007, 0.003]
+        iters = 5
+        start = 5
+        limit = 51
+        step = 5
+    elif num_doc < 5000:
+        num_news = [2,2,2]
+        topic_perc = [0.013, 0.007, 0.003]
+        iters = 7
+        start = 10
+        limit = 74
+        step = 7
+    elif num_doc < 15000:
+        num_news = [2,2,2]
+        topic_perc = [0.03, 0.02, 0.01]
+        iters = 9
+        start = 20
+        limit = 111
+        step = 10
+    elif num_doc < 25000:
+        num_news = [3,3,3]
+        topic_perc = [0.035, 0.025, 0.015]
+        iters = 11
+        start = 30
+        limit = 166
+        step = 15
+
+    else:
+        num_news = [3,3,3]
+        topic_perc = [0.04, 0.03, 0.02]
+        iters = 15
+        start = 40
+        limit = 176
+        step = 15
+
 
     for i in range(len(topic_priority)):
         ldamallet = topic_modeling(id2word, corpus, title_list, topic_priority[i], iteration)
-        timeline = topics_to_timeline(news_df, ldamallet, corpus, 3, topic_priority[i], -0.0025 * topic_priority[i] + 0.13) # 마지막 인자 키워드 개수
-
+        #timeline = topics_to_timeline(news_df, ldamallet, corpus, 3, topic_priority[i], -0.0025 * topic_priority[i] + 0.13, num_news[i]) # 마지막 인자 키워드 개수
+        timeline = topics_to_timeline(news_df, ldamallet, corpus, 3, topic_priority[i], topic_perc[i], num_news[i], iters) 
         topics = []
         for j in range(len(timeline.index)):
             t = timeline.iloc[j]

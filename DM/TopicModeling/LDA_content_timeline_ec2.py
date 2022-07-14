@@ -203,7 +203,7 @@ def topics_to_timeline(news_df, ldamodel, corpus, num_keywords, num_topics, perc
 
 
 if __name__ == '__main__':
-    query = '네이버'
+    query = '손흥민'
     news_data = requests.get(req + query)
     client = MongoClient("mongodb+srv://BaekYeonsun:hello12345@cluster.3dypr.mongodb.net/database?retryWrites=true&w=majority")
 
@@ -222,8 +222,8 @@ if __name__ == '__main__':
 
     # find optimal topic nums
     #ldamallet, coherence_mallet = topic_modeling(id2word, corpus, title_list)
-    start = 30 # 이 범위는 뉴스 개수에 따라 다르게 하기
-    limit = 101
+    start = 5 # 이 범위는 뉴스 개수에 따라 다르게 하기
+    limit = 96
     step = 10
     topic_priority = get_score(corpus, id2word, title_list, start, limit, step, query, iteration, num_doc)
 
